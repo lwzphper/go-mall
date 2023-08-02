@@ -18,8 +18,8 @@ var (
 
 var serviceCmd = &cobra.Command{
 	Use:   "start",
-	Short: "go-mail API服务",
-	Long:  "go-mail API服务",
+	Short: "go-mall API服务",
+	Long:  "go-mall API服务",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// 初始化全局配置
 		if err := loadGlobalConfig(); err != nil {

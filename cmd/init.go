@@ -6,8 +6,8 @@ import "github.com/spf13/cobra"
 
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "go-mail 初始化",
-	Long:  "go-mail 初始化",
+	Short: "go-mall 初始化",
+	Long:  "go-mall 初始化",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// 初始化全局配置
 		if err := loadGlobalConfig(); err != nil {

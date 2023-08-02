@@ -1,7 +1,7 @@
-PROJECT_NAME := "go-mail"
+PROJECT_NAME := "go-mall"
 MAIN_FILE_PATH := "main.go"
-PKG := "github.com/lwzphper/go-mail"
-OUTPUT_NAME := "go-mail"
+PKG := "github.com/lwzphper/go-mall"
+OUTPUT_NAME := "go-mall"
 
 BUILD_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 BUILD_COMMIT := ${shell git rev-parse HEAD}
