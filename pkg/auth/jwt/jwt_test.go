@@ -28,7 +28,7 @@ func TestGenerateToken(t *testing.T) {
 			wantEqual: true,
 		},
 		{
-			name:      "valid_token",
+			name:      "fail_token",
 			signKey:   jwtSignKey,
 			now:       time.Now(),
 			want:      wantStr,
@@ -37,22 +37,24 @@ func TestGenerateToken(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		jwtGen := NewJwtTokenGen("go-mall", c.signKey)
-		jwtGen.nowFunc = func() time.Time {
-			return c.now
-		}
-		token, err := jwtGen.GenerateToken("1")
-		if err != nil {
-			t.Errorf("token generate error: %v", err)
-		}
+		t.Run(c.name, func(t *testing.T) {
+			jwtGen := NewJwtTokenGen("go-mall", c.signKey)
+			jwtGen.nowFunc = func() time.Time {
+				return c.now
+			}
+			token, err := jwtGen.GenerateToken("1")
+			if err != nil {
+				t.Errorf("token generate error: %v", err)
+			}
 
-		if c.wantEqual {
-			assert.Equal(t, c.want, token)
-		}
+			if c.wantEqual {
+				assert.Equal(t, c.want, token)
+			}
 
-		if !c.wantEqual {
-			assert.NotEqual(t, c.want, token)
-		}
+			if !c.wantEqual {
+				assert.NotEqual(t, c.want, token)
+			}
+		})
 	}
 
 }

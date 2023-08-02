@@ -38,8 +38,8 @@ type TokenVerify struct {
 }
 
 func (v *TokenVerify) Verify(token string, options ...jwt.ParserOption) (string, error) {
-	/*jwt.ParseWithClaims(token, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
-
-	})*/
+	claims, err := jwt.ParseWithClaims(token, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return v.signKey, nil
+	}, options...)
 	return "", nil
 }
