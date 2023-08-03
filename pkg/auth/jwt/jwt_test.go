@@ -8,7 +8,7 @@ import (
 
 var (
 	jwtSignKey = []byte("aomKPd2HzKTNuEiX5tc5IlriiUIb9IEBvAI0jMGzOQEp38yfL0cJibvQMYTLpxoX")
-	wantStr    = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnby1tYWxsIiwic3ViIjoiMSIsImV4cCI6MTY5MDk3MDM1NiwiaWF0IjoxNjkwOTcwMzU2fQ.zYOgu0uCwCx9D-UZqxuQSJrWZlp60LiwtEWSv09NSXo"
+	wantStr    = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnby1tYWxsIiwic3ViIjoiMSIsImV4cCI6MTY5MDk3MDM1NiwiaWF0IjoxNjkwOTcwMzU2fQ.zYOgu0uCwCx9D-UZqxuQSJrWZlp60LiwtEWSv09NSXo"
 )
 
 func TestGenerateToken(t *testing.T) {
@@ -17,6 +17,7 @@ func TestGenerateToken(t *testing.T) {
 		name      string
 		signKey   []byte
 		now       time.Time
+		expireSec time.Duration
 		want      string
 		wantEqual bool
 	}{
@@ -42,7 +43,7 @@ func TestGenerateToken(t *testing.T) {
 			jwtGen.nowFunc = func() time.Time {
 				return c.now
 			}
-			token, err := jwtGen.GenerateToken("1")
+			token, err := jwtGen.GenerateToken("1", c.expireSec)
 			if err != nil {
 				t.Errorf("token generate error: %v", err)
 			}
@@ -53,6 +54,64 @@ func TestGenerateToken(t *testing.T) {
 
 			if !c.wantEqual {
 				assert.NotEqual(t, c.want, token)
+			}
+		})
+	}
+}
+
+func TestTokenVerify(t *testing.T) {
+	cases := []struct {
+		name      string
+		subject   string
+		expireSec time.Duration
+		want      string
+		wantEqual bool
+		wantErr   bool
+	}{
+		{
+			name:      "subject_equal",
+			subject:   "123",
+			expireSec: 10 * time.Second,
+			want:      "123",
+			wantEqual: true,
+		},
+		{
+			name:      "token_expire",
+			subject:   "123",
+			want:      "", // jwt 解析错误，获取不到响应数据
+			wantErr:   true,
+			wantEqual: true,
+		},
+		{
+			name:      "subject_not_equal",
+			subject:   "666",
+			expireSec: 10 * time.Second,
+			want:      "123",
+			wantEqual: false,
+		},
+	}
+
+	gen := NewJwtTokenGen("go-mall", jwtSignKey)
+
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			jwtToken, err := gen.GenerateToken(c.subject, c.expireSec)
+			if err != nil {
+				t.Errorf("generate token error: %v", err)
+				return
+			}
+
+			validator := NewTokenValidator(jwtSignKey)
+			valSubject, err := validator.Validator(jwtToken)
+			if !c.wantErr && err != nil {
+				t.Errorf("validate token error：%v", err)
+				return
+			}
+
+			if c.wantEqual {
+				assert.Equal(t, c.want, valSubject)
+			} else {
+				assert.NotEqual(t, c.want, valSubject)
 			}
 		})
 	}
