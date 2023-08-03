@@ -1,0 +1,33 @@
+syntax = "proto3";
+package auth.v1;
+option go_package = "go-mall/server/auth/api/gen/v1;authpb";
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message userBasicInfo {
+  int64 id = 1;
+  string name = 2;
+  string nickname = 3;
+}
+
+message LoginResponse {
+  string access_token = 1;
+  userBasicInfo user_info = 2;
+}
+
+message RegisterRequest {
+  string phone = 1;
+  int32 sms_code = 2;
+}
+
+message RegisterResponse {
+
+}
+
+service AuthService {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+}
