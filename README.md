@@ -12,6 +12,12 @@ go商城系统（开发中...）
 protoc
 grpc-go：https://github.com/grpc/grpc-go
 
+日志切割：
++ 按大小切割：github.com/natefinch/lumberjack
++ 按日期切割：
+  + 方式1：使用 Linux 系统自带的 logrotate
+  + 方式2：github.com/lestrrat-go/file-rotatelogs （不再维护）
+
 ## 技术栈
 
 1. 熔断、限流：sentinel

@@ -22,23 +22,22 @@ func TestFileLog(t *testing.T) {
 	}
 
 	logger := New(file, WarnLevel)
-	ResetDefault(logger)
-	defer Sync()
+	defer logger.Sync()
 
 	// 使用包级函数调用
-	Info("file log info")
-	Warn("file log warn")
-	Error("file log error")
+	logger.Info("file log info")
+	logger.Warn("file log warn")
+	logger.Error("file log error")
 }
 
 // 测试多文件写入。 warn 级别及以下的日志写入 warn.log； warn 级别及以上的写入 error.log
 func TestNewTee(t *testing.T) {
-	infoFile, err := os.OpenFile("./log/info.log", logFlag, 0644)
+	infoFile, err := os.OpenFile("./log/tee_info.log", logFlag, 0644)
 	if err != nil {
 		panic(err)
 	}
 
-	errorFile, err := os.OpenFile("./log/error.log", logFlag, 0644)
+	errorFile, err := os.OpenFile("./log/tee_error.log", logFlag, 0644)
 	if err != nil {
 		panic(err)
 	}
@@ -53,15 +52,32 @@ func TestNewTee(t *testing.T) {
 		{
 			W: errorFile,
 			Lef: func(lvl Level) bool {
-				return InfoLevel < lvl
+				return lvl > InfoLevel
 			},
 		},
 	}
 
 	logger := NewTee(tops)
-	ResetDefault(logger)
-	Debug("file log Debug")
-	Info("file log Info")
-	Warn("file log Warn")
-	Error("file log Error")
+	logger.Debug("file log Debug")
+	logger.Info("file log Info")
+	logger.Warn("file log Warn")
+	logger.Error("file log Error")
+}
+
+// 测试日志分割
+func TestNewWithSizeRotate(t *testing.T) {
+	cfg := SizeRotateLogConfig{
+		Level:      DebugLevel,
+		FileName:   "./log/size_rotate.log",
+		MaxSize:    1,
+		MaxAge:     10,
+		MaxBackups: 30,
+	}
+	logger := NewWithSizeRotate(cfg)
+	for i := 0; i < 100000; i++ {
+		logger.Debug("debug msg", String("rotate", "debug"))
+		logger.Info("info msg", String("rotate", "info"))
+		logger.Warn("warn msg", String("rotate", "warn"))
+		logger.Error("error msg", String("rotate", "error"))
+	}
 }

@@ -28,6 +28,8 @@ func (l *Logger) Fatal(msg string, fields ...Field) {
 	l.l.Fatal(msg, fields...)
 }
 
+// Sync 调用内核的Sync方法，刷新所有缓冲的日志条目
+// 应用程序应该注意在退出之前调用Sync
 func (l *Logger) Sync() error {
 	return l.l.Sync()
 }
