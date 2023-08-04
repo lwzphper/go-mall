@@ -24,7 +24,7 @@ message RegisterRequest {
 }
 
 message RegisterResponse {
-
+  userBasicInfo user_info = 1;
 }
 
 service AuthService {
