@@ -91,7 +91,9 @@ func NewTee(tops []TeeOption, opts ...Option) *Logger {
 
 	var cores []zapcore.Core
 	for _, top := range tops {
-		// 需要将 top 新建变量保存，否则闭包里每次获取的都是最后一次的 top
+		// golang的for range机制相当于对for循环做了优化，会额外创建一个新的 v2 变量存储切片中的元素，
+		// 循环中使用的这个变量 v2的值 会在每一次迭代被重新赋值而覆盖，赋值时也会触发拷贝，而其本身地址不会变，
+		// 因为始终是同一变量；也就引出了另一个需要注意的for range用法中的指针问题
 		// blog link: https://blog.csdn.net/qq_39618369/article/details/121546942
 		// link: https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-for-range/
 		itemTop := top
