@@ -91,22 +91,23 @@ func NewTee(tops []TeeOption, opts ...Option) *Logger {
 
 	var cores []zapcore.Core
 	for _, top := range tops {
+		if top.W == nil {
+			panic("the writer is nil")
+		}
+
+		// 使用闭包主要解决：go 闭包变量延迟绑定问题
 		// golang的for range机制相当于对for循环做了优化，会额外创建一个新的 v2 变量存储切片中的元素，
 		// 循环中使用的这个变量 v2的值 会在每一次迭代被重新赋值而覆盖，赋值时也会触发拷贝，而其本身地址不会变，
 		// 因为始终是同一变量；也就引出了另一个需要注意的for range用法中的指针问题
 		// blog link: https://blog.csdn.net/qq_39618369/article/details/121546942
 		// link: https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-for-range/
-		itemTop := top
-		if itemTop.W == nil {
-			panic("the writer is nil")
-		}
+		lvl := func(top TeeOption) zapcore.LevelEnabler {
+			return zap.LevelEnablerFunc(func(level zapcore.Level) bool {
+				return top.Lef(level)
+			})
+		}(top)
 
-		lvl := zap.LevelEnablerFunc(func(level zapcore.Level) bool {
-			//这里传入的实际上是 itemTop 的引用
-			return itemTop.Lef(level)
-		})
-
-		core := zapcore.NewCore(getEncoder(), zapcore.AddSync(itemTop.W), lvl)
+		core := zapcore.NewCore(getEncoder(), zapcore.AddSync(top.W), lvl)
 		cores = append(cores, core)
 	}
 	return &Logger{
