@@ -1,0 +1,16 @@
+mysql:
+  database: go-mall
+  username: root
+  password: 123456
+  host: 127.0.0.1
+  port: 3306
+  max_open_conn: 1000
+  max_idle_conn: 100
+  max_life_second: 30
+  table_prefix:
+
+mongodb:
+  database: go-mall
+  user: root
+  password: 123456
+  host: ["127.0.0.1:27017", "127.0.0.1:27018"]
