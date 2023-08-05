@@ -26,6 +26,12 @@ grpc-go：https://github.com/grpc/grpc-go
 4. 远程调用&负载均衡：Feign
 5. 分布式id：ksuid
 6. 链路追踪
+7. MQ
+8. redis
+9. mysql
+10. MongoDB
+11. elasticsearch
+12. canal
 
 
 
