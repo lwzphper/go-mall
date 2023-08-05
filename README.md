@@ -65,3 +65,9 @@ config：配置文件
 middleware：中间件
 
 routere：路由
+
+## 知识点
+
+ACL 防止入侵层
+
+Identifier Type设计模式
