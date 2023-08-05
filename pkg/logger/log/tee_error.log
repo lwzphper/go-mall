@@ -1,2 +1,0 @@
-{"level":"WARN","time":"2023-08-04 11:48:10","caller":"logger/log.go:12","msg":"file log Warn"}
-{"level":"ERROR","time":"2023-08-04 11:48:10","caller":"logger/log.go:16","msg":"file log Error"}

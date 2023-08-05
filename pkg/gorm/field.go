@@ -5,7 +5,13 @@ import (
 )
 
 type CreatedAtField struct {
-	CreatedAt int64                 `json:"created_at" gorm:"autoCreateTime"`
-	UpdatedAt int64                 `json:"updated_at" gorm:"autoUpdateTime"`
-	IsDelete  soft_delete.DeletedAt `json:"is_delete" gorm:"softDelete:flag"`
+	CreatedAt int64 `json:"created_at" gorm:"autoCreateTime"`
+}
+
+type UpdatedAtFiled struct {
+	UpdatedAt int64 `json:"updated_at" gorm:"autoUpdateTime"`
+}
+
+type SoftDeleteField struct {
+	IsDelete soft_delete.DeletedAt `json:"is_delete" gorm:"softDelete:flag"`
 }
