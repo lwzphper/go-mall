@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	mysqlDB "github.com/lwzphper/go-mall/pkg/db"
+	mysqlDB "github.com/lwzphper/go-mall/pkg/db/mysql"
 	"gorm.io/gorm"
 	"sync"
 	"time"
