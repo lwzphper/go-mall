@@ -133,7 +133,6 @@ func NewDefaultOption() *Config {
 		MaxIdleConn:       DefaultMaxIdleConn,
 		ConnMaxLifeSecond: DefaultConnMaxLifeSecond,
 		PrepareStmt:       true,
-		// todo 这里需要调整， 慢查询时间需要动态配置
 		Logger: logger.New(StdLogger, logger.Config{
 			SlowThreshold:             time.Duration(DefaultSlowLogMillisecond) * time.Millisecond,
 			LogLevel:                  logger.Info,
@@ -185,6 +184,12 @@ func CloseMysqlClient(clientName string) error {
 		return err
 	}
 	return sqlDB.Close()
+	/*err = sqlDB.Close()
+	if err != nil {
+		return err
+	}
+	delete(mysqlClients, clientName)
+	return nil*/
 }
 
 func dbConnect(user, pass, host, dbName string, option *Config) (*gorm.DB, error) {

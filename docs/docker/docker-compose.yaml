@@ -1,0 +1,36 @@
+version: "3"
+services:
+  mysql:
+    image: mysql/mysql-server:${MYSQL_VERSION}
+    container_name: mysql
+    ports:
+      - "${MYSQL_HOST_PORT}:3306"
+    volumes:
+      - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
+      - ${DATA_DIR}/mysql:/var/lib/mysql/:rw
+      - ${MYSQL_LOG_DIR}:/var/log/mysql/:rw
+
+    restart: always
+    networks:
+      - default
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_ROOT_HOST: "${MYSQL_ROOT_HOST}"
+      TZ: "$TZ"
+
+  mongodb:
+    image: mongo:${MONGODB_VERSION}
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MONGODB_INITDB_ROOT_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_INITDB_ROOT_PASSWORD}"
+      TZ: "$TZ"
+    volumes:
+      - ${DATA_DIR}/mongo:/data/db:rw
+      - ${DATA_DIR}/mongo_key:/mongo:rw
+    ports:
+      - "${MONGODB_HOST_PORT}:27017"
+    networks:
+      - default
+    command:
+      --auth
