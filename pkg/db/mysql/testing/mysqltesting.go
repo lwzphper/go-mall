@@ -2,18 +2,16 @@ package mysqltesting
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 	"github.com/docker/go-connections/nat"
 	_ "github.com/go-sql-driver/mysql"
-	"log"
 	"testing"
 )
 
-var ContainerHostPort nat.PortBinding
+var HostPort string
 
 var (
 	imageName     = "mysql/mysql-server:8.0.28"
@@ -21,7 +19,6 @@ var (
 	containerName = "mysql-test"
 	Username      = "root"
 	Password      = "123456"
-	Database      = "mysql_test"
 )
 
 // RunWithMongoInDocker 在 docker 容器中运行 MongoDB
@@ -77,19 +74,8 @@ func RunWithMongoInDocker(m *testing.M) int {
 	}
 
 	// 获取监听的端口
-	ContainerHostPort = inspRes.NetworkSettings.Ports[containerPort][0]
+	ctIpPort := inspRes.NetworkSettings.Ports[containerPort][0]
+	HostPort = fmt.Sprintf("%s:%s", ctIpPort.HostIP, ctIpPort.HostPort)
 
-	// 创建数据库
-	//createDefaultDatabase()
-	// docker exec -it mysql bash -c '/usr/bin/mysql -uroot -p123456 -e "create database test111"'
 	return m.Run()
-}
-
-func createDefaultDatabase() {
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/mysql", Username, Password, ContainerHostPort.HostIP, ContainerHostPort.HostPort))
-	if err != nil {
-		log.Panic(err)
-	}
-	defer db.Close()
-	db.Exec(fmt.Sprintf("create database %s", Database))
 }
