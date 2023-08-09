@@ -8,14 +8,14 @@ message LoginRequest {
 }
 
 message userBasicInfo {
-  int64 id = 1;
+  uint64 id = 1;
   string name = 2;
   string nickname = 3;
 }
 
 message LoginResponse {
   string access_token = 1;
-  userBasicInfo user_info = 2;
+  int32 expires_in = 2;
 }
 
 message RegisterRequest {

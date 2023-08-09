@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package common.member;
+option go_package = "go-mall/server/common/proto/member;memberpb";
+
+message MemberBasicInfo {
+  uint64 id = 1;
+  string name = 2;
+  string nickname = 3;
+}

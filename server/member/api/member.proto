@@ -1,0 +1,6 @@
+syntax = "proto3";
+package member.v1;
+option go_package = "go-mall/server/member/api/gen/v1;memberpb";
+
+import "member/member.proto";
+
