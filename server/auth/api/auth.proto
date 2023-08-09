@@ -2,16 +2,13 @@ syntax = "proto3";
 package auth.v1;
 option go_package = "go-mall/server/auth/api/gen/v1;authpb";
 
+import "member/member.proto";
+
 message LoginRequest {
   string username = 1;
   string password = 2;
 }
 
-message userBasicInfo {
-  uint64 id = 1;
-  string name = 2;
-  string nickname = 3;
-}
 
 message LoginResponse {
   string access_token = 1;
@@ -24,7 +21,7 @@ message RegisterRequest {
 }
 
 message RegisterResponse {
-  userBasicInfo user_info = 1;
+  common.member.BasicInfo user_info = 1;
 }
 
 service AuthService {

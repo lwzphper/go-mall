@@ -3,7 +3,7 @@ syntax = "proto3";
 package common.member;
 option go_package = "go-mall/server/common/proto/member;memberpb";
 
-message MemberBasicInfo {
+message BasicInfo {
   uint64 id = 1;
   string name = 2;
   string nickname = 3;
