@@ -1,4 +1,4 @@
-package config
+package db
 
 import (
 	"context"
@@ -15,44 +15,6 @@ var (
 	sqlDB *sql.DB
 )
 
-func NewDefaultRedis() *Redis {
-	return &Redis{
-		Host: "127.0.0.1:6379",
-	}
-}
-
-type Redis struct {
-	Host        string `toml:"host" yaml:"host" mapstructure:"host" env:"REDIS_HOST"`
-	Password    string `toml:"password" yaml:"password" mapstructure:"password" env:"REDIS_PASSWORD"`
-	Database    int    `toml:"database" yaml:"database" mapstructure:"database" env:"REDIS_DATABASE"`
-	MinIdleConn int    `toml:"min_idle_conn" yaml:"min_idle_conn" mapstructure:"min_idle_conn" env:"REDIS_MIN_IDLE_CONN"`
-	PoolSize    int    `toml:"pool_size" yaml:"pool_size" mapstructure:"pool_size" env:"REDIS_POOL_SIZE"`
-	MaxRetries  int    `toml:"max_retries" yaml:"max_retries" mapstructure:"max_retries" env:"REDIS_MAX_RETRIES"`
-}
-
-func NewDefaultMongoDB() *Mongodb {
-	return &Mongodb{
-		Host: []string{"127.0.0.1:27017"},
-	}
-}
-
-type Mongodb struct {
-	Database string   `toml:"database" yaml:"database" mapstructure:"database" env:"MONGODB_DATABASE"`
-	UserName string   `toml:"username" yaml:"username" mapstructure:"username" env:"MONGODB_USERNAME"`
-	Password string   `toml:"password" yaml:"password" mapstructure:"password" env:"MONGODB_PASSWORD"`
-	Host     []string `toml:"host" yaml:"host" mapstructure:"host" env:"MONGODB_HOST"`
-}
-
-func NewDefaultMysql() *Mysql {
-	return &Mysql{
-		Host:        "127.0.0.1",
-		Port:        "3306",
-		Database:    "default_db",
-		MaxOpenConn: 200,
-		MaxIdleConn: 100,
-	}
-}
-
 type Mysql struct {
 	Host        string `toml:"host" yaml:"host" mapstructure:"host" env:"MYSQL_HOST"`
 	Port        string `toml:"port" yaml:"port" mapstructure:"port" env:"MYSQL_PORT"`
@@ -65,6 +27,16 @@ type Mysql struct {
 	MaxIdleTime int    `toml:"max_idle_time" yaml:"max_idle_time" mapstructure:"max_idle_time" env:"MYSQL_MAX_IDLE_TIME"`
 	TablePrefix string `toml:"table_prefix" yaml:"table_prefix" mapstructure:"table_prefix" env:"MYSQL_TABLE_PREFIX"`
 	lock        sync.Mutex
+}
+
+func NewDefaultMysql() *Mysql {
+	return &Mysql{
+		Host:        "127.0.0.1",
+		Port:        "3306",
+		Database:    "default_db",
+		MaxOpenConn: 200,
+		MaxIdleConn: 100,
+	}
 }
 
 func (m *Mysql) GetDB() *gorm.DB {
