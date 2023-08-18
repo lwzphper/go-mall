@@ -4,3 +4,45 @@ option go_package = "go-mall/server/member/api/gen/v1;memberpb";
 
 import "member/member.proto";
 
+message RegisterResponse {
+  common.member.BasicInfo user_info = 1;
+}
+
+enum MemberStatus {
+  DISABLED = 0;
+  ENABLED = 1;
+}
+
+enum MemberGender {
+  MAN = 0;
+  WOMAN = 1;
+}
+
+message GetMemberRequest {
+  int64 id = 1;
+}
+
+message MemberEntity {
+  int64 id = 1;
+  Member member = 2;
+}
+
+message Member {
+  int64 member_level_id = 1;
+  string username = 2;
+  string nickname = 3;
+  string phone = 5;
+  string icon = 6;
+  MemberStatus status = 7;
+  MemberGender gender = 8;
+  string birthday = 9;
+  string city = 10;
+  string job = 11;
+  int32 growth = 12;
+  string crated_at = 13;
+}
+
+
+service MemberService {
+  rpc GetMember(GetMemberRequest) returns(Member);
+}
