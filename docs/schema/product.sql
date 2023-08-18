@@ -53,8 +53,8 @@ CREATE TABLE `product_spu`
     `recommend_status`     tinyint unsigned NOT NULL DEFAULT 0 COMMENT '推荐状态 0：非推荐；1：推荐',
     `verify_status`        tinyint unsigned NOT NULL DEFAULT 0 COMMENT '审核状态 0：未审核；1：审核通过；3：审核不通过',
     `description`          text COMMENT '商品详情',
-    `created_at`           int unsigned NOT NULL COMMENT '创建时间',
-    `updated_at`           int unsigned NOT NULL DEFAULT 0 COMMENT '修改时间',
+    `created_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
     `deleted_at`           int unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`),
     KEY                    `idx_brand_id` (`brand_id`)
@@ -71,8 +71,8 @@ CREATE TABLE `product_sku`
     `lock_stock`  int unsigned NOT NULL DEFAULT '0' COMMENT '锁定库存',
     `pic`         varchar(255)   NOT NULL DEFAULT '' COMMENT '图片',
     `sp_data`     varchar(1024)  NOT NULL DEFAULT '' COMMENT '商品属性，JSON 格式', -- 如：[{"key":"颜色","value":"蓝色"},{"key":"尺寸","value":"38"},{"key":"风格","value":"秋季"}]
-    `created_at`  int unsigned NOT NULL COMMENT '创建时间',
-    `updated_at`  int unsigned NOT NULL DEFAULT 0 COMMENT '修改时间',
+    `created_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
     `deleted_at`  int unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`),
     KEY           `idx_brand_id` (`brand_id`,`product_id`)
@@ -82,8 +82,8 @@ CREATE TABLE `product_attribute_category` -- 如：电脑办公-笔记本
 (
     `id`         bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
     `name`       varchar(64) NOT NULL COMMENT '分类名称',
-    `created_at` int unsigned NOT NULL COMMENT '创建时间',
-    `updated_at` int unsigned NOT NULL DEFAULT 0 COMMENT '修改时间',
+    `created_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
     `deleted_at` int unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='商品属性分类表';
@@ -98,8 +98,8 @@ CREATE TABLE `product_attribute` -- 如：颜色
     `option_list`                   varchar(1024) NOT NULL COMMENT '可选值列表，以逗号隔开',
     `sort`                          int unsigned NOT NULL COMMENT '排序',
     `type`                          tinyint unsigned NOT NULL COMMENT '类型 1：规则 2：参数',
-    `created_at`                    int unsigned NOT NULL COMMENT '创建时间',
-    `updated_at`                    int unsigned NOT NULL DEFAULT 0 COMMENT '修改时间',
+    `created_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
     `deleted_at`                    int unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`),
     UNIQUE KEY `id` (`id`)
@@ -111,8 +111,8 @@ CREATE TABLE `product_attribute_value` -- 如：黑色,白色
     `product_id`           bigint unsigned NOT NULL COMMENT '商品 ID',
     `product_attribute_id` bigint unsigned NOT NULL COMMENT '商品属性 ID',
     `value`                varchar(64) NOT NULL COMMENT '手动添加规格或参数的值，参数单值，规格有多个时以逗号隔开',
-    `created_at`           int unsigned NOT NULL COMMENT '创建时间',
-    `updated_at`           int unsigned NOT NULL DEFAULT 0 COMMENT '修改时间',
+    `created_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
     `deleted_at`           int unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='商品属性值表';
@@ -131,8 +131,8 @@ CREATE TABLE `product_comment`
     `content`          varchar(1000) NOT NULL DEFAULT '' COMMENT '评论',
     `hide_flag`        tinyint unsigned NOT NULL DEFAULT 0 COMMENT '匿名标识 1：匿名 2：不匿名',
     `resource`         varchar(1000) NOT NULL DEFAULT '' COMMENT '评论图片/视频，JSON格式',
-    `created_at`       int unsigned NOT NULL COMMENT '创建时间',
-    `updated_at`       int unsigned NOT NULL DEFAULT 0 COMMENT '修改时间',
+    `created_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
     `deleted_at`       int unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`),
     KEY                `idx_product_id` (`product_id`)
@@ -148,7 +148,7 @@ CREATE TABLE `product_comment_replay`
     `member_nick_name` varchar(100)  NOT NULL COMMENT '用户昵称',
     `member_icon`      varchar(255)  NOT NULL COMMENT '用户头像',
     `content`          varchar(1000) NOT NULL DEFAULT '' COMMENT '评论',
-    `created_at`       int unsigned NOT NULL COMMENT '创建时间',
+    `created_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `deleted_at`       int unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`),
     KEY                `idx_comment_id` (`comment_id`, `deleted_at`)
@@ -165,9 +165,9 @@ CREATE TABLE `product_operate_log`
     `gift_point_old`     int unsigned NOT NULL COMMENT '旧的赠送积分',
     `gift_point_new`     int unsigned NOT NULL COMMENT '新的赠送积分',
     `operate_man`        varchar(64)    NOT NULL COMMENT '操作人',
-    `created_at`         int unsigned NOT NULL COMMENT '创建时间',
+    `created_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_by`         int unsigned NOT NULL DEFAULT 0 COMMENT '操作人id',
-    `updated_at`         int unsigned NOT NULL DEFAULT 0 COMMENT '修改时间',
+    `updated_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
     `deleted_at`         int unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='商品修改记录表';
