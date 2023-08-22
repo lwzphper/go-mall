@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
+	"github.com/lwzphper/go-mall/server/member/model"
 	"gorm.io/gorm"
 )
 
@@ -12,7 +13,7 @@ type Member struct {
 
 func NewMember(db *gorm.DB) *Member {
 	return &Member{
-		db: db,
+		db: db.Model(&model.Member{}),
 	}
 }
 
@@ -23,5 +24,7 @@ type MemberRecord struct {
 
 // GetMemberByUsername 通过用户名获取用户信息
 func (m *Member) GetMemberByUsername(ctx context.Context, username string) (*MemberRecord, error) {
-	return nil, nil
+	record := &MemberRecord{}
+	m.db.Where("username", username).First(record)
+	return record, nil
 }
