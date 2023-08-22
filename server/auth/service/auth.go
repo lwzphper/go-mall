@@ -8,8 +8,14 @@ import (
 
 type AuthService struct {
 	authpb.UnimplementedAuthServiceServer
-	MemberAuth MemberAuth
-	Logger     *logger.Logger
+	MemberAuth   MemberAuth
+	MemberManger MemberManger
+	Logger       *logger.Logger
+}
+
+// MemberManger defines the ACL for member management. 会员管理 防止入侵层
+type MemberManger interface {
+	LoginVerify(ctx context.Context, username, password string) error
 }
 
 type MemberAuth interface {

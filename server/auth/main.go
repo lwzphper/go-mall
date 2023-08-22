@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/lwzphper/go-mall/pkg/common/config"
+	"github.com/lwzphper/go-mall/pkg/common/config/app"
 	"github.com/lwzphper/go-mall/pkg/common/config/db"
 	config2 "github.com/lwzphper/go-mall/pkg/config"
 	"github.com/lwzphper/go-mall/pkg/logger"
@@ -19,7 +19,7 @@ var (
 
 // Config 配置文件
 type Config struct {
-	App     *config.App `toml:"app" yaml:"app" mapstructure:"app"`
+	App     *app.App    `toml:"app" yaml:"app" mapstructure:"app"`
 	Mysql   *db.Mysql   `toml:"mysql" yaml:"mysql" mapstructure:"mysql"`
 	Mongodb *db.Mongodb `toml:"Mongodb" yaml:"mongodb" mapstructure:"mongodb"`
 }
@@ -45,7 +45,7 @@ func main() {
 	rotateLog := logger.NewWithSizeRotate(logCfg)
 	rotateLog.Name(cfg.App.Name)
 
-	lis, err := net.Listen("tcp", cfg.App.Address)
+	lis, err := net.Listen("tcp", cfg.App.Addr)
 	if err != nil {
 		rotateLog.Fatal("cannot listen", zap.Error(err))
 	}

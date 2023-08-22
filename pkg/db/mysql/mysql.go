@@ -200,7 +200,6 @@ func dbConnect(user, pass, host, dbName string, option *Config) (*gorm.DB, error
 		dbName,
 		true,
 		"Local")
-	fmt.Println(dsn)
 	if option.SlowLogMillisecond == 0 {
 		option.SlowLogMillisecond = DefaultSlowLogMillisecond
 	}

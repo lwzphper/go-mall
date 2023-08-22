@@ -1,6 +1,6 @@
 [app]
-name = "go-mall-auth"
-address = "8081"
+name = "go-mall-member"
+address = ":8081"
 
 [mysql]
 database = "go_mall"
@@ -18,3 +18,11 @@ database = "shop"
 username = "root"
 password = "123456"
 host = ["127.0.0.1:27017", "127.0.0.1:27018"]
+
+[logging]
+driver = "rotate" # 支持 rotate 和 single
+level = "debug"
+file_name = "./log/rotate.log"
+file_size_mb = ""
+max_age = ""
+max_backups = ""

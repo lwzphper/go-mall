@@ -14,7 +14,7 @@ type Field = zap.Field
 type Option = zap.Option
 
 type Logger struct {
-	l     *zap.Logger
+	L     *zap.Logger
 	level Level
 }
 
@@ -31,7 +31,7 @@ func New(writer io.Writer, level Level, opts ...Option) *Logger {
 	)
 	opts = append(opts, zap.AddCaller())
 	return &Logger{
-		l:     zap.New(core, opts...),
+		L:     zap.New(core, opts...),
 		level: level,
 	}
 }
@@ -49,7 +49,7 @@ type SizeRotateLogConfig struct {
 // NewWithSizeRotate create a new logger support log rotating.
 func NewWithSizeRotate(lCfg SizeRotateLogConfig, opts ...Option) *Logger {
 	opts = append(opts, zap.AddCaller())
-	w := getSizeLogWriter(lCfg.FileName, lCfg.MaxSize, lCfg.MaxBackups, lCfg.MaxAge, lCfg.Compress)
+	w := GetSizeLogWriter(lCfg.FileName, lCfg.MaxSize, lCfg.MaxBackups, lCfg.MaxAge, lCfg.Compress)
 	core := zapcore.NewCore(
 		getEncoder(),
 		zapcore.AddSync(w),
@@ -60,13 +60,13 @@ func NewWithSizeRotate(lCfg SizeRotateLogConfig, opts ...Option) *Logger {
 	//zap.ReplaceGlobals(logger) // 替换zap包中全局的logger实例，后续在其他包中只需使用zap.L()调用即可
 
 	return &Logger{
-		l:     zap.New(core, opts...),
+		L:     zap.New(core, opts...),
 		level: lCfg.Level,
 	}
 }
 
-// 负责日志写入的位置
-func getSizeLogWriter(filename string, maxsize, maxBackup, maxAge int, compress bool) zapcore.WriteSyncer {
+// GetSizeLogWriter 负责日志写入的位置
+func GetSizeLogWriter(filename string, maxsize, maxBackup, maxAge int, compress bool) zapcore.WriteSyncer {
 	lumberJackLogger := &lumberjack.Logger{
 		Filename:   filename,  // 文件位置
 		MaxSize:    maxsize,   // 进行切割之前,日志文件的最大大小(MB为单位)
@@ -111,7 +111,7 @@ func NewTee(tops []TeeOption, opts ...Option) *Logger {
 		cores = append(cores, core)
 	}
 	return &Logger{
-		l: zap.New(zapcore.NewTee(cores...), opts...),
+		L: zap.New(zapcore.NewTee(cores...), opts...),
 	}
 }
 

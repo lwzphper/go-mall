@@ -2,12 +2,6 @@ syntax = "proto3";
 package member.v1;
 option go_package = "go-mall/server/member/api/gen/v1;memberpb";
 
-import "member/member.proto";
-
-message RegisterResponse {
-  common.member.BasicInfo user_info = 1;
-}
-
 enum MemberStatus {
   DISABLED = 0;
   ENABLED = 1;
@@ -19,7 +13,8 @@ enum MemberGender {
 }
 
 message GetMemberRequest {
-  int64 id = 1;
+  string username = 1;
+  string phone = 2;
 }
 
 message MemberEntity {
@@ -30,7 +25,8 @@ message MemberEntity {
 message Member {
   int64 member_level_id = 1;
   string username = 2;
-  string nickname = 3;
+  string password = 3;
+  string nickname = 4;
   string phone = 5;
   string icon = 6;
   MemberStatus status = 7;
@@ -42,7 +38,20 @@ message Member {
   string crated_at = 13;
 }
 
+message BasicInfo {
+  uint64 id = 1;
+  string name = 2;
+  string nickname = 3;
+}
+
+message SaveRequest {
+  Member member = 1;
+  string password = 2;
+}
 
 service MemberService {
+  // 获取会员信息
   rpc GetMember(GetMemberRequest) returns(Member);
+  // 创建会员
+  rpc CreateMember(SaveRequest) returns (BasicInfo);
 }
