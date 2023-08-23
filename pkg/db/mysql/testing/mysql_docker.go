@@ -89,9 +89,9 @@ func RunMysqlInDocker(m *testing.M) {
 	code := m.Run()
 
 	// You can't defer this because os.Exit doesn't care for defer
-	if err := pool.Purge(resource); err != nil {
+	/*if err := pool.Purge(resource); err != nil {
 		log.Fatalf("Could not purge resource: %s", err)
-	}
+	}*/
 
 	os.Exit(code)
 }

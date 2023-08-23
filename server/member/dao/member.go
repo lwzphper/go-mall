@@ -19,7 +19,7 @@ func NewMember(db *gorm.DB) *Member {
 
 // MemberRecord 定义 member 记录
 type MemberRecord struct {
-	Member memberpb.BasicInfo
+	memberpb.BasicInfo
 }
 
 // CreateMember 创建会员

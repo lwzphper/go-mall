@@ -15,7 +15,7 @@ CREATE TABLE `cart_item`
     `product_sn`        varchar(128)   NOT NULL DEFAULT '' COMMENT '商品编码',
     `created_at`        timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at`        timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `deleted_at`        int unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `is_delete`        tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -59,7 +59,7 @@ CREATE TABLE `order`
     `remark`                  varchar(255)   NOT NULL DEFAULT '' COMMENT '订单备注信息',
     `created_at`              timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at`              timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `deleted_at`              int unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `is_delete`              tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -87,7 +87,7 @@ CREATE TABLE `order_item`
     `gift_growth`        smallint unsigned NOT NULL DEFAULT '0' COMMENT '成长值',
     `created_at`         timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at`         timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `deleted_at`         int unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `is_delete`         tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`),
     KEY                  `idx_order_id` (`order_id`)
 ) ENGINE = InnoDB

@@ -11,9 +11,9 @@ CREATE TABLE `member_level`
     `privilege_promotion`    tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否有专享活动特权',
     `privilege_member_price` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否有会员价格特权',
     `privilege_birthday`     tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否有生日特权',
-    `created_at`             timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at`             timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `deleted_at`             int unsigned     NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `created_at`             timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`             timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    `is_delete`             tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -39,9 +39,9 @@ CREATE TABLE `member`
     `growth`                 smallint unsigned NOT NULL DEFAULT 0 COMMENT '成长值',
     `lucky_count`            smallint unsigned NOT NULL DEFAULT 0 COMMENT '剩余抽奖次数',
     `history_integration`    smallint unsigned NOT NULL DEFAULT 0 COMMENT '历史积分数量',
-    `created_at`             timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at`             timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `deleted_at`             int unsigned      NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `created_at`             timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`             timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    `is_delete`             tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`),
     UNIQUE KEY `idx_username` (`username`),
     UNIQUE KEY `idx_phone` (`phone`)
@@ -62,9 +62,9 @@ CREATE TABLE `member_receive_address`
     `region`         varchar(100)     NOT NULL COMMENT '区',
     `detail_address` varchar(128)     NOT NULL COMMENT '详细地址(街道)',
     `member_id`      bigint unsigned  NOT NULL COMMENT '会员id',
-    `created_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at`     timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `deleted_at`     int unsigned     NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `created_at`     timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`     timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    `is_delete`     tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -79,7 +79,7 @@ CREATE TABLE `member_login_log`
     `province`   varchar(64)      NOT NULL DEFAULT '' COMMENT '省份',
     `city`       varchar(64)      NOT NULL DEFAULT '' COMMENT '城市',
     `member_id`  bigint unsigned  NOT NULL COMMENT '会员id',
-    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `created_at` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -94,9 +94,9 @@ CREATE TABLE `member_rule_setting`
     `consume_per_point`   decimal(10, 2)   NOT NULL DEFAULT 0 COMMENT '每消费多少元获取1个点',
     `low_order_amount`    decimal(10, 2)   NOT NULL DEFAULT 0 COMMENT '最低获取点数的订单金额',
     `max_point_per_order` int unsigned     NOT NULL DEFAULT 0 COMMENT '每笔订单最高获取点数',
-    `created_at`          timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at`          timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `deleted_at`          int unsigned     NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `created_at`          timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`          timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    `is_delete`          tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -109,9 +109,9 @@ CREATE TABLE `member_task`
     `type`        tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '任务类型：1：新手任务；2：日常任务',
     `growth`      smallint unsigned NOT NULL DEFAULT 0 COMMENT '赠送成长值',
     `integration` smallint unsigned NOT NULL DEFAULT 0 COMMENT '赠送积分',
-    `created_at`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `deleted_at`  int unsigned      NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `created_at`  timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`  timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    `is_delete`  tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -127,7 +127,7 @@ CREATE TABLE `integration_change_history`
     `change_count` smallint         NOT NULL DEFAULT 0 COMMENT '积分改变数量',
     `operate_man`  varchar(30)      NOT NULL DEFAULT '' COMMENT '操作人员',
     `operate_note` varchar(200)     NOT NULL DEFAULT '' COMMENT '操作备注',
-    `created_at`   timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `created_at`   timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`),
     KEY `idx_member_id` (`member_id`)
 ) ENGINE = InnoDB
