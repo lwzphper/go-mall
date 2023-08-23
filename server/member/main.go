@@ -53,6 +53,8 @@ func main() {
 	}
 	gormDB = db.GetDB()
 
+	// todo 优雅关闭
+
 	// 启动 grpc
 	logger.L.Sugar().Fatal(server.RunGRPCServer(&server.GRPCConfig{
 		Name:   cfg.App.Name,

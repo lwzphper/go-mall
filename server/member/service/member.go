@@ -13,12 +13,12 @@ type MemberService struct {
 	Logger    *logger.Logger
 }
 
-// GetMember 获取会员详情
-func (m *MemberService) GetMember(ctx context.Context, req *memberpb.GetMemberRequest) (*memberpb.Member, error) {
+// CreateMember 创建会员
+func (m *MemberService) CreateMember(ctx context.Context, req *memberpb.SaveRequest) (*memberpb.BasicInfo, error) {
 	return nil, nil
 }
 
-// CreateMember 创建会员
-func (m *MemberService) CreateMember(ctx context.Context, req *memberpb.SaveRequest) (*memberpb.BasicInfo, error) {
+// GetMember 获取会员详情
+func (m *MemberService) GetMember(ctx context.Context, req *memberpb.GetMemberRequest) (*memberpb.Member, error) {
 	return nil, nil
 }

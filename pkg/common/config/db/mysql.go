@@ -33,12 +33,14 @@ func NewDefaultMysql() *Mysql {
 	return &Mysql{
 		Host:        "127.0.0.1",
 		Port:        "3306",
+		UserName:    "root",
 		Database:    "default_db",
 		MaxOpenConn: 200,
 		MaxIdleConn: 100,
 	}
 }
 
+// GetDB 获取 gorm 对象
 func (m *Mysql) GetDB() *gorm.DB {
 	if db == nil {
 		panic("数据库未初始化")
@@ -58,6 +60,20 @@ func (m *Mysql) InitDB() error {
 	}
 	db = mysqlDB.GetMysqlClient(mysqlDB.DefaultClient).DB
 	return nil
+}
+
+// GetSqlDB 获取 sql 对象
+func (m *Mysql) GetSqlDB() (*sql.DB, error) {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	if sqlDB == nil {
+		conn, err := m.getSqlDBConn()
+		if err != nil {
+			return nil, err
+		}
+		sqlDB = conn
+	}
+	return sqlDB, nil
 }
 
 // 用于初始化操作
@@ -81,19 +97,6 @@ func (m *Mysql) getSqlDBConn() (*sql.DB, error) {
 	defer cancel()
 	if err := sqlDB.PingContext(ctx); err != nil {
 		return nil, fmt.Errorf("ping mysql<%s> error, %s", dsn, err.Error())
-	}
-	return sqlDB, nil
-}
-
-func (m *Mysql) GetSqlDB() (*sql.DB, error) {
-	m.lock.Lock()
-	defer m.lock.Unlock()
-	if sqlDB == nil {
-		conn, err := m.getSqlDBConn()
-		if err != nil {
-			return nil, err
-		}
-		sqlDB = conn
 	}
 	return sqlDB, nil
 }
