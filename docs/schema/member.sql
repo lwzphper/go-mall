@@ -44,7 +44,7 @@ CREATE TABLE `member`
     `is_delete`             tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`),
     UNIQUE KEY `idx_username` (`username`),
-    UNIQUE KEY `idx_phone` (`phone`)
+    INDEX `idx_phone` (`phone`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci COMMENT ='会员表';

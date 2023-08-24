@@ -5,8 +5,10 @@ import (
 	"time"
 )
 
+type Timestamp time.Time
+
 type BigIdField struct {
-	Id time.Time `json:"id" gorm:"column:id;primaryKey"`
+	Id uint64 `json:"id" gorm:"column:id;autoIncrement;primaryKey"`
 }
 
 type CreatedAtField struct {

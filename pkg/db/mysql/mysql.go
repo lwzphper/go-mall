@@ -251,23 +251,23 @@ func dbConnect(user, pass, host, port, dbName string, option *Config) (*gorm.DB,
 		sqlDB.SetConnMaxIdleTime(time.Second * option.MaxIdleTime)
 	}
 
-	// 监听事件
-	err = db.Callback().Create().After("gorm:after_create").Register(DefaultLogName, afterLog)
-	if err != nil {
-		StdLogger.Print("Register Create error", err)
-	}
-	err = db.Callback().Query().After("gorm:after_query").Register(DefaultLogName, afterLog)
-	if err != nil {
-		StdLogger.Print("Register Query error", err)
-	}
-	err = db.Callback().Update().After("gorm:after_update").Register(DefaultLogName, afterLog)
-	if err != nil {
-		StdLogger.Print("Register Update error", err)
-	}
-	err = db.Callback().Delete().After("gorm:after_delete").Register(DefaultLogName, afterLog)
-	if err != nil {
-		StdLogger.Print("Register Delete error", err)
-	}
+	//// 监听事件
+	//err = db.Callback().Create().After("gorm:after_create").Register(DefaultLogName, afterLog)
+	//if err != nil {
+	//	StdLogger.Print("Register Create error", err)
+	//}
+	//err = db.Callback().Query().After("gorm:after_query").Register(DefaultLogName, afterLog)
+	//if err != nil {
+	//	StdLogger.Print("Register Query error", err)
+	//}
+	//err = db.Callback().Update().After("gorm:after_update").Register(DefaultLogName, afterLog)
+	//if err != nil {
+	//	StdLogger.Print("Register Update error", err)
+	//}
+	//err = db.Callback().Delete().After("gorm:after_delete").Register(DefaultLogName, afterLog)
+	//if err != nil {
+	//	StdLogger.Print("Register Delete error", err)
+	//}
 	return db, nil
 }
 

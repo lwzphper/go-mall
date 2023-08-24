@@ -63,6 +63,16 @@ func RunMysqlInDocker(m *testing.M) {
 		log.Fatalf("could not pull resource: %s", err)
 	}
 
+	var runCode int
+
+	defer func() {
+		// You can't defer this because os.Exit doesn't care for defer
+		if err := pool.Purge(resource); err != nil {
+			log.Fatalf("Could not purge resource: %s", err)
+		}
+		os.Exit(runCode)
+	}()
+
 	dockerPort = resource.GetPort(dbSetting.PortID)
 	if err := pool.Retry(func() error {
 		// 创建数据库
@@ -92,14 +102,8 @@ func RunMysqlInDocker(m *testing.M) {
 		log.Fatalf("cannot get sql db:%v", err)
 	}
 
-	code := m.Run()
+	runCode = m.Run()
 
-	// You can't defer this because os.Exit doesn't care for defer
-	if err := pool.Purge(resource); err != nil {
-		log.Fatalf("Could not purge resource: %s", err)
-	}
-
-	os.Exit(code)
 }
 
 // 初始化 mysql

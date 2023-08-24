@@ -13,7 +13,7 @@ type Member struct {
 
 func NewMember(db *gorm.DB) *Member {
 	return &Member{
-		db: db.Model(&entity.Member{}),
+		db: db.Model(&entity.Member{}).Session(&gorm.Session{}),
 	}
 }
 

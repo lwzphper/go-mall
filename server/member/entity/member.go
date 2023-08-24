@@ -1,6 +1,9 @@
 package entity
 
-import "github.com/lwzphper/go-mall/pkg/gorm"
+import (
+	"github.com/lwzphper/go-mall/pkg/gorm"
+	"time"
+)
 
 type MemberStatus int8
 type Gender int8
@@ -16,7 +19,7 @@ type Member struct {
 	Status                MemberStatus `json:"status" gorm:"column:status"`
 	Icon                  string       `json:"icon" gorm:"column:icon"`
 	Gender                Gender       `json:"gender" gorm:"column:gender"`
-	Birthday              string       `json:"birthday" gorm:"column:birthday"`
+	Birthday              *time.Time   `json:"birthday" gorm:"column:birthday;default:null"`
 	City                  string       `json:"city" gorm:"column:city"`
 	PersonalizedSignature string       `json:"personalized_signature" gorm:"column:personalized_signature"`
 	SourceType            SourceType   `json:"source_type" gorm:"column:source_type"`
