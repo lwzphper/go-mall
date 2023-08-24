@@ -11,9 +11,9 @@ import (
 // 测试创建会员
 func TestCreateMember(t *testing.T) {
 	// 创建数据表
-	/*if err := mysqltesting.GormDB.AutoMigrate(&entity.Member{}); err != nil {
+	if err := initTable(); err != nil {
 		t.Errorf("create table error: %v", err)
-	}*/
+	}
 
 	dao := NewMember(mysqltesting.GormDB)
 	ctx := context.Background()
@@ -42,7 +42,10 @@ func TestGetMemberByUsername(t *testing.T) {
 
 }
 
-func initTable() {
+// 初始化数据表
+func initTable() error {
+	sql := "CREATE TABLE `member`\n(\n    `id`                     bigint unsigned   NOT NULL AUTO_INCREMENT,\n    `member_level_id`        bigint unsigned   NOT NULL DEFAULT 0 COMMENT '会员等级',\n    `username`               varchar(64)       NOT NULL COMMENT '用户名',\n    `password`               varchar(64)       NOT NULL COMMENT '密码',\n    `nickname`               varchar(64)       NOT NULL DEFAULT '' COMMENT '昵称',\n    `phone`                  char(11)          NOT NULL DEFAULT '' COMMENT '手机号码',\n    `status`                 tinyint unsigned  NOT NULL DEFAULT 1 COMMENT '帐号启用状态:0->禁用；1->启用',\n    `icon`                   varchar(255)      NOT NULL DEFAULT '' COMMENT '头像',\n    `gender`                 tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '性别：0->未知；1->男；2->女',\n    `birthday`               date                       DEFAULT NULL COMMENT '生日',\n    `city`                   varchar(64)       NOT NULL DEFAULT '' COMMENT '所做城市',\n    `job`                    varchar(100)      NOT NULL DEFAULT '' COMMENT '职业',\n    `personalized_signature` varchar(200)      NOT NULL DEFAULT '' COMMENT '个性签名',\n    `source_type`            tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '用户来源',\n    `integration`            smallint unsigned NOT NULL DEFAULT 0 COMMENT '积分',\n    `growth`                 smallint unsigned NOT NULL DEFAULT 0 COMMENT '成长值',\n    `lucky_count`            smallint unsigned NOT NULL DEFAULT 0 COMMENT '剩余抽奖次数',\n    `history_integration`    smallint unsigned NOT NULL DEFAULT 0 COMMENT '历史积分数量',\n    `created_at`             timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n    `updated_at`             timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',\n    `is_delete`             tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '删除时间',\n    PRIMARY KEY (`id`),\n    UNIQUE KEY `idx_username` (`username`),\n    UNIQUE KEY `idx_phone` (`phone`)\n) ENGINE = InnoDB\n  DEFAULT CHARSET = utf8mb4\n  COLLATE = utf8mb4_0900_ai_ci COMMENT ='会员表';"
+	return mysqltesting.GormDB.Exec(sql).Error
 }
 
 func TestMain(m *testing.M) {

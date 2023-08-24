@@ -37,6 +37,7 @@ func NewDefaultMysql() *Mysql {
 		Database:    "default_db",
 		MaxOpenConn: 200,
 		MaxIdleConn: 100,
+		MaxLifeTime: 1800,
 	}
 }
 
@@ -55,7 +56,8 @@ func (m *Mysql) InitDB() error {
 		mysqlDB.WithConnMaxLifeSecond(time.Duration(m.MaxLifeTime)),
 		mysqlDB.WithMaxIdleTime(time.Duration(m.MaxIdleTime)),
 	}
-	if err := mysqlDB.InitMysqlClient(mysqlDB.DefaultClient, m.UserName, m.Password, m.Host, m.Database, options...); err != nil {
+
+	if err := mysqlDB.InitMysqlClient(mysqlDB.DefaultClient, m.UserName, m.Password, m.Host, m.Port, m.Database, options...); err != nil {
 		return err
 	}
 	db = mysqlDB.GetMysqlClient(mysqlDB.DefaultClient).DB

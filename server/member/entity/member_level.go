@@ -4,7 +4,7 @@ import "github.com/lwzphper/go-mall/pkg/gorm"
 
 type MemberLevel struct {
 	gorm.BigIdField
-	Name                 string `json:"name" gorm:"column:username,uniqueIndex:uk_username"`
+	Name                 string `json:"name" gorm:"column:username;uniqueIndex:uk_username"`
 	GrowthPoint          int    `json:"growth_point" gorm:"column:growth_point"`
 	IsDefault            int8   `json:"is_default" gorm:"column:is_default"`
 	CommentGrowthPoint   int8   `json:"comment_growth_point" gorm:"column:comment_growth_point"`

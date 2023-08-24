@@ -22,7 +22,7 @@ type Member struct {
 	SourceType            SourceType   `json:"source_type" gorm:"column:source_type"`
 	Integration           int          `json:"integration" gorm:"column:integration"`
 	Growth                int          `json:"growth" gorm:"column:growth"`
-	LuckCount             int          `json:"luck_count" gorm:"column:luck_count"`
+	LuckyCount            int          `json:"lucky_count" gorm:"column:lucky_count"`
 	HistoryIntegration    int          `json:"history_integration" gorm:"column:history_integration"`
 	gorm.CreatedAtField
 	gorm.UpdatedAtFiled

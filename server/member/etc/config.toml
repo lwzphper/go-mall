@@ -11,6 +11,7 @@ password = "123456"
 max_open_conn = 1000
 max_idle_conn = 100
 max_life_second = 30
+max_life_time = 1800
 table_prefix = ""
 
 [mongodb]

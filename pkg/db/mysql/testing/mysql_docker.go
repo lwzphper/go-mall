@@ -1,11 +1,11 @@
 package mysqltesting
 
 import (
+	"database/sql"
 	"fmt"
 	"github.com/lwzphper/go-mall/pkg/common/config/db"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
-	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"log"
 	"os"
@@ -26,6 +26,7 @@ type TestDBSetting struct {
 }
 
 var GormDB *gorm.DB
+var connDB *sql.DB
 var dockerPort string
 
 var (
@@ -36,7 +37,7 @@ var (
 		//ImageVersion: "10.4.7",
 		ImageName:    "mysql/mysql-server",
 		ImageVersion: "8.0.28",
-		Database:     "test", // 由于连接时指定了数据库，gorm 切换数据比较麻烦，因此默认用 test
+		Database:     "go_mall_test",
 		ENV:          []string{fmt.Sprintf("MYSQL_ROOT_PASSWORD=%s", password), "MYSQL_ROOT_HOST=%"},
 		PortID:       "3306/tcp",
 	}
@@ -64,34 +65,39 @@ func RunMysqlInDocker(m *testing.M) {
 
 	dockerPort = resource.GetPort(dbSetting.PortID)
 	if err := pool.Retry(func() error {
-		initMysql()
+		// 创建数据库
+		dsn := fmt.Sprintf("root:%s@tcp(127.0.0.1:%s)/?charset=utf8mb4&multiStatements=true", password, dockerPort)
+		connDB, err = sql.Open("mysql", dsn)
 		if err != nil {
 			return err
 		}
-
-		sql, err := GormDB.DB()
-		if err != nil {
-			return errors.Wrapf(err, "cannot get sql db")
+		if err = connDB.Ping(); err != nil {
+			return err
 		}
-
-		return sql.Ping()
-
+		return connDB.Ping()
 	}); err != nil {
 		log.Fatalf("could not connect to database: %s", err)
 	}
 
-	// 初始化数据库
-	/*err = GormDB.Exec(fmt.Sprintf("create database %s", dbSetting.Database)).Error
+	// 创建数据库
+	_, err = connDB.Exec(fmt.Sprintf("create database %s", dbSetting.Database))
 	if err != nil {
 		log.Fatalf("create database error: %s", err)
-	}*/
+	}
+	_ = connDB.Close()
+
+	// 初始化 gorm 数据库
+	initMysql()
+	if err != nil {
+		log.Fatalf("cannot get sql db:%v", err)
+	}
 
 	code := m.Run()
 
 	// You can't defer this because os.Exit doesn't care for defer
-	/*if err := pool.Purge(resource); err != nil {
+	if err := pool.Purge(resource); err != nil {
 		log.Fatalf("Could not purge resource: %s", err)
-	}*/
+	}
 
 	os.Exit(code)
 }
@@ -108,5 +114,6 @@ func initMysql() {
 		log.Fatalf("init mysql db error: %s", err)
 	}
 
+	fmt.Printf("sql 连接信息：%v\n", mysqlCfg)
 	GormDB = mysqlCfg.GetDB()
 }

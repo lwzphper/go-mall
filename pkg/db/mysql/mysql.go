@@ -142,7 +142,7 @@ func NewDefaultOption() *Config {
 	}
 }
 
-func InitMysqlClient(clientName, username, password, host, dbName string, options ...Option) error {
+func InitMysqlClient(clientName, username, password, host, port, dbName string, options ...Option) error {
 	if len(clientName) == 0 {
 		return errors.New("client name is empty")
 	}
@@ -156,7 +156,7 @@ func InitMysqlClient(clientName, username, password, host, dbName string, option
 		}
 	}
 
-	db, err := dbConnect(username, password, host, dbName, opt)
+	db, err := dbConnect(username, password, host, port, dbName, opt)
 	if err != nil {
 		return errors.Wrapf(err, "host : "+host)
 	}
@@ -192,11 +192,12 @@ func CloseMysqlClient(clientName string) error {
 	return nil*/
 }
 
-func dbConnect(user, pass, host, dbName string, option *Config) (*gorm.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=%t&loc=%s",
+func dbConnect(user, pass, host, port, dbName string, option *Config) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=%t&loc=%s",
 		user,
 		pass,
 		host,
+		port,
 		dbName,
 		true,
 		"Local")
