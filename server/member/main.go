@@ -12,6 +12,7 @@ import (
 	"github.com/lwzphper/go-mall/server/member/service"
 	"google.golang.org/grpc"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type Config struct {
@@ -46,12 +47,7 @@ func main() {
 	logger := cfg.Logging.InitLogger(cfg.App.Env)
 
 	// 初始化数据库
-	db := cfg.Mysql
-	err = db.InitDB()
-	if err != nil {
-		panic(fmt.Sprintf("init mysql error:%v", err))
-	}
-	gormDB = db.GetDB()
+	initDB()
 
 	// todo 优雅关闭
 
@@ -67,4 +63,25 @@ func main() {
 			})
 		},
 	}))
+}
+
+// 初始化数据库配置
+func initDB() {
+	envLogLevelMap := map[app.Env]logger.LogLevel{
+		app.ENV_DEVELOPMENT: logger.Info,
+		app.ENV_TEST:        logger.Info,
+		app.ENV_PRODUCTION:  logger.Warn,
+	}
+	level, ok := envLogLevelMap[cfg.App.Env]
+	if !ok {
+		level = logger.Warn
+	}
+
+	db := cfg.Mysql
+	db.LogLevel = level
+	err := db.InitDB()
+	if err != nil {
+		panic(fmt.Sprintf("init mysql error:%v", err))
+	}
+	gormDB = db.GetDB()
 }

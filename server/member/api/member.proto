@@ -44,7 +44,7 @@ message BasicInfo {
   string nickname = 3;
 }
 
-message SaveRequest {
+message CreateRequest {
   Member member = 1;
   string password = 2;
 }
@@ -53,5 +53,5 @@ service MemberService {
   // 获取会员信息
   rpc GetMember(GetMemberRequest) returns(Member);
   // 创建会员
-  rpc CreateMember(SaveRequest) returns (BasicInfo);
+  rpc CreateMember(CreateRequest) returns (BasicInfo);
 }

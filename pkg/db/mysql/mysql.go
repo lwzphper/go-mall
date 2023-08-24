@@ -127,18 +127,25 @@ func WithLogger(writer io.Writer, config LoggerConfig) Option {
 	}
 }
 
+// NewDefaultOption 创建默认配置项
 func NewDefaultOption() *Config {
+	logConf := NewDefaultLoggerConf()
 	return &Config{
 		MaxOpenConn:       DefaultMaxOpenConn,
 		MaxIdleConn:       DefaultMaxIdleConn,
 		ConnMaxLifeSecond: DefaultConnMaxLifeSecond,
 		PrepareStmt:       true,
-		Logger: logger.New(StdLogger, logger.Config{
-			SlowThreshold:             time.Duration(DefaultSlowLogMillisecond) * time.Millisecond,
-			LogLevel:                  logger.Info,
-			IgnoreRecordNotFoundError: true,
-			Colorful:                  true,
-		}),
+		Logger:            logger.New(StdLogger, logger.Config(logConf)),
+	}
+}
+
+// NewDefaultLoggerConf 创建日志默认配置
+func NewDefaultLoggerConf() LoggerConfig {
+	return LoggerConfig{
+		SlowThreshold:             time.Duration(DefaultSlowLogMillisecond) * time.Millisecond,
+		LogLevel:                  logger.Info,
+		IgnoreRecordNotFoundError: true,
+		Colorful:                  true,
 	}
 }
 

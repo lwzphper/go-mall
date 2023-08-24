@@ -5,7 +5,11 @@ import (
 	"database/sql"
 	"fmt"
 	mysqlDB "github.com/lwzphper/go-mall/pkg/db/mysql"
+	"github.com/pkg/errors"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"io"
+	"os"
 	"sync"
 	"time"
 )
@@ -26,7 +30,9 @@ type Mysql struct {
 	MaxLifeTime int    `toml:"max_life_time" yaml:"max_life_time" mapstructure:"max_life_time" env:"MYSQL_MAX_LIFE_TIME"`
 	MaxIdleTime int    `toml:"max_idle_time" yaml:"max_idle_time" mapstructure:"max_idle_time" env:"MYSQL_MAX_IDLE_TIME"`
 	TablePrefix string `toml:"table_prefix" yaml:"table_prefix" mapstructure:"table_prefix" env:"MYSQL_TABLE_PREFIX"`
+	LogFileName string `toml:"log_file_name" yaml:"log_file_name" mapstructure:"log_file_name" env:"MYSQL_LOG_FILE_NAME"`
 	lock        sync.Mutex
+	LogLevel    logger.LogLevel
 }
 
 func NewDefaultMysql() *Mysql {
@@ -38,6 +44,7 @@ func NewDefaultMysql() *Mysql {
 		MaxOpenConn: 200,
 		MaxIdleConn: 100,
 		MaxLifeTime: 1800,
+		LogLevel:    logger.Info,
 	}
 }
 
@@ -57,6 +64,22 @@ func (m *Mysql) InitDB() error {
 		mysqlDB.WithMaxIdleTime(time.Duration(m.MaxIdleTime)),
 	}
 
+	// 设置日志
+	logConf := mysqlDB.NewDefaultLoggerConf()
+	logConf.LogLevel = m.LogLevel
+	var logWriter io.Writer
+	if m.LogFileName == "" {
+		logWriter = os.Stdout
+	} else {
+		open, err := os.OpenFile(m.LogFileName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+		if err != nil {
+			return errors.Wrap(err, "cannot open mysql log file")
+		}
+		logWriter = open
+	}
+	options = append(options, mysqlDB.WithLogger(logWriter, logConf))
+
+	// 初始化客户端
 	if err := mysqlDB.InitMysqlClient(mysqlDB.DefaultClient, m.UserName, m.Password, m.Host, m.Port, m.Database, options...); err != nil {
 		return err
 	}

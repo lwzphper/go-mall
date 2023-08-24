@@ -5,6 +5,7 @@ import (
 	"github.com/lwzphper/go-mall/pkg/logger"
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
 	"github.com/lwzphper/go-mall/server/member/dao"
+	"github.com/lwzphper/go-mall/server/member/entity"
 )
 
 type MemberService struct {
@@ -14,11 +15,25 @@ type MemberService struct {
 }
 
 // CreateMember 创建会员
-func (m *MemberService) CreateMember(ctx context.Context, req *memberpb.SaveRequest) (*memberpb.BasicInfo, error) {
-	return nil, nil
+func (s *MemberService) CreateMember(ctx context.Context, req *memberpb.CreateRequest) (*memberpb.BasicInfo, error) {
+	m := &entity.Member{
+		Username: req.Member.Username,
+		Password: req.Password,
+	}
+
+	err := s.MemberDao.CreateMember(ctx, m)
+	if err != nil {
+		return nil, err
+	}
+
+	return &memberpb.BasicInfo{
+		Id:       m.Id,
+		Username: m.Username,
+		Nickname: m.Nickname,
+	}, nil
 }
 
 // GetMember 获取会员详情
-func (m *MemberService) GetMember(ctx context.Context, req *memberpb.GetMemberRequest) (*memberpb.Member, error) {
+func (s *MemberService) GetMember(ctx context.Context, req *memberpb.GetMemberRequest) (*memberpb.Member, error) {
 	return nil, nil
 }
