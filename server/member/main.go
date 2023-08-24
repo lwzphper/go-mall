@@ -44,21 +44,19 @@ func main() {
 	}
 
 	// 初始化日志
-	logger := cfg.Logging.InitLogger(cfg.App.Env)
+	log := cfg.Logging.InitLogger(cfg.App.Env)
 
 	// 初始化数据库
 	initDB()
 
-	// todo 优雅关闭
-
 	// 启动 grpc
-	logger.L.Sugar().Fatal(server.RunGRPCServer(&server.GRPCConfig{
+	log.L.Sugar().Fatal(server.RunGRPCServer(&server.GRPCConfig{
 		Name:   cfg.App.Name,
 		Addr:   cfg.App.Addr,
-		Logger: logger,
+		Logger: log,
 		RegisterFunc: func(s *grpc.Server) {
 			memberpb.RegisterMemberServiceServer(s, &service.MemberService{
-				Logger:    logger,
+				Logger:    log,
 				MemberDao: dao.NewMember(gormDB),
 			})
 		},
