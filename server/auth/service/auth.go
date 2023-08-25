@@ -15,6 +15,7 @@ type AuthService struct {
 
 // MemberManger defines the ACL for member management. 会员管理 防止入侵层
 type MemberManger interface {
+	RegisterMemberInfo(c context.Context, username, password string) error
 	LoginVerify(ctx context.Context, username, password string) error
 }
 

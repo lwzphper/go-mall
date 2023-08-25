@@ -5,7 +5,7 @@ import (
 	"github.com/lwzphper/go-mall/pkg/common/config"
 	"github.com/lwzphper/go-mall/pkg/common/config/app"
 	configDB "github.com/lwzphper/go-mall/pkg/common/config/db"
-	configHelper "github.com/lwzphper/go-mall/pkg/config"
+	cfgHelper "github.com/lwzphper/go-mall/pkg/config"
 	"github.com/lwzphper/go-mall/pkg/server"
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
 	"github.com/lwzphper/go-mall/server/member/dao"
@@ -21,15 +21,6 @@ type Config struct {
 	Logging *config.Logging `toml:"logging" yaml:"logging" mapstructure:"logging"`
 }
 
-// NewConfig 创建配置文件
-func NewConfig() *Config {
-	return &Config{
-		App:     app.NewDefaultApp(),
-		Mysql:   configDB.NewDefaultMysql(),
-		Logging: config.NewDefaultLogging(),
-	}
-}
-
 var (
 	cfg    *Config
 	gormDB *gorm.DB
@@ -37,8 +28,12 @@ var (
 
 func main() {
 	// 初始化配置文件
-	cfg = NewConfig()
-	err := configHelper.LoadConfigFromYml("server/member/etc/config.yaml", cfg)
+	cfg = &Config{
+		App:     app.NewDefaultApp(),
+		Mysql:   configDB.NewDefaultMysql(),
+		Logging: config.NewDefaultLogging(),
+	}
+	err := cfgHelper.LoadConfigFromYml("server/member/etc/config.yaml", cfg)
 	if err != nil {
 		panic(fmt.Sprintf("load config from env error:%v", err))
 	}

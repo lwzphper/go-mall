@@ -6,6 +6,7 @@ import (
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
 	"github.com/lwzphper/go-mall/server/member/dao"
 	"github.com/lwzphper/go-mall/server/member/entity"
+	"github.com/pkg/errors"
 )
 
 type MemberService struct {
@@ -35,5 +36,10 @@ func (s *MemberService) CreateMember(ctx context.Context, req *memberpb.CreateRe
 
 // GetMember 获取会员详情
 func (s *MemberService) GetMember(ctx context.Context, req *memberpb.GetMemberRequest) (*memberpb.Member, error) {
+	if req.Username == "" && req.Phone == "" {
+		return nil, errors.New("username or phone empty")
+	}
+
+	//memberRecord, err := s.MemberDao.GetMemberByUsername(ctx, req.Username)
 	return nil, nil
 }

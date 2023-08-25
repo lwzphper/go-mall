@@ -1,5 +1,10 @@
+app:
+  env: development
+  name: go-mall-auth
+  address: :8081
+
 mysql:
-  database: go-mall
+  database: go_mall
   username: root
   password: 123456
   host: 127.0.0.1
@@ -7,4 +12,15 @@ mysql:
   max_open_conn: 1000
   max_idle_conn: 100
   max_life_second: 30
+  max_life_time: 1800
+  log_file_name: ./log/auth/sql.log
   table_prefix:
+
+logging:
+  name: auth
+  driver: rotate
+  level: debug
+  file_name: ./log/auth/rotate.log
+  file_size_mb:
+  max_age:
+  max_backups:

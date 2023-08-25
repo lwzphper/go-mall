@@ -7,7 +7,12 @@ import (
 
 // Manager defines a member manager.
 type Manager struct {
-	memberService memberpb.MemberServiceClient
+	MemberService memberpb.MemberServiceClient
+}
+
+// RegisterMemberInfo 注册用户信息
+func (m *Manager) RegisterMemberInfo(c context.Context, username, password string) error {
+	return nil
 }
 
 // LoginVerify 登录验证
