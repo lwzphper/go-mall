@@ -40,6 +40,6 @@ func (s *MemberService) GetMember(ctx context.Context, req *memberpb.GetMemberRe
 		return nil, errors.New("username or phone empty")
 	}
 
-	//memberRecord, err := s.MemberDao.GetMemberByUsername(ctx, req.Username)
+	//memberRecord, err := s.MemberDao.GetItem(ctx, entity.Member{})
 	return nil, nil
 }

@@ -73,6 +73,8 @@ func RunMysqlInDocker(m *testing.M) {
 		os.Exit(runCode)
 	}()
 
+	fmt.Println("docker starting")
+
 	dockerPort = resource.GetPort(dbSetting.PortID)
 	if err := pool.Retry(func() error {
 		// 创建数据库
@@ -103,7 +105,6 @@ func RunMysqlInDocker(m *testing.M) {
 	}
 
 	runCode = m.Run()
-
 }
 
 // 初始化 mysql

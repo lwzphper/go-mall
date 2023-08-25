@@ -27,8 +27,8 @@ func (m *Member) CreateMember(ctx context.Context, member *entity.Member) error 
 	return m.db.Create(member).Error
 }
 
-// GetMemberByUsername 通过用户名获取用户信息
-func (m *Member) GetMemberByUsername(ctx context.Context, username string) (*MemberRecord, error) {
-	record := &MemberRecord{}
-	return record, m.db.Where("username", username).First(record).Error
+// GetItem 查询用户信息
+func (m *Member) GetItem(ctx context.Context, where *entity.Member) (*entity.Member, error) {
+	record := &entity.Member{}
+	return record, m.db.Where(where).First(record).Error
 }

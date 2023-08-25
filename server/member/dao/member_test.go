@@ -49,7 +49,7 @@ func TestCreateAndQueryMember(t *testing.T) {
 				t.Errorf("[%s]:create member error:%v", c.caseName, err)
 			}
 
-			memberRecord, err := dao.GetMemberByUsername(ctx, c.username)
+			memberRecord, err := dao.GetItem(ctx, &entity.Member{Username: c.username})
 			if err != nil {
 				t.Errorf("[%s]:get member info error: %v", c.caseName, err)
 			}
@@ -63,11 +63,6 @@ func TestCreateAndQueryMember(t *testing.T) {
 			}
 		})
 	}
-}
-
-// 测试获取会员
-func TestGetMemberByUsername(t *testing.T) {
-
 }
 
 // 初始化数据表
