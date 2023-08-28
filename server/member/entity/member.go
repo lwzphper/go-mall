@@ -21,10 +21,11 @@ type Member struct {
 	Gender                Gender       `json:"gender" gorm:"column:gender"`
 	Birthday              *time.Time   `json:"birthday" gorm:"column:birthday;default:null"`
 	City                  string       `json:"city" gorm:"column:city"`
+	Job                   string       `json:"job" gorm:"column:job"`
 	PersonalizedSignature string       `json:"personalized_signature" gorm:"column:personalized_signature"`
 	SourceType            SourceType   `json:"source_type" gorm:"column:source_type"`
 	Integration           int          `json:"integration" gorm:"column:integration"`
-	Growth                int          `json:"growth" gorm:"column:growth"`
+	Growth                int32        `json:"growth" gorm:"column:growth"`
 	LuckyCount            int          `json:"lucky_count" gorm:"column:lucky_count"`
 	HistoryIntegration    int          `json:"history_integration" gorm:"column:history_integration"`
 	gorm.CreatedAtField
