@@ -40,11 +40,11 @@ func TestCreateAndQueryMember(t *testing.T) {
 
 	for _, c := range testCase {
 		t.Run(c.caseName, func(t *testing.T) {
-			member := &entity.Member{
+			member := entity.Member{
 				Username: c.username,
 				Password: until.RandomString(32),
 			}
-			err := dao.CreateMember(ctx, member)
+			err := dao.CreateMember(ctx, &member)
 			if err != nil {
 				t.Errorf("[%s]:create member error:%v", c.caseName, err)
 			}

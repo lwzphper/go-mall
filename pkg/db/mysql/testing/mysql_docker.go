@@ -66,10 +66,11 @@ func RunMysqlInDocker(m *testing.M) {
 	var runCode int
 
 	defer func() {
-		// You can't defer this because os.Exit doesn't care for defer
+		//// You can't defer this because os.Exit doesn't care for defer
 		if err := pool.Purge(resource); err != nil {
 			log.Fatalf("Could not purge resource: %s", err)
 		}
+
 		os.Exit(runCode)
 	}()
 
@@ -100,9 +101,6 @@ func RunMysqlInDocker(m *testing.M) {
 
 	// 初始化 gorm 数据库
 	initMysql()
-	if err != nil {
-		log.Fatalf("cannot get sql db:%v", err)
-	}
 
 	runCode = m.Run()
 }
@@ -119,6 +117,5 @@ func initMysql() {
 		log.Fatalf("init mysql db error: %s", err)
 	}
 
-	fmt.Printf("sql 连接信息：%v\n", mysqlCfg)
 	GormDB = mysqlCfg.GetDB()
 }
