@@ -8,6 +8,7 @@ package memberpb
 
 import (
 	context "context"
+	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -19,18 +20,22 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MemberService_GetMember_FullMethodName    = "/member.v1.MemberService/GetMember"
-	MemberService_CreateMember_FullMethodName = "/member.v1.MemberService/CreateMember"
+	MemberService_GetMemberById_FullMethodName    = "/member.v1.MemberService/GetMemberById"
+	MemberService_GetMemberByPhone_FullMethodName = "/member.v1.MemberService/GetMemberByPhone"
+	MemberService_CreateMember_FullMethodName     = "/member.v1.MemberService/CreateMember"
+	MemberService_UpdateMember_FullMethodName     = "/member.v1.MemberService/UpdateMember"
+	MemberService_CheckPassWord_FullMethodName    = "/member.v1.MemberService/CheckPassWord"
 )
 
 // MemberServiceClient is the client API for MemberService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MemberServiceClient interface {
-	// 获取会员信息
-	GetMember(ctx context.Context, in *GetMemberRequest, opts ...grpc.CallOption) (*Member, error)
-	// 创建会员
-	CreateMember(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*BasicInfo, error)
+	GetMemberById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*MemberEntity, error)
+	GetMemberByPhone(ctx context.Context, in *PhoneRequest, opts ...grpc.CallOption) (*MemberEntity, error)
+	CreateMember(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*MemberEntity, error)
+	UpdateMember(ctx context.Context, in *MemberEntity, opts ...grpc.CallOption) (*empty.Empty, error)
+	CheckPassWord(ctx context.Context, in *PasswordCheckInfo, opts ...grpc.CallOption) (*CheckResponse, error)
 }
 
 type memberServiceClient struct {
@@ -41,18 +46,45 @@ func NewMemberServiceClient(cc grpc.ClientConnInterface) MemberServiceClient {
 	return &memberServiceClient{cc}
 }
 
-func (c *memberServiceClient) GetMember(ctx context.Context, in *GetMemberRequest, opts ...grpc.CallOption) (*Member, error) {
-	out := new(Member)
-	err := c.cc.Invoke(ctx, MemberService_GetMember_FullMethodName, in, out, opts...)
+func (c *memberServiceClient) GetMemberById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*MemberEntity, error) {
+	out := new(MemberEntity)
+	err := c.cc.Invoke(ctx, MemberService_GetMemberById_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *memberServiceClient) CreateMember(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*BasicInfo, error) {
-	out := new(BasicInfo)
+func (c *memberServiceClient) GetMemberByPhone(ctx context.Context, in *PhoneRequest, opts ...grpc.CallOption) (*MemberEntity, error) {
+	out := new(MemberEntity)
+	err := c.cc.Invoke(ctx, MemberService_GetMemberByPhone_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *memberServiceClient) CreateMember(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*MemberEntity, error) {
+	out := new(MemberEntity)
 	err := c.cc.Invoke(ctx, MemberService_CreateMember_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *memberServiceClient) UpdateMember(ctx context.Context, in *MemberEntity, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, MemberService_UpdateMember_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *memberServiceClient) CheckPassWord(ctx context.Context, in *PasswordCheckInfo, opts ...grpc.CallOption) (*CheckResponse, error) {
+	out := new(CheckResponse)
+	err := c.cc.Invoke(ctx, MemberService_CheckPassWord_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,10 +95,11 @@ func (c *memberServiceClient) CreateMember(ctx context.Context, in *CreateReques
 // All implementations must embed UnimplementedMemberServiceServer
 // for forward compatibility
 type MemberServiceServer interface {
-	// 获取会员信息
-	GetMember(context.Context, *GetMemberRequest) (*Member, error)
-	// 创建会员
-	CreateMember(context.Context, *CreateRequest) (*BasicInfo, error)
+	GetMemberById(context.Context, *IdRequest) (*MemberEntity, error)
+	GetMemberByPhone(context.Context, *PhoneRequest) (*MemberEntity, error)
+	CreateMember(context.Context, *CreateRequest) (*MemberEntity, error)
+	UpdateMember(context.Context, *MemberEntity) (*empty.Empty, error)
+	CheckPassWord(context.Context, *PasswordCheckInfo) (*CheckResponse, error)
 	mustEmbedUnimplementedMemberServiceServer()
 }
 
@@ -74,11 +107,20 @@ type MemberServiceServer interface {
 type UnimplementedMemberServiceServer struct {
 }
 
-func (UnimplementedMemberServiceServer) GetMember(context.Context, *GetMemberRequest) (*Member, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetMember not implemented")
+func (UnimplementedMemberServiceServer) GetMemberById(context.Context, *IdRequest) (*MemberEntity, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMemberById not implemented")
 }
-func (UnimplementedMemberServiceServer) CreateMember(context.Context, *CreateRequest) (*BasicInfo, error) {
+func (UnimplementedMemberServiceServer) GetMemberByPhone(context.Context, *PhoneRequest) (*MemberEntity, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMemberByPhone not implemented")
+}
+func (UnimplementedMemberServiceServer) CreateMember(context.Context, *CreateRequest) (*MemberEntity, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateMember not implemented")
+}
+func (UnimplementedMemberServiceServer) UpdateMember(context.Context, *MemberEntity) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateMember not implemented")
+}
+func (UnimplementedMemberServiceServer) CheckPassWord(context.Context, *PasswordCheckInfo) (*CheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckPassWord not implemented")
 }
 func (UnimplementedMemberServiceServer) mustEmbedUnimplementedMemberServiceServer() {}
 
@@ -93,20 +135,38 @@ func RegisterMemberServiceServer(s grpc.ServiceRegistrar, srv MemberServiceServe
 	s.RegisterService(&MemberService_ServiceDesc, srv)
 }
 
-func _MemberService_GetMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetMemberRequest)
+func _MemberService_GetMemberById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MemberServiceServer).GetMember(ctx, in)
+		return srv.(MemberServiceServer).GetMemberById(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MemberService_GetMember_FullMethodName,
+		FullMethod: MemberService_GetMemberById_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MemberServiceServer).GetMember(ctx, req.(*GetMemberRequest))
+		return srv.(MemberServiceServer).GetMemberById(ctx, req.(*IdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MemberService_GetMemberByPhone_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PhoneRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MemberServiceServer).GetMemberByPhone(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MemberService_GetMemberByPhone_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MemberServiceServer).GetMemberByPhone(ctx, req.(*PhoneRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -129,6 +189,42 @@ func _MemberService_CreateMember_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MemberService_UpdateMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MemberEntity)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MemberServiceServer).UpdateMember(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MemberService_UpdateMember_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MemberServiceServer).UpdateMember(ctx, req.(*MemberEntity))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MemberService_CheckPassWord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PasswordCheckInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MemberServiceServer).CheckPassWord(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MemberService_CheckPassWord_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MemberServiceServer).CheckPassWord(ctx, req.(*PasswordCheckInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MemberService_ServiceDesc is the grpc.ServiceDesc for MemberService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -137,12 +233,24 @@ var MemberService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MemberServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetMember",
-			Handler:    _MemberService_GetMember_Handler,
+			MethodName: "GetMemberById",
+			Handler:    _MemberService_GetMemberById_Handler,
+		},
+		{
+			MethodName: "GetMemberByPhone",
+			Handler:    _MemberService_GetMemberByPhone_Handler,
 		},
 		{
 			MethodName: "CreateMember",
 			Handler:    _MemberService_CreateMember_Handler,
+		},
+		{
+			MethodName: "UpdateMember",
+			Handler:    _MemberService_UpdateMember_Handler,
+		},
+		{
+			MethodName: "CheckPassWord",
+			Handler:    _MemberService_CheckPassWord_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

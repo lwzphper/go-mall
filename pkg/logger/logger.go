@@ -155,6 +155,6 @@ func ResetDefault(l *Logger) {
 	Fatal = std.Fatal
 }
 
-func Default() *Logger {
+func NewDefaultLogger() *Logger {
 	return std
 }

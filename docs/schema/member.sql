@@ -24,7 +24,7 @@ CREATE TABLE `member`
     `id`                     bigint unsigned   NOT NULL AUTO_INCREMENT,
     `member_level_id`        bigint unsigned   NOT NULL DEFAULT 0 COMMENT '会员等级',
     `username`               varchar(64)       NOT NULL COMMENT '用户名',
-    `password`               varchar(64)       NOT NULL COMMENT '密码',
+    `password`               varchar(100)       NOT NULL COMMENT '密码',
     `nickname`               varchar(64)       NOT NULL DEFAULT '' COMMENT '昵称',
     `phone`                  char(11)          NOT NULL DEFAULT '' COMMENT '手机号码',
     `status`                 tinyint unsigned  NOT NULL DEFAULT 1 COMMENT '帐号启用状态:0->禁用；1->启用',

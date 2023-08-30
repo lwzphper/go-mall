@@ -1,80 +1,33 @@
 package main
 
 import (
-	"fmt"
-	"github.com/lwzphper/go-mall/pkg/common/config"
-	"github.com/lwzphper/go-mall/pkg/common/config/app"
-	configDB "github.com/lwzphper/go-mall/pkg/common/config/db"
-	cfgHelper "github.com/lwzphper/go-mall/pkg/config"
 	"github.com/lwzphper/go-mall/pkg/server"
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
 	"github.com/lwzphper/go-mall/server/member/dao"
+	"github.com/lwzphper/go-mall/server/member/global"
+	"github.com/lwzphper/go-mall/server/member/initialize"
 	"github.com/lwzphper/go-mall/server/member/service"
 	"google.golang.org/grpc"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
-)
-
-type Config struct {
-	App     *app.App        `toml:"app" yaml:"app" mapstructure:"app"`
-	Mysql   *configDB.Mysql `toml:"mysql" yaml:"mysql" mapstructure:"mysql"`
-	Logging *config.Logging `toml:"logging" yaml:"logging" mapstructure:"logging"`
-}
-
-var (
-	cfg    *Config
-	gormDB *gorm.DB
 )
 
 func main() {
 	// 初始化配置文件
-	cfg = &Config{
-		App:     app.NewDefaultApp(),
-		Mysql:   configDB.NewDefaultMysql(),
-		Logging: config.NewDefaultLogging(),
-	}
-	err := cfgHelper.LoadConfigFromYml("server/member/etc/config.yaml", cfg)
-	if err != nil {
-		panic(fmt.Sprintf("load config from env error:%v", err))
-	}
-
+	initialize.InitConfig()
 	// 初始化日志
-	log := cfg.Logging.InitLogger(cfg.App.Env)
-
+	initialize.InitLogger()
 	// 初始化数据库
-	initDB()
+	initialize.InitDB()
 
 	// 启动 grpc
-	log.L.Sugar().Fatal(server.RunGRPCServer(&server.GRPCConfig{
-		Name:   cfg.App.Name,
-		Addr:   cfg.App.Addr,
-		Logger: log,
+	global.Logger.L.Sugar().Fatal(server.RunGRPCServer(&server.GRPCConfig{
+		Name:   global.Config.App.Name,
+		Addr:   global.Config.App.Addr,
+		Logger: global.Logger,
 		RegisterFunc: func(s *grpc.Server) {
 			memberpb.RegisterMemberServiceServer(s, &service.MemberService{
-				Logger:    log,
-				MemberDao: dao.NewMember(gormDB),
+				Logger:    global.Logger,
+				MemberDao: dao.NewMember(),
 			})
 		},
 	}))
-}
-
-// 初始化数据库配置
-func initDB() {
-	envLogLevelMap := map[app.Env]logger.LogLevel{
-		app.ENV_DEVELOPMENT: logger.Info,
-		app.ENV_TEST:        logger.Info,
-		app.ENV_PRODUCTION:  logger.Warn,
-	}
-	level, ok := envLogLevelMap[cfg.App.Env]
-	if !ok {
-		level = logger.Warn
-	}
-
-	db := cfg.Mysql
-	db.LogLevel = level
-	err := db.InitDB()
-	if err != nil {
-		panic(fmt.Sprintf("init mysql error:%v", err))
-	}
-	gormDB = db.GetDB()
 }
