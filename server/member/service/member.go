@@ -22,6 +22,8 @@ var (
 	memberNotFoundError = status.Errorf(codes.NotFound, "用户不存在")
 )
 
+var _ memberpb.MemberServiceServer = (*MemberService)(nil)
+
 type MemberService struct {
 	memberpb.UnimplementedMemberServiceServer
 	MemberDao *dao.Member
