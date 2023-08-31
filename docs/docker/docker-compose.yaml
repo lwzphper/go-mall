@@ -34,3 +34,9 @@ services:
       - default
     command:
       --auth
+
+  seaweedfs:
+    image: chrislusf/seaweedfs
+    ports:
+      - "8333:8333"
+    command: 'server -s3 -ip.bind=0.0.0.0'
