@@ -14,7 +14,6 @@ type Member struct {
 	MemberLevelId         uint64       `json:"member_level_id" gorm:"column:member_level_id"`
 	Username              string       `json:"username" gorm:"column:username;uniqueIndex:uk_username"`
 	Password              string       `json:"password" gorm:"column:password"`
-	Nickname              string       `json:"nickname" gorm:"column:nickname"`
 	Phone                 string       `json:"phone" gorm:"column:phone"`
 	Status                MemberStatus `json:"status" gorm:"column:status"`
 	Icon                  string       `json:"icon" gorm:"column:icon"`

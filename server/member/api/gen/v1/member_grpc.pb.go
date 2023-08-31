@@ -33,7 +33,7 @@ const (
 type MemberServiceClient interface {
 	GetMemberById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*MemberEntity, error)
 	GetMemberByPhone(ctx context.Context, in *PhoneRequest, opts ...grpc.CallOption) (*MemberEntity, error)
-	CreateMember(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*MemberEntity, error)
+	CreateMember(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	UpdateMember(ctx context.Context, in *MemberEntity, opts ...grpc.CallOption) (*empty.Empty, error)
 	CheckPassWord(ctx context.Context, in *PasswordCheckInfo, opts ...grpc.CallOption) (*CheckResponse, error)
 }
@@ -64,8 +64,8 @@ func (c *memberServiceClient) GetMemberByPhone(ctx context.Context, in *PhoneReq
 	return out, nil
 }
 
-func (c *memberServiceClient) CreateMember(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*MemberEntity, error) {
-	out := new(MemberEntity)
+func (c *memberServiceClient) CreateMember(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
 	err := c.cc.Invoke(ctx, MemberService_CreateMember_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -97,7 +97,7 @@ func (c *memberServiceClient) CheckPassWord(ctx context.Context, in *PasswordChe
 type MemberServiceServer interface {
 	GetMemberById(context.Context, *IdRequest) (*MemberEntity, error)
 	GetMemberByPhone(context.Context, *PhoneRequest) (*MemberEntity, error)
-	CreateMember(context.Context, *CreateRequest) (*MemberEntity, error)
+	CreateMember(context.Context, *CreateRequest) (*CreateResponse, error)
 	UpdateMember(context.Context, *MemberEntity) (*empty.Empty, error)
 	CheckPassWord(context.Context, *PasswordCheckInfo) (*CheckResponse, error)
 	mustEmbedUnimplementedMemberServiceServer()
@@ -113,7 +113,7 @@ func (UnimplementedMemberServiceServer) GetMemberById(context.Context, *IdReques
 func (UnimplementedMemberServiceServer) GetMemberByPhone(context.Context, *PhoneRequest) (*MemberEntity, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMemberByPhone not implemented")
 }
-func (UnimplementedMemberServiceServer) CreateMember(context.Context, *CreateRequest) (*MemberEntity, error) {
+func (UnimplementedMemberServiceServer) CreateMember(context.Context, *CreateRequest) (*CreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateMember not implemented")
 }
 func (UnimplementedMemberServiceServer) UpdateMember(context.Context, *MemberEntity) (*empty.Empty, error) {

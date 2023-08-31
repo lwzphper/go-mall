@@ -25,7 +25,6 @@ CREATE TABLE `member`
     `member_level_id`        bigint unsigned   NOT NULL DEFAULT 0 COMMENT '会员等级',
     `username`               varchar(64)       NOT NULL COMMENT '用户名',
     `password`               varchar(100)       NOT NULL COMMENT '密码',
-    `nickname`               varchar(64)       NOT NULL DEFAULT '' COMMENT '昵称',
     `phone`                  char(11)          NOT NULL DEFAULT '' COMMENT '手机号码',
     `status`                 tinyint unsigned  NOT NULL DEFAULT 1 COMMENT '帐号启用状态:0->禁用；1->启用',
     `icon`                   varchar(255)      NOT NULL DEFAULT '' COMMENT '头像',
@@ -43,8 +42,7 @@ CREATE TABLE `member`
     `updated_at`             timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
     `is_delete`             tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `idx_username` (`username`),
-    INDEX `idx_phone` (`phone`)
+    UNIQUE KEY `uk_phone` (`phone`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci COMMENT ='会员表';

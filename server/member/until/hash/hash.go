@@ -1,4 +1,4 @@
-package until
+package hash
 
 import "golang.org/x/crypto/bcrypt"
 

@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 service MemberService {
   rpc GetMemberById(IdRequest) returns(MemberEntity); // 通过用户id获取会员信息
   rpc GetMemberByPhone(PhoneRequest) returns(MemberEntity); // 通过手机号码获取会员信息
-  rpc CreateMember(CreateRequest) returns (MemberEntity); // 创建会员
+  rpc CreateMember(CreateRequest) returns (CreateResponse); // 创建会员
   rpc UpdateMember(MemberEntity) returns (google.protobuf.Empty); // 更新会员
   rpc CheckPassWord(PasswordCheckInfo) returns (CheckResponse); //检查密码
 }
@@ -31,6 +31,10 @@ message PasswordCheckInfo {
   string encryptedPassword = 2;
 }
 
+message CreateResponse {
+  uint64 id = 1;
+}
+
 message CheckResponse{
   bool success = 1;
 }
@@ -44,22 +48,20 @@ message MemberEntity {
   uint64 member_level_id = 2;
   string username = 3;
   string password = 4;
-  string nickname = 5;
-  string phone = 6;
-  string icon = 7;
-  MemberStatus status = 8;
-  MemberGender gender = 9;
-  google.protobuf.Timestamp birthday = 10;
-  string city = 11;
-  string job = 12;
-  int32 growth = 13;
-  string created_at = 14;
+  string phone = 5;
+  string icon = 6;
+  MemberStatus status = 7;
+  MemberGender gender = 8;
+  google.protobuf.Timestamp birthday = 9;
+  string city = 10;
+  string job = 11;
+  int32 growth = 12;
+  string created_at = 13;
 }
 
 message BasicInfo {
   uint64 id = 1;
   string username = 2;
-  string nickname = 3;
 }
 
 message CreateRequest {
