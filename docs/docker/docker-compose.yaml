@@ -39,4 +39,7 @@ services:
     image: chrislusf/seaweedfs
     ports:
       - "8333:8333"
+      - "9333:9333"
     command: 'server -s3 -ip.bind=0.0.0.0'
+    volumes:
+      - ${DATA_DIR}/s3:/data

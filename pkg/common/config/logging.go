@@ -79,5 +79,7 @@ func (l *Logging) InitLogger(env app.Env) *logger.Logger {
 	}
 
 	log.Name(l.Name)
+
+	logger.ResetDefault(log)
 	return log
 }
