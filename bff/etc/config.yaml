@@ -1,0 +1,13 @@
+app:
+  env: development
+  name: buff
+  address: :8080
+
+logging:
+  name: buff
+  driver: rotate
+  level: debug
+  file_name: ./log/auth/rotate.log
+  file_size_mb:
+  max_age:
+  max_backups:
