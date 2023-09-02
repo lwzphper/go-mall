@@ -10,12 +10,16 @@ import (
 	"github.com/lwzphper/go-mall/server/member/global"
 	"github.com/stretchr/testify/assert"
 	"log"
+	"sync"
 	"testing"
+	"time"
 )
 
 var (
-	dao *Member
-	ctx context.Context
+	dao          *Member
+	ctx          context.Context
+	hasInitTable bool // 是否初始化 table
+	initLock     sync.Mutex
 )
 
 // 测试会员创建和查询
@@ -25,18 +29,21 @@ func TestCreateAndQueryMember(t *testing.T) {
 	testCase := []struct {
 		caseName  string // 测试名称
 		username  string // 会员名称
+		phone     string
 		wantName  string // 期望值
 		wantEqual bool   // 是否期望相等
 	}{
 		{
 			caseName:  "test equal",
 			username:  "张三",
+			phone:     until.RandomString(11),
 			wantName:  "张三",
 			wantEqual: true,
 		},
 		{
 			caseName:  "test not equal",
 			username:  "李四",
+			phone:     until.RandomString(11),
 			wantName:  "张三",
 			wantEqual: false,
 		},
@@ -46,6 +53,7 @@ func TestCreateAndQueryMember(t *testing.T) {
 		t.Run(c.caseName, func(t *testing.T) {
 			member := entity.Member{
 				Username: c.username,
+				Phone:    c.phone,
 				Password: until.RandomString(32),
 			}
 			err := dao.CreateMember(ctx, &member)
@@ -74,7 +82,7 @@ func TestGetItemById(t *testing.T) {
 
 	save := &entity.Member{
 		Username: "张三",
-		Phone:    "15800000001",
+		Phone:    until.RandomString(11),
 		Password: "123456",
 	}
 	err := dao.CreateMember(ctx, save)
@@ -94,7 +102,51 @@ func TestUpdate(t *testing.T) {
 
 	save := &entity.Member{
 		Username: "张三",
-		Phone:    "15800000001",
+		Phone:    until.RandomString(11),
+		Password: "123456",
+	}
+	err := dao.CreateMember(ctx, save)
+	if err != nil {
+		t.Errorf("create member error:%v", err)
+	}
+
+	uData := map[string]interface{}{
+		"username":        "王五",
+		"birthday":        until.TimeToDate(time.Now()),
+		"member_level_id": uint64(1),
+		"icon":            "https://www.baidu.com",
+		"status":          entity.StatusDisable,
+		"gender":          entity.GenderMan,
+		"city":            "广州",
+		"job":             "go开发工程师",
+		"growth":          int32(100),
+	}
+	err = dao.UpdateById(ctx, id.MemberID(save.Id), uData)
+	if err != nil {
+		t.Errorf("update member error:%v", err)
+	}
+
+	member, err := dao.GetItemById(ctx, id.MemberID(save.Id))
+	if err != nil {
+		t.Errorf("get member by id error:%v", err)
+	}
+	assert.Equal(t, uData["username"], member.Username)
+	assert.Equal(t, uData["birthday"], until.TimeToDate(*member.Birthday))
+	assert.Equal(t, uData["member_level_id"], member.MemberLevelId)
+	assert.Equal(t, uData["icon"], member.Icon)
+	assert.Equal(t, uData["status"], member.Status)
+	assert.Equal(t, uData["gender"], member.Gender)
+	assert.Equal(t, uData["city"], member.City)
+	assert.Equal(t, uData["job"], member.Job)
+	assert.Equal(t, uData["growth"], member.Growth)
+}
+
+func TestMember_UpdateByEntity(t *testing.T) {
+	initTable()
+
+	save := &entity.Member{
+		Username: "张三",
+		Phone:    until.RandomString(11),
 		Password: "123456",
 	}
 	err := dao.CreateMember(ctx, save)
@@ -103,7 +155,7 @@ func TestUpdate(t *testing.T) {
 	}
 
 	save.Username = "王五"
-	err = dao.Update(ctx, save)
+	err = dao.UpdateByEntity(ctx, save)
 	if err != nil {
 		t.Errorf("update member error:%v", err)
 	}
@@ -116,6 +168,12 @@ func TestUpdate(t *testing.T) {
 }
 
 func initTable() {
+	initLock.Lock()
+	defer initLock.Unlock()
+
+	if hasInitTable {
+		return
+	}
 	// 创建数据表
 	if err := init_table.Member(); err != nil {
 		log.Panicf("create table error: %v", err)
@@ -124,6 +182,7 @@ func initTable() {
 	global.DB = mysqltesting.GormDB
 	dao = NewMember()
 	ctx = context.Background()
+	hasInitTable = true
 }
 
 func TestMain(m *testing.M) {

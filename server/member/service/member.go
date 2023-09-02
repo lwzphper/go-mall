@@ -17,12 +17,12 @@ import (
 	"gorm.io/gorm"
 )
 
+var _ memberpb.MemberServiceServer = (*MemberService)(nil)
+
 var (
 	memberExistError    = status.Errorf(codes.AlreadyExists, "用户已存在")
 	memberNotFoundError = status.Errorf(codes.NotFound, "用户不存在")
 )
-
-var _ memberpb.MemberServiceServer = (*MemberService)(nil)
 
 type MemberService struct {
 	memberpb.UnimplementedMemberServiceServer
@@ -125,7 +125,7 @@ func (s *MemberService) UpdateMember(ctx context.Context, req *memberpb.MemberEn
 	member.City = req.City
 	member.Job = req.Job
 	member.Growth = req.Growth
-	err = s.MemberDao.Update(ctx, member)
+	err = s.MemberDao.UpdateByEntity(ctx, member)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}

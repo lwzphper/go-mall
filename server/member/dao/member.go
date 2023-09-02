@@ -32,16 +32,21 @@ func (m *Member) CreateMember(ctx context.Context, member *entity.Member) error 
 // GetItemByWhere 查询用户信息
 func (m *Member) GetItemByWhere(ctx context.Context, where *entity.Member) (*entity.Member, error) {
 	record := &entity.Member{}
-	return record, m.db.Where(where).First(record).Error
+	return record, m.db.Where(where).Take(record).Error
 }
 
 // GetItemById GetItemById 查询用户信息
 func (m *Member) GetItemById(ctx context.Context, id id.MemberID) (*entity.Member, error) {
 	record := &entity.Member{}
-	return record, m.db.First(record, id.Uint64()).Error
+	return record, m.db.Take(record, id.Uint64()).Error
 }
 
-// Update 更新
-func (m *Member) Update(ctx context.Context, member *entity.Member) error {
+// UpdateById 通过id更新
+func (m *Member) UpdateById(ctx context.Context, id id.MemberID, data map[string]interface{}) error {
+	return m.db.Model(&entity.Member{}).Where("id", id).Save(data).Error
+}
+
+// UpdateByEntity 通过实体更新（id 不存在会新增）
+func (m *Member) UpdateByEntity(ctx context.Context, member *entity.Member) error {
 	return m.db.Save(member).Error
 }
