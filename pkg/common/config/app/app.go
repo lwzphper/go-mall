@@ -4,7 +4,7 @@ func NewDefaultApp() *App {
 	return &App{
 		Name: "go-mall",
 		Addr: ":8081",
-		Env:  ENV_DEVELOPMENT,
+		Env:  EnvDevelopment,
 	}
 }
 

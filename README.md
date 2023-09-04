@@ -36,7 +36,7 @@ weed shell
 3. 注册中心：nacos
 4. 远程调用&负载均衡：Feign
 5. 分布式id：ksuid
-6. 链路追踪
+6. 链路追踪：jaeger
 7. MQ
 8. redis
 9. mysql

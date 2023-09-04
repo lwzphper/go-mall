@@ -58,7 +58,7 @@ func (l *Logging) InitLogger(env app.Env) *logger.Logger {
 	}
 
 	// 如果开发环境，将错误输出到终端
-	if env == app.ENV_DEVELOPMENT {
+	if env == app.EnvDevelopment {
 		tops := []logger.TeeOption{
 			{
 				W: os.Stdout,

@@ -11,3 +11,8 @@ logging:
   file_size_mb:
   max_age:
   max_backups:
+
+jaeger:
+  host: 127.0.0.1
+  port: 6831
+  name: mail-jaeger

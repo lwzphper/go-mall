@@ -14,5 +14,5 @@ func InitConfig() {
 	if err != nil {
 		panic(fmt.Sprintf("load config from env error:%v", err))
 	}
-	global.Config = cfg
+	global.C = cfg
 }

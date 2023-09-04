@@ -7,8 +7,6 @@ import (
 	"google.golang.org/grpc"
 	"net"
 	"os"
-	"os/signal"
-	"syscall"
 )
 
 type GRPCConfig struct {
@@ -39,24 +37,17 @@ func RunGRPCServer(c *GRPCConfig) error {
 	s := grpc.NewServer(opts...)
 	c.RegisterFunc(s)
 
-	// 优雅关闭
 	// 监听中断信号，优雅关闭服务
-	ch := make(chan os.Signal, 1)
-	defer close(ch)
-	signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGHUP, syscall.SIGQUIT)
-
-	// 监听信号，优雅关闭
-	go func() {
-		for sg := range ch {
-			switch v := sg.(type) {
-			// todo 根据不同的类型，做不同的处理
-			default:
-				c.Logger.Info(fmt.Sprintf("receive signal '%v', start graceful shutdown", v.String()))
-				s.Stop()
-				return
-			}
+	hook := NewHook()
+	go hook.Close(func(sg os.Signal) {
+		switch v := sg.(type) {
+		// todo 根据不同的类型，做不同的处理
+		default:
+			c.Logger.Info(fmt.Sprintf("receive signal '%v', start graceful shutdown", v.String()))
+			s.Stop()
+			return
 		}
-	}()
+	})
 
 	c.Logger.Info("server started", nameField, zap.String("addr", c.Addr))
 	return s.Serve(lis)

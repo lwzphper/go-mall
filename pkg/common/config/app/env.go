@@ -3,9 +3,9 @@ package app
 type Env string
 
 const (
-	ENV_DEVELOPMENT Env = "development"
-	ENV_TEST        Env = "test"
-	ENV_PRODUCTION  Env = "production"
+	EnvDevelopment Env = "development"
+	EnvTest        Env = "test"
+	EnvProduction  Env = "production"
 )
 
 func (e Env) String() string {

@@ -19,7 +19,7 @@ func memberSrv() {
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 	)
 	if err != nil {
-		global.Logger.Fatal("[InitSrvConn] 连接 【用户服务失败】")
+		global.L.Fatal("[InitSrvConn] 连接 【用户服务失败】")
 	}
 	global.MemberSrvClient = memberpb.NewMemberServiceClient(conn)
 }

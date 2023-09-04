@@ -10,9 +10,9 @@ import (
 func InitDB() {
 	cfg := global.Config
 	envLogLevelMap := map[app.Env]logger.LogLevel{
-		app.ENV_DEVELOPMENT: logger.Info,
-		app.ENV_TEST:        logger.Info,
-		app.ENV_PRODUCTION:  logger.Warn,
+		app.EnvDevelopment: logger.Info,
+		app.EnvTest:        logger.Info,
+		app.EnvProduction:  logger.Warn,
 	}
 	level, ok := envLogLevelMap[cfg.App.Env]
 	if !ok {

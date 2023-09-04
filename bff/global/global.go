@@ -7,8 +7,8 @@ import (
 )
 
 var (
-	Config *config.Config
-	Logger *logger.Logger
+	C *config.Config
+	L *logger.Logger
 
 	MemberSrvClient memberpb.MemberServiceClient
 )
