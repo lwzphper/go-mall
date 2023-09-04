@@ -14,10 +14,15 @@ import (
 
 func InitGin() {
 	gin.SetMode(getGinModeByEnv())
-	router := Routers()
+	r := Routers()
 	srv := &http.Server{
-		Addr:    global.C.App.Addr,
-		Handler: router,
+		ReadHeaderTimeout: 60 * time.Second,
+		ReadTimeout:       60 * time.Second,
+		WriteTimeout:      60 * time.Second,
+		IdleTimeout:       60 * time.Second,
+		MaxHeaderBytes:    1 << 20, // 1M
+		Addr:              global.C.App.Addr,
+		Handler:           r,
 	}
 
 	go func() {

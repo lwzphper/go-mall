@@ -3,7 +3,6 @@ package response
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/lwzphper/go-mall/pkg/constant"
 	"github.com/lwzphper/go-mall/pkg/logger"
 	"net/http"
 )
@@ -56,15 +55,15 @@ func WithHttpStatusCode(code int) RespOption {
 }
 
 func Success(w http.ResponseWriter, data interface{}) {
-	SendResponse(w, data, constant.SUCCESS)
+	SendResponse(w, data, SUCCESS)
 }
 
 func PageSuccess(w http.ResponseWriter, data interface{}, page, pageSize int) {
-	SendResponse(w, data, constant.SUCCESS, WithPage(page), WithPageSize(pageSize))
+	SendResponse(w, data, SUCCESS, WithPage(page), WithPageSize(pageSize))
 }
 
 func FormValidError(w http.ResponseWriter, msg string) {
-	SendResponse(w, nil, constant.INVALID_PARAMS, WithMsg(msg), WithHttpStatusCode(http.StatusBadRequest))
+	SendResponse(w, nil, INVALID_PARAMS, WithMsg(msg), WithHttpStatusCode(http.StatusBadRequest))
 }
 
 func Failed(w http.ResponseWriter, code int, options ...RespOption) {
@@ -84,13 +83,13 @@ func SendResponse(w http.ResponseWriter, data interface{}, code int, options ...
 	}
 
 	if len(resp.Msg) == 0 {
-		resp.Msg = constant.GetMsg(resp.Code)
+		resp.Msg = GetMsg(resp.Code)
 	}
 
 	respByt, err := json.Marshal(resp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		errMsg := fmt.Sprintf(`{"code":"%d", "msg": "encoding to json error, %s"}`, constant.ERROR, err)
+		errMsg := fmt.Sprintf(`{"code":"%d", "msg": "encoding to json error, %s"}`, ERROR, err)
 		_, err = w.Write([]byte(errMsg))
 		if err != nil {
 			logger.Error("send response error: " + err.Error()) // 错误默认输出到终端

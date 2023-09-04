@@ -18,6 +18,7 @@ func Routers() *gin.Engine {
 
 	//配置跨域
 	r.Use(middleware.Cors())
+	r.Use(middleware.Exception()) // 错误处理
 	ApiGroup := r.Group("/v1")
 	router.InitAuth(ApiGroup)
 	router.InitMemberRouter(ApiGroup)

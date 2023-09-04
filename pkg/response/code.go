@@ -1,4 +1,4 @@
-package constant
+package response
 
 const (
 	//全局
