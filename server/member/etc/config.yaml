@@ -1,7 +1,7 @@
 app:
   env: development
   name: go-mall-member
-  address: :8082
+  address: :8081
 
 mysql:
   database: go_mall

@@ -14,6 +14,7 @@ type Response struct {
 	Msg            string      `json:"msg"`
 	Data           interface{} `json:"data"`
 	httpStatusCode int
+	headers        map[string]string
 }
 
 type RespOption func(*Response)
@@ -48,18 +49,34 @@ func WithCode(code int) RespOption {
 	}
 }
 
+func WithHeaders(headers map[string]string) RespOption {
+	return func(r *Response) {
+		r.headers = headers
+	}
+}
+
+func WithAuthHeader(token string) RespOption {
+	return func(r *Response) {
+		r.headers["Authorization"] = token
+	}
+}
+
 func WithHttpStatusCode(code int) RespOption {
 	return func(r *Response) {
 		r.httpStatusCode = code
 	}
 }
 
-func Success(w http.ResponseWriter, data interface{}) {
-	SendResponse(w, data, CodeSuccess)
+func Success(w http.ResponseWriter, data interface{}, options ...RespOption) {
+	SendResponse(w, data, CodeSuccess, options...)
 }
 
 func PageSuccess(w http.ResponseWriter, data interface{}, page, pageSize int) {
 	SendResponse(w, data, CodeSuccess, WithPage(page), WithPageSize(pageSize))
+}
+
+func NotFoundError(w http.ResponseWriter, msg string) {
+	SendResponse(w, nil, CodeNotFound, WithMsg(msg), WithHttpStatusCode(http.StatusNotFound))
 }
 
 func FormValidError(w http.ResponseWriter, msg string) {
@@ -81,6 +98,7 @@ func SendResponse(w http.ResponseWriter, data interface{}, code int, options ...
 		Data:           data,
 		Code:           code,
 		httpStatusCode: http.StatusOK,
+		headers:        map[string]string{},
 	}
 
 	for _, option := range options {
@@ -105,6 +123,9 @@ func SendResponse(w http.ResponseWriter, data interface{}, code int, options ...
 
 	// set response header
 	w.Header().Set("Content-Type", "application/json")
+	for key, val := range resp.headers {
+		w.Header().Set(key, val)
+	}
 	w.WriteHeader(resp.httpStatusCode)
 
 	_, err = w.Write(respByt)

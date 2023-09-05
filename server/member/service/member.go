@@ -20,6 +20,7 @@ import (
 var _ memberpb.MemberServiceServer = (*MemberService)(nil)
 
 var (
+	InternalError       = status.Errorf(codes.Internal, "用户模块内部错误")
 	memberExistError    = status.Errorf(codes.AlreadyExists, "用户已存在")
 	memberNotFoundError = status.Errorf(codes.NotFound, "用户不存在")
 )
@@ -53,8 +54,14 @@ func modelToResponse(member *entity.Member) *memberpb.MemberEntity {
 // CreateMember 创建会员
 func (s *MemberService) CreateMember(ctx context.Context, req *memberpb.CreateRequest) (*memberpb.CreateResponse, error) {
 	// 校验用户是否存在
-	_, err := s.MemberDao.GetItemByWhere(ctx, &entity.Member{Phone: req.Phone})
-	if err == nil || (err != nil && err != gorm.ErrRecordNotFound) {
+	member, err := s.MemberDao.GetItemByWhere(ctx, &entity.Member{Phone: req.Phone})
+	if err != nil && err != gorm.ErrRecordNotFound {
+		global.Logger.Errorf("create member error:%v", err)
+		return nil, InternalError
+	}
+
+	// 用户已存在
+	if member.Id > 0 {
 		return nil, memberExistError
 	}
 

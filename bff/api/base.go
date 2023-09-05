@@ -7,7 +7,6 @@ import (
 	"github.com/lwzphper/go-mall/pkg/response"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"net/http"
 	"strings"
 )
 
@@ -42,26 +41,18 @@ func HandleGrpcErrorToHttp(c *gin.Context, err error) {
 	if err != nil {
 		if e, ok := status.FromError(err); ok {
 			switch e.Code() {
-			case codes.NotFound:
-				c.JSON(http.StatusNotFound, gin.H{
-					"msg": e.Message(),
-				})
-			case codes.Internal:
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"msg:": "内部错误",
-				})
-			case codes.InvalidArgument:
-				c.JSON(http.StatusBadRequest, gin.H{
-					"msg": "参数错误",
-				})
 			case codes.Unavailable:
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"msg": "用户服务不可用",
-				})
+				response.InternalError(c.Writer, response.WithMsg("服务不可用"))
+			//case codes.NotFound:
+			//	response.NotFoundError(c.Writer, e.Message())
+			//case codes.Internal:
+			//	response.InternalError(c.Writer)
+			//case codes.InvalidArgument:
+			//	response.FormValidError(c.Writer, e.Message())
+			//case codes.AlreadyExists:
+			//	response.InternalError(c.Writer, response.WithMsg("数据已存在"))
 			default:
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"msg": e.Code(),
-				})
+				response.InternalError(c.Writer, response.WithMsg(e.Message()))
 			}
 			return
 		}

@@ -15,7 +15,7 @@ type Member struct {
 	Username              string       `json:"username" gorm:"column:username;uniqueIndex:uk_username"`
 	Password              string       `json:"password" gorm:"column:password"`
 	Phone                 string       `json:"phone" gorm:"column:phone"`
-	Status                MemberStatus `json:"status" gorm:"column:status"`
+	Status                MemberStatus `json:"status" gorm:"column:status;default:1"`
 	Icon                  string       `json:"icon" gorm:"column:icon"`
 	Gender                Gender       `json:"gender" gorm:"column:gender"`
 	Birthday              *time.Time   `json:"birthday" gorm:"column:birthday;default:null"`

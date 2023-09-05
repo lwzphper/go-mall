@@ -16,3 +16,7 @@ jaeger:
   host: 127.0.0.1
   port: 6831
   name: mail-jaeger
+
+jwt:
+  secret: aomKPd2HzKTNuEiX5tc5IlriiUIb9IEBvAI0jMGzOQEp38yfL0cJibvQMYTLpxoX
+  ttl: 864000

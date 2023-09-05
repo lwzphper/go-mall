@@ -3,8 +3,12 @@ package auth
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/lwzphper/go-mall/bff/api"
+	"github.com/lwzphper/go-mall/bff/global"
 	"github.com/lwzphper/go-mall/bff/request/auth"
+	jwt2 "github.com/lwzphper/go-mall/pkg/jwt"
 	"github.com/lwzphper/go-mall/pkg/response"
+	"github.com/lwzphper/go-mall/pkg/until"
+	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
 )
 
 // Login 登录
@@ -14,7 +18,36 @@ func Login(c *gin.Context) {
 		api.HandleValidatorError(c, err)
 		return
 	}
-	response.Success(c.Writer, nil)
+
+	// 获取用户信息
+	member, err := global.MemberSrvClient.GetMemberByPhone(c, &memberpb.PhoneRequest{Phone: req.Phone})
+	if err != nil {
+		api.HandleGrpcErrorToHttp(c, err)
+		return
+	}
+
+	// 检查密码是否正确
+	checkRet, _ := global.MemberSrvClient.CheckPassWord(c, &memberpb.PasswordCheckInfo{
+		Password:          req.Password,
+		EncryptedPassword: member.Password,
+	})
+	if checkRet.Success == false {
+		response.FormValidError(c.Writer, "密码不正确")
+		return
+	}
+
+	// 生成 token
+	tokenGen := jwt2.NewJwtTokenGen(global.C.App.Name, []byte(global.C.Jwt.Secret))
+	token, err := tokenGen.GenerateToken(until.Uint64ToString(member.Id), global.C.Jwt.TTL)
+	if err != nil {
+		global.L.Errorf("create token error:%v", err)
+		response.InternalError(c.Writer)
+		return
+	}
+
+	result := member
+	result.Password = "" // 删除密码
+	response.Success(c.Writer, nil, response.WithAuthHeader(token), response.WithData(member))
 }
 
 // Register 注册
@@ -24,5 +57,18 @@ func Register(c *gin.Context) {
 		api.HandleValidatorError(c, err)
 		return
 	}
-	response.Success(c.Writer, nil)
+
+	createReq := &memberpb.CreateRequest{
+		Phone:    req.Phone,
+		Password: req.Password,
+	}
+	member, err := global.MemberSrvClient.CreateMember(c, createReq)
+	if err != nil {
+		api.HandleGrpcErrorToHttp(c, err)
+		return
+	}
+
+	result := make(map[string]uint64, 1)
+	result["id"] = member.Id
+	response.Success(c.Writer, result)
 }

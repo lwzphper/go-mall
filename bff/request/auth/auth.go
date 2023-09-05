@@ -8,6 +8,6 @@ type Register struct {
 }
 
 type Login struct {
-	Phone    string `form:"phone" json:"phone" xml:"phone"  binding:"required,len:11" label:"手机号码"`
+	Phone    string `form:"phone" json:"phone" xml:"phone"  binding:"required,len=11" label:"手机号码"`
 	Password string `form:"password" json:"password" xml:"password"  binding:"required,min=6" label:"密码"`
 }

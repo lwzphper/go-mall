@@ -61,6 +61,10 @@ func Int64ToString(num int64) string {
 	return strconv.FormatInt(num, 10)
 }
 
+func Uint64ToString(num uint64) string {
+	return strconv.FormatUint(num, 10)
+}
+
 func BytesToString(data *[]byte) string {
 	// 使用地址方式转换，避免 string 在内存中重新拷贝一份
 	return *(*string)(unsafe.Pointer(data))
