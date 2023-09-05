@@ -17,8 +17,8 @@ const (
 	ZhLocale = "zh"
 )
 
-// InitTrans 初始化翻译
-func InitTrans(locale string) {
+// InitValidator 初始验证器
+func InitValidator(locale string) {
 	// 修改gin框架中的validator引擎属性, 实现定制
 	v, ok := binding.Validator.Engine().(*validator.Validate)
 	if !ok {
