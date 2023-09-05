@@ -5,8 +5,9 @@ import (
 )
 
 func main() {
-	initialize.InitConfig()
-	initialize.InitLogger()
-	initialize.InitSrvConn()
-	initialize.InitGin()
+	initialize.InitConfig()                   // 配置
+	initialize.InitLogger()                   // 日志
+	initialize.InitSrvConn()                  // 服务
+	initialize.InitTrans(initialize.ZhLocale) // 翻译
+	initialize.InitGin()                      // gin
 }

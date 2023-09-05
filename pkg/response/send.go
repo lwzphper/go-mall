@@ -55,15 +55,20 @@ func WithHttpStatusCode(code int) RespOption {
 }
 
 func Success(w http.ResponseWriter, data interface{}) {
-	SendResponse(w, data, SUCCESS)
+	SendResponse(w, data, CodeSuccess)
 }
 
 func PageSuccess(w http.ResponseWriter, data interface{}, page, pageSize int) {
-	SendResponse(w, data, SUCCESS, WithPage(page), WithPageSize(pageSize))
+	SendResponse(w, data, CodeSuccess, WithPage(page), WithPageSize(pageSize))
 }
 
 func FormValidError(w http.ResponseWriter, msg string) {
-	SendResponse(w, nil, INVALID_PARAMS, WithMsg(msg), WithHttpStatusCode(http.StatusBadRequest))
+	SendResponse(w, nil, CodeInvalidParams, WithMsg(msg), WithHttpStatusCode(http.StatusBadRequest))
+}
+
+func InternalError(w http.ResponseWriter, options ...RespOption) {
+	options = append(options, WithHttpStatusCode(http.StatusInternalServerError))
+	SendResponse(w, nil, CodeError, options...)
 }
 
 func Failed(w http.ResponseWriter, code int, options ...RespOption) {
@@ -89,7 +94,7 @@ func SendResponse(w http.ResponseWriter, data interface{}, code int, options ...
 	respByt, err := json.Marshal(resp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		errMsg := fmt.Sprintf(`{"code":"%d", "msg": "encoding to json error, %s"}`, ERROR, err)
+		errMsg := fmt.Sprintf(`{"code":"%d", "msg": "encoding to json error, %s"}`, CodeError, err)
 		_, err = w.Write([]byte(errMsg))
 		if err != nil {
 			logger.Error("send response error: " + err.Error()) // 错误默认输出到终端

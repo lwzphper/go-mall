@@ -2,14 +2,15 @@ package initialize
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
-	"github.com/lwzphper/go-mall/bff/global"
-	"github.com/lwzphper/go-mall/pkg/common/config/app"
-	"github.com/lwzphper/go-mall/pkg/server"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/lwzphper/go-mall/bff/global"
+	"github.com/lwzphper/go-mall/pkg/common/config/app"
+	"github.com/lwzphper/go-mall/pkg/server"
 )
 
 func InitGin() {
