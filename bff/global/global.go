@@ -12,5 +12,6 @@ var (
 	L *logger.Logger
 	T ut.Translator
 
+	JwtSecret       []byte
 	MemberSrvClient memberpb.MemberServiceClient
 )

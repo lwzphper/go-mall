@@ -16,12 +16,10 @@ func Routers() *gin.Engine {
 		})
 	})
 
-	//配置跨域
-	r.Use(middleware.Cors())
+	r.Use(middleware.Cors())      //配置跨域
 	r.Use(middleware.Exception()) // 错误处理
 
-	v1 := r.Group("/v1")
-	router.InitAuth(v1)
-	router.InitMemberRouter(v1)
+	v1Group := r.Group("/v1")
+	router.InitMember(v1Group)
 	return r
 }

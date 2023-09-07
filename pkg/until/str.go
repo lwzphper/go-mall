@@ -57,12 +57,21 @@ func IsDigit(str string) bool {
 	return true
 }
 
+func IntToString(num int) string {
+	return strconv.Itoa(num)
+}
+
 func Int64ToString(num int64) string {
 	return strconv.FormatInt(num, 10)
 }
 
 func Uint64ToString(num uint64) string {
 	return strconv.FormatUint(num, 10)
+}
+
+func StringToUint64(num string) uint64 {
+	intNum, _ := strconv.Atoi(num)
+	return uint64(intNum)
 }
 
 func BytesToString(data *[]byte) string {

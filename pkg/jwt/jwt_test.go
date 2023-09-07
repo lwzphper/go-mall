@@ -43,7 +43,7 @@ func TestGenerateToken(t *testing.T) {
 			jwtGen.nowFunc = func() time.Time {
 				return c.now
 			}
-			token, err := jwtGen.GenerateToken("1", c.expireSec)
+			token, err := jwtGen.GenerateToken(1, c.expireSec)
 			if err != nil {
 				t.Errorf("token generate error: %v", err)
 			}
@@ -62,31 +62,31 @@ func TestGenerateToken(t *testing.T) {
 func TestTokenVerify(t *testing.T) {
 	cases := []struct {
 		name      string
-		subject   string
+		id        uint64
 		expireSec time.Duration
-		want      string
+		want      uint64
 		wantEqual bool
 		wantErr   bool
 	}{
 		{
 			name:      "subject_equal",
-			subject:   "123",
+			id:        123,
 			expireSec: 10 * time.Second,
-			want:      "123",
+			want:      123,
 			wantEqual: true,
 		},
 		{
 			name:      "token_expire",
-			subject:   "123",
-			want:      "", // jwt 解析错误，获取不到响应数据
+			id:        123,
+			want:      0, // jwt 解析错误，获取不到响应数据
 			wantErr:   true,
 			wantEqual: true,
 		},
 		{
 			name:      "subject_not_equal",
-			subject:   "666",
+			id:        666,
 			expireSec: 10 * time.Second,
-			want:      "123",
+			want:      123,
 			wantEqual: false,
 		},
 	}
@@ -95,7 +95,7 @@ func TestTokenVerify(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			jwtToken, err := gen.GenerateToken(c.subject, c.expireSec)
+			jwtToken, err := gen.GenerateToken(c.id, c.expireSec)
 			if err != nil {
 				t.Errorf("generate token error: %v", err)
 				return

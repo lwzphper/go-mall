@@ -1,4 +1,4 @@
-package auth
+package member
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,7 +7,6 @@ import (
 	"github.com/lwzphper/go-mall/bff/request/auth"
 	jwt2 "github.com/lwzphper/go-mall/pkg/jwt"
 	"github.com/lwzphper/go-mall/pkg/response"
-	"github.com/lwzphper/go-mall/pkg/until"
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
 )
 
@@ -37,8 +36,8 @@ func Login(c *gin.Context) {
 	}
 
 	// 生成 token
-	tokenGen := jwt2.NewJwtTokenGen(global.C.App.Name, []byte(global.C.Jwt.Secret))
-	token, err := tokenGen.GenerateToken(until.Uint64ToString(member.Id), global.C.Jwt.TTL)
+	tokenGen := jwt2.NewJwtTokenGen(global.C.App.Name, global.JwtSecret)
+	token, err := tokenGen.GenerateToken(member.Id, global.C.Jwt.TTL)
 	if err != nil {
 		global.L.Errorf("create token error:%v", err)
 		response.InternalError(c.Writer)

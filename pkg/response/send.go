@@ -75,6 +75,11 @@ func PageSuccess(w http.ResponseWriter, data interface{}, page, pageSize int) {
 	SendResponse(w, data, CodeSuccess, WithPage(page), WithPageSize(pageSize))
 }
 
+func UnauthorizedError(w http.ResponseWriter, options ...RespOption) {
+	options = append(options, WithHttpStatusCode(http.StatusUnauthorized))
+	SendResponse(w, nil, CodeUnauthorized, options...)
+}
+
 func NotFoundError(w http.ResponseWriter, msg string) {
 	SendResponse(w, nil, CodeNotFound, WithMsg(msg), WithHttpStatusCode(http.StatusNotFound))
 }
