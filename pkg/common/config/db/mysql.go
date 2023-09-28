@@ -5,11 +5,13 @@ import (
 	"database/sql"
 	"fmt"
 	mysqlDB "github.com/lwzphper/go-mall/pkg/db/mysql"
+	"github.com/lwzphper/go-mall/pkg/file"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"io"
 	"os"
+	"path/filepath"
 	"sync"
 	"time"
 )
@@ -71,6 +73,11 @@ func (m *Mysql) InitDB() error {
 	if m.LogFileName == "" {
 		logWriter = os.Stdout
 	} else {
+		err := file.IsNotExistMkDir(filepath.Dir(m.LogFileName))
+		if err != nil {
+			return errors.Wrap(err, fmt.Sprintf("cannot create dir：%s", m.LogFileName))
+		}
+
 		open, err := os.OpenFile(m.LogFileName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 		if err != nil {
 			return errors.Wrap(err, "cannot open mysql log file")

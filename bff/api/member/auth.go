@@ -57,6 +57,12 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	// 校验短信
+	if req.SmsCode != 123456 {
+		response.FormValidError(c.Writer, "短信验证码有误")
+		return
+	}
+
 	createReq := &memberpb.CreateRequest{
 		Phone:    req.Phone,
 		Password: req.Password,
