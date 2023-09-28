@@ -46,7 +46,7 @@ func Login(c *gin.Context) {
 
 	result := member
 	result.Password = "" // 删除密码
-	response.Success(c.Writer, nil, response.WithAuthHeader(token), response.WithData(member))
+	response.Success(c.Writer, member, response.WithAuthHeader(token))
 }
 
 // Register 注册
@@ -58,7 +58,7 @@ func Register(c *gin.Context) {
 	}
 
 	// 校验短信
-	if req.SmsCode != 123456 {
+	if req.SmsCode != "123456" {
 		response.FormValidError(c.Writer, "短信验证码有误")
 		return
 	}

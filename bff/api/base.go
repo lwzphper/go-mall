@@ -19,6 +19,11 @@ func RemoveTopStruct(fields map[string]string) map[string]string {
 	return rsp
 }
 
+// HandleMemberIdNotExistError 处理会员信息不存在错误
+func HandleMemberIdNotExistError(c *gin.Context) {
+	response.InternalError(c.Writer, response.WithMsg("[m err] 服务器异常，请稍后再试"))
+}
+
 // HandleValidatorError 处理表单验证错误
 func HandleValidatorError(c *gin.Context, err error) {
 	errs, ok := err.(validator.ValidationErrors)

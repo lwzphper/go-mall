@@ -67,36 +67,44 @@ func WithHttpStatusCode(code int) RespOption {
 	}
 }
 
+// Success 成功响应
 func Success(w http.ResponseWriter, data interface{}, options ...RespOption) {
 	SendResponse(w, data, CodeSuccess, options...)
 }
 
+// PageSuccess 分页响应数据
 func PageSuccess(w http.ResponseWriter, data interface{}, page, pageSize int) {
 	SendResponse(w, data, CodeSuccess, WithPage(page), WithPageSize(pageSize))
 }
 
+// UnauthorizedError 未授权
 func UnauthorizedError(w http.ResponseWriter, options ...RespOption) {
 	options = append(options, WithHttpStatusCode(http.StatusUnauthorized))
 	SendResponse(w, nil, CodeUnauthorized, options...)
 }
 
+// NotFoundError 页面未找到
 func NotFoundError(w http.ResponseWriter, msg string) {
 	SendResponse(w, nil, CodeNotFound, WithMsg(msg), WithHttpStatusCode(http.StatusNotFound))
 }
 
+// FormValidError 表单验证错误
 func FormValidError(w http.ResponseWriter, msg string) {
 	SendResponse(w, nil, CodeInvalidParams, WithMsg(msg), WithHttpStatusCode(http.StatusBadRequest))
 }
 
+// InternalError 内部错误
 func InternalError(w http.ResponseWriter, options ...RespOption) {
 	options = append(options, WithHttpStatusCode(http.StatusInternalServerError))
 	SendResponse(w, nil, CodeError, options...)
 }
 
+// Failed 错误响应
 func Failed(w http.ResponseWriter, code int, options ...RespOption) {
 	SendResponse(w, nil, code, options...)
 }
 
+// SendResponse 发送响应
 func SendResponse(w http.ResponseWriter, data interface{}, code int, options ...RespOption) {
 
 	resp := &Response{

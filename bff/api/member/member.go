@@ -1,16 +1,30 @@
 package member
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/lwzphper/go-mall/bff/api"
 	"github.com/lwzphper/go-mall/bff/common"
+	"github.com/lwzphper/go-mall/bff/global"
+	"github.com/lwzphper/go-mall/bff/reponse"
+	"github.com/lwzphper/go-mall/pkg/response"
+	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
 )
 
+// GetMemberDetail 获取会员详情
 func GetMemberDetail(c *gin.Context) {
 	memberId, exists := common.MemberIDFromContext(c)
 	if !exists {
-		fmt.Println("未认证")
+		api.HandleMemberIdNotExistError(c)
 		return
 	}
-	fmt.Printf("userid %d", memberId)
+
+	detail, err := global.MemberSrvClient.GetMemberById(c, &memberpb.IdRequest{Id: memberId})
+	if err != nil {
+		api.HandleGrpcErrorToHttp(c, err)
+		return
+	}
+
+	// 这里空值会将字段过滤掉
+	detail.Password = ""
+	response.Success(c.Writer, reponse.MemberResponse{})
 }
