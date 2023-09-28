@@ -25,6 +25,6 @@ func GetMemberDetail(c *gin.Context) {
 	}
 
 	// 这里空值会将字段过滤掉
-	detail.Password = ""
-	response.Success(c.Writer, reponse.MemberResponse{})
+	detail.Password = ""                                 // todo 删除
+	response.Success(c.Writer, reponse.MemberResponse{}) // todo 设置
 }
