@@ -1,0 +1,26 @@
+app:
+  env: development
+  name: go-mall-product
+  address: :8083
+
+mysql:
+  database: go_mall
+  username: root
+  password: 123456
+  host: 127.0.0.1
+  port: 3306
+  max_open_conn: 1000
+  max_idle_conn: 100
+  max_life_second: 30
+  max_life_time: 1800
+  log_file_name: ./log/product/sql.log
+  table_prefix:
+
+logging:
+  name: product
+  driver: rotate
+  level: debug
+  file_name: ./log/product/rotate.log
+  file_size_mb:
+  max_age:
+  max_backups:

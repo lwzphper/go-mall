@@ -1,7 +1,7 @@
 app:
   env: development
-  name: go-mall-auth
-  address: :8081
+  name: go-mall-order
+  address: :8082
 
 mysql:
   database: go_mall
@@ -13,14 +13,14 @@ mysql:
   max_idle_conn: 100
   max_life_second: 30
   max_life_time: 1800
-  log_file_name: ./log/auth/sql.log
+  log_file_name: ./log/order/sql.log
   table_prefix:
 
 logging:
-  name: auth
+  name: order
   driver: rotate
   level: debug
-  file_name: ./log/auth/rotate.log
+  file_name: ./log/order/rotate.log
   file_size_mb:
   max_age:
   max_backups:

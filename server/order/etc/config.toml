@@ -1,0 +1,29 @@
+[app]
+name = "go-mall-order"
+address = ":8081"
+
+[mysql]
+database = "go_mall"
+host = "127.0.0.1"
+port = "3306"
+username = "root"
+password = "123456"
+max_open_conn = 1000
+max_idle_conn = 100
+max_life_second = 30
+max_life_time = 1800
+table_prefix = ""
+
+[mongodb]
+database = "shop"
+username = "root"
+password = "123456"
+host = ["127.0.0.1:27017", "127.0.0.1:27018"]
+
+[logging]
+driver = "rotate" # 支持 rotate 和 single
+level = "debug"
+file_name = "./log/rotate.log"
+file_size_mb = ""
+max_age = ""
+max_backups = ""
