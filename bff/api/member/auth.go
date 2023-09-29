@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lwzphper/go-mall/bff/api"
 	"github.com/lwzphper/go-mall/bff/global"
+	"github.com/lwzphper/go-mall/bff/reponse"
 	"github.com/lwzphper/go-mall/bff/request/auth"
 	jwt2 "github.com/lwzphper/go-mall/pkg/jwt"
 	"github.com/lwzphper/go-mall/pkg/response"
@@ -44,9 +45,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	result := member
-	result.Password = "" // 删除密码
-	response.Success(c.Writer, member, response.WithAuthHeader(token))
+	result := new(reponse.LoginResponse)
+	result.Marshal(member)
+	response.Success(c.Writer, result, response.WithAuthHeader(token))
 }
 
 // Register 注册
