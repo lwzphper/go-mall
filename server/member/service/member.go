@@ -32,6 +32,10 @@ type MemberService struct {
 }
 
 func modelToResponse(member *entity.Member) *memberpb.MemberEntity {
+	if member.Username == "" {
+		member.Username = "默认名称"
+	}
+
 	pbMember := &memberpb.MemberEntity{}
 	pbMember.Id = member.Id
 	pbMember.MemberLevelId = member.MemberLevelId
