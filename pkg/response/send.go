@@ -84,8 +84,8 @@ func UnauthorizedError(w http.ResponseWriter, options ...RespOption) {
 }
 
 // NotFoundError 页面未找到
-func NotFoundError(w http.ResponseWriter, msg string) {
-	SendResponse(w, nil, CodeNotFound, WithMsg(msg), WithHttpStatusCode(http.StatusNotFound))
+func NotFoundError(w http.ResponseWriter) {
+	SendResponse(w, nil, CodeNotFound, WithMsg("请求地址有误"), WithHttpStatusCode(http.StatusNotFound))
 }
 
 // FormValidError 表单验证错误
