@@ -1,3 +1,4 @@
+#!/bin/bash
 function genCommonProto {
     DOMAIN=$1
     PROTO_PATH=./pkg/common/proto/${DOMAIN}
@@ -18,7 +19,16 @@ function genProto {
     mkdir -p $GO_OUT_PATH
 
     #protoc -I=$PROTO_PATH --go_out=plugins=grpc,paths=source_relative:$GO_OUT_PATH ${DOMAIN}.proto
-    protoc -I=$PROTO_PATH --proto_path=./pkg/common/proto --go_out=paths=source_relative:$GO_OUT_PATH --go-grpc_out=paths=source_relative:$GO_OUT_PATH ${DOMAIN}.proto
+    if [ $DOMAIN = "member" ]; then
+      for srv in member address;
+      do
+        # 这里配置 go 依赖包 路径
+        protoc -I=$PROTO_PATH --proto_path=./pkg/common/proto --proto_path=${GOPATH}/src --go_out=paths=source_relative:$GO_OUT_PATH --go-grpc_out=paths=source_relative:$GO_OUT_PATH --govalidators_out=$GO_OUT_PATH ${srv}.proto
+      done
+    else
+      protoc -I=$PROTO_PATH --proto_path=./pkg/common/proto --go_out=paths=source_relative:$GO_OUT_PATH --go-grpc_out=paths=source_relative:$GO_OUT_PATH ${DOMAIN}.proto
+    fi
+
 
 
 #    if [ $SKIP_GATEWAY ]; then

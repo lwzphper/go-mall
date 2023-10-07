@@ -50,19 +50,19 @@ CREATE TABLE `member`
 -- 收货地址
 CREATE TABLE `member_receive_address`
 (
-    `id`             bigint unsigned  NOT NULL AUTO_INCREMENT,
-    `name`           varchar(100)     NOT NULL COMMENT '收货人名称',
-    `phone`          char(11)         NOT NULL COMMENT '手机号码',
-    `is_default`     tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为默认。0：否；1：是',
-    `post_code`      varchar(100)     NOT NULL DEFAULT '' COMMENT '邮政编码',
-    `province`       varchar(100)     NOT NULL COMMENT '省份/直辖市',
-    `city`           varchar(100)     NOT NULL COMMENT '城市',
-    `region`         varchar(100)     NOT NULL COMMENT '区',
-    `detail_address` varchar(128)     NOT NULL COMMENT '详细地址(街道)',
-    `member_id`      bigint unsigned  NOT NULL COMMENT '会员id',
-    `created_at`     timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at`     timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `is_delete`      tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `id`         bigint unsigned  NOT NULL AUTO_INCREMENT,
+    `name`       varchar(100)     NOT NULL COMMENT '收货人名称',
+    `phone`      char(11)         NOT NULL COMMENT '手机号码',
+    `is_default` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为默认。0：否；1：是',
+    `post_code`  varchar(100)     NOT NULL DEFAULT '' COMMENT '邮政编码',
+    `province`   varchar(100)     NOT NULL COMMENT '省份/直辖市',
+    `city`       varchar(100)     NOT NULL COMMENT '城市',
+    `region`     varchar(100)     NOT NULL COMMENT '区',
+    `address`    varchar(128)     NOT NULL COMMENT '详细地址(街道)',
+    `member_id`  bigint unsigned  NOT NULL COMMENT '会员id',
+    `created_at` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    `is_delete`  tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

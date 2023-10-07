@@ -21,6 +21,11 @@ grpc-go：https://github.com/grpc/grpc-go
   + 方式1：使用 Linux 系统自带的 logrotate
   + 方式2：github.com/lestrrat-go/file-rotatelogs （不再维护）
 
+```shell
+# proto 数据校验
+go install github.com/mwitkow/go-proto-validators/protoc-gen-govalidators
+```
+
 
 ```shell
 # 启动 s3 服务

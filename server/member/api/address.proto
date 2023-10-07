@@ -1,0 +1,49 @@
+syntax = "proto3";
+package address.v1;
+option go_package = "go-mall/server/member/api/gen/v1;addresspb";
+import "google/protobuf/empty.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
+
+service AddressService {
+  rpc GetAddressList(ListRequest) returns(ListResponse); //查看地址
+  rpc CreateAddress(CreateRequest) returns(AddressEntity); //新增地址
+  rpc DeleteAddress(DeleteRequest) returns(google.protobuf.Empty); //删除地址
+  rpc UpdateAddress(AddressEntity) returns(google.protobuf.Empty); //修改地址
+}
+
+message ListRequest {
+  int64 memberId = 1;
+}
+
+message DeleteRequest {
+  int64 id = 1 [(validator.field) = {msg_exists : true}];
+}
+
+message CreateRequest{
+  int32 memberId = 2;
+  string name = 3 [(validator.field) = {msg_exists : true}];
+  uint32 isDefault = 4;
+  string postCode = 5;
+  string province = 6 [(validator.field) = {msg_exists : true}];
+  string city = 7 [(validator.field) = {msg_exists : true}];
+  string region = 8 [(validator.field) = {msg_exists : true}];
+  string address = 9 [(validator.field) = {msg_exists : true}];
+}
+
+message  AddressEntity{
+  int32 id = 1;
+  int32 memberId = 2;
+  string name = 3 [(validator.field) = {msg_exists : true}];
+  uint32 isDefault = 4;
+  string postCode = 5;
+  string province = 6 [(validator.field) = {msg_exists : true}];
+  string city = 7 [(validator.field) = {msg_exists : true}];
+  string region = 8 [(validator.field) = {msg_exists : true}];
+  string address = 9 [(validator.field) = {msg_exists : true}];
+}
+
+
+message ListResponse {
+  int32 total = 1;
+  repeated AddressEntity list = 2;
+}
