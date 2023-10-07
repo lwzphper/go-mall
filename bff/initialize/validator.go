@@ -9,6 +9,7 @@ import (
 	en_translations "github.com/go-playground/validator/v10/translations/en"
 	zh_translations "github.com/go-playground/validator/v10/translations/zh"
 	"github.com/lwzphper/go-mall/bff/global"
+	"github.com/lwzphper/go-mall/bff/rule"
 	"reflect"
 )
 
@@ -34,10 +35,20 @@ func InitValidator(locale string) {
 		return name
 	})
 
+	// 设置语言
+	setLocale(v, locale)
+
+	// 注册自定义验证类
+	rule.RegisterGender(v)
+}
+
+// 设置语言
+func setLocale(v *validator.Validate, locale string) {
 	zhT := zh.New() // 中文翻译器
 	enT := en.New() // 英文翻译器
 	// 第一个参数是备用的语言环境，后面的参数是应该支持的语言环境
 	uni := ut.New(enT, zhT, enT)
+	var ok bool
 	global.T, ok = uni.GetTranslator(locale)
 	if !ok {
 		global.L.Errorf("uni.GetTranslator error:%s", locale)

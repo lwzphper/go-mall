@@ -47,7 +47,7 @@ func HandleGrpcErrorToHttp(c *gin.Context, err error) {
 		if e, ok := status.FromError(err); ok {
 			switch e.Code() {
 			case codes.Unavailable:
-				response.InternalError(c.Writer, response.WithMsg("服务不可用"))
+				response.InternalError(c.Writer, response.WithMsg("[g] 服务不可用"))
 			//case codes.NotFound:
 			//	response.NotFoundError(c.Writer, e.Message())
 			//case codes.Internal:
@@ -57,7 +57,7 @@ func HandleGrpcErrorToHttp(c *gin.Context, err error) {
 			//case codes.AlreadyExists:
 			//	response.InternalError(c.Writer, response.WithMsg("数据已存在"))
 			default:
-				response.InternalError(c.Writer, response.WithMsg(e.Message()))
+				response.InternalError(c.Writer, response.WithMsg("[g]"+e.Message()))
 			}
 			return
 		}

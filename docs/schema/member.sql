@@ -13,7 +13,7 @@ CREATE TABLE `member_level`
     `privilege_birthday`     tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否有生日特权',
     `created_at`             timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at`             timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `is_delete`             tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `is_delete`              tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -21,26 +21,26 @@ CREATE TABLE `member_level`
 
 CREATE TABLE `member`
 (
-    `id`                     bigint unsigned   NOT NULL AUTO_INCREMENT,
-    `member_level_id`        bigint unsigned   NOT NULL DEFAULT 0 COMMENT '会员等级',
-    `username`               varchar(64)       NOT NULL COMMENT '用户名',
-    `password`               varchar(100)       NOT NULL COMMENT '密码',
-    `phone`                  char(11)          NOT NULL DEFAULT '' COMMENT '手机号码',
-    `status`                 tinyint unsigned  NOT NULL DEFAULT 1 COMMENT '帐号启用状态:0->禁用；1->启用',
-    `icon`                   varchar(255)      NOT NULL DEFAULT '' COMMENT '头像',
-    `gender`                 tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '性别：0->未知；1->男；2->女',
-    `birthday`               date                       DEFAULT NULL COMMENT '生日',
-    `city`                   varchar(64)       NOT NULL DEFAULT '' COMMENT '所做城市',
-    `job`                    varchar(100)      NOT NULL DEFAULT '' COMMENT '职业',
-    `personalized_signature` varchar(200)      NOT NULL DEFAULT '' COMMENT '个性签名',
-    `source_type`            tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '用户来源',
-    `integration`            smallint unsigned NOT NULL DEFAULT 0 COMMENT '积分',
-    `growth`                 smallint unsigned NOT NULL DEFAULT 0 COMMENT '成长值',
-    `lucky_count`            smallint unsigned NOT NULL DEFAULT 0 COMMENT '剩余抽奖次数',
-    `history_integration`    smallint unsigned NOT NULL DEFAULT 0 COMMENT '历史积分数量',
-    `created_at`             timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at`             timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `is_delete`             tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `id`                  bigint unsigned   NOT NULL AUTO_INCREMENT,
+    `member_level_id`     bigint unsigned   NOT NULL DEFAULT 0 COMMENT '会员等级',
+    `username`            varchar(64)       NOT NULL COMMENT '用户名',
+    `password`            varchar(100)      NOT NULL COMMENT '密码',
+    `phone`               char(11)          NOT NULL DEFAULT '' COMMENT '手机号码',
+    `status`              tinyint unsigned  NOT NULL DEFAULT 1 COMMENT '帐号启用状态:0->禁用；1->启用',
+    `icon`                varchar(255)      NOT NULL DEFAULT '' COMMENT '头像',
+    `gender`              tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '性别：0->未知；1->男；2->女',
+    `birthday`            date                       DEFAULT NULL COMMENT '生日',
+    `city`                varchar(64)       NOT NULL DEFAULT '' COMMENT '所做城市',
+    `job`                 varchar(100)      NOT NULL DEFAULT '' COMMENT '职业',
+    `signature`           varchar(200)      NOT NULL DEFAULT '' COMMENT '个性签名',
+    `source_type`         tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '用户来源',
+    `integration`         smallint unsigned NOT NULL DEFAULT 0 COMMENT '积分',
+    `growth`              smallint unsigned NOT NULL DEFAULT 0 COMMENT '成长值',
+    `lucky_count`         smallint unsigned NOT NULL DEFAULT 0 COMMENT '剩余抽奖次数',
+    `history_integration` smallint unsigned NOT NULL DEFAULT 0 COMMENT '历史积分数量',
+    `created_at`          timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`          timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    `is_delete`           tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_phone` (`phone`)
 ) ENGINE = InnoDB
@@ -62,7 +62,7 @@ CREATE TABLE `member_receive_address`
     `member_id`      bigint unsigned  NOT NULL COMMENT '会员id',
     `created_at`     timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at`     timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `is_delete`     tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `is_delete`      tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -94,7 +94,7 @@ CREATE TABLE `member_rule_setting`
     `max_point_per_order` int unsigned     NOT NULL DEFAULT 0 COMMENT '每笔订单最高获取点数',
     `created_at`          timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at`          timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `is_delete`          tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `is_delete`           tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -109,7 +109,7 @@ CREATE TABLE `member_task`
     `integration` smallint unsigned NOT NULL DEFAULT 0 COMMENT '赠送积分',
     `created_at`  timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at`  timestamp         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    `is_delete`  tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '删除时间',
+    `is_delete`   tinyint unsigned  NOT NULL DEFAULT 0 COMMENT '删除时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

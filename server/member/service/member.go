@@ -126,8 +126,12 @@ func (s *MemberService) UpdateMember(ctx context.Context, req *memberpb.MemberEn
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
 
-	birthday := req.Birthday.AsTime()
-	member.Birthday = &birthday
+	if until.TimeToDate(req.Birthday.AsTime()) == "0001-01-01" {
+		member.Birthday = nil
+	} else {
+		birthday := req.Birthday.AsTime()
+		member.Birthday = &birthday
+	}
 	member.Username = req.Username
 	member.MemberLevelId = req.MemberLevelId
 	member.Icon = req.Icon

@@ -16,6 +16,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
 	"testing"
+	"time"
 )
 
 var srv *MemberService
@@ -110,38 +111,58 @@ func TestMemberService_UpdateMember(t *testing.T) {
 		t.Error(err)
 	}
 
+	testCases := []struct {
+		name     string
+		birthday *timestamppb.Timestamp
+		want     string
+	}{
+		{
+			name:     "正常时间格式更新",
+			birthday: timestamppb.Now(),
+			want:     until.PbTimeToDate(timestamppb.Now()),
+		},
+		{
+			name:     "零值时间格式更新",
+			birthday: timestamppb.New(time.Time{}),
+			want:     "1970-01-02",
+		},
+	}
+
 	var (
 		username = "王五"
 		job      = "go开发工程师"
 		city     = "广州"
-		birthday = timestamppb.Now()
 		gender   = memberpb.MemberGender_MAN
 		icon     = "https://avatars.githubusercontent.com/u/35757691?v=4"
 	)
 
-	_, err = srv.UpdateMember(ctx, &memberpb.MemberEntity{
-		Id:       member.Id,
-		Birthday: birthday,
-		Username: username,
-		Job:      job,
-		City:     city,
-		Gender:   gender,
-		Icon:     icon,
-	})
-	if err != nil {
-		t.Errorf("update member error:%v", err)
-	}
+	for _, c := range testCases {
+		t.Run(c.name, func(t *testing.T) {
+			_, err = srv.UpdateMember(ctx, &memberpb.MemberEntity{
+				Id:       member.Id,
+				Birthday: c.birthday,
+				Username: username,
+				Job:      job,
+				City:     city,
+				Gender:   gender,
+				Icon:     icon,
+			})
+			if err != nil {
+				t.Errorf("update member error:%v", err)
+			}
 
-	newMember, err := srv.GetMemberById(ctx, &memberpb.IdRequest{Id: member.Id})
-	if err != nil {
-		t.Errorf("get member error:%v", err)
+			newMember, err := srv.GetMemberById(ctx, &memberpb.IdRequest{Id: member.Id})
+			if err != nil {
+				t.Errorf("get member error:%v", err)
+			}
+			assert.Equal(t, username, newMember.Username)
+			assert.Equal(t, job, newMember.Job)
+			assert.Equal(t, city, newMember.City)
+			assert.Equal(t, c.want, until.PbTimeToDate(newMember.Birthday)) // 零值测试
+			assert.Equal(t, gender, newMember.Gender)
+			assert.Equal(t, icon, newMember.Icon)
+		})
 	}
-	assert.Equal(t, username, newMember.Username)
-	assert.Equal(t, job, newMember.Job)
-	assert.Equal(t, city, newMember.City)
-	assert.Equal(t, until.PbTimeToDate(birthday), until.PbTimeToDate(newMember.Birthday))
-	assert.Equal(t, gender, newMember.Gender)
-	assert.Equal(t, icon, newMember.Icon)
 }
 
 // 检查密码

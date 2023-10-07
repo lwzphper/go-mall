@@ -6,12 +6,14 @@ import (
 	"github.com/lwzphper/go-mall/bff/common"
 	"github.com/lwzphper/go-mall/bff/global"
 	"github.com/lwzphper/go-mall/bff/reponse"
+	"github.com/lwzphper/go-mall/bff/request/member"
 	"github.com/lwzphper/go-mall/pkg/response"
+	"github.com/lwzphper/go-mall/pkg/until"
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
 )
 
-// GetMemberDetail 获取会员详情
-func GetMemberDetail(c *gin.Context) {
+// Detail 获取会员详情
+func Detail(c *gin.Context) {
 	memberId, exists := common.MemberIDFromContext(c)
 	if !exists {
 		api.HandleMemberIdNotExistError(c)
@@ -28,4 +30,32 @@ func GetMemberDetail(c *gin.Context) {
 	result := new(reponse.MemberResponse)
 	result.Marshal(detail)
 	response.Success(c.Writer, result)
+}
+
+// Update 更新会员信息
+func Update(c *gin.Context) {
+	memberId, exists := common.MemberIDFromContext(c)
+	if !exists {
+		api.HandleMemberIdNotExistError(c)
+		return
+	}
+
+	var req member.Update
+	if err := c.ShouldBind(&req); err != nil {
+		api.HandleValidatorError(c, err)
+		return
+	}
+
+	_, err := global.MemberSrvClient.UpdateMember(c, &memberpb.MemberEntity{
+		Id:       memberId,
+		Username: req.Username,
+		Icon:     req.Icon,
+		Birthday: until.TimeToPb(req.Birthday),
+		Gender:   memberpb.MemberGender(req.Gender),
+	})
+	if err != nil {
+		api.HandleGrpcErrorToHttp(c, err)
+		return
+	}
+	response.Success(c.Writer, nil)
 }

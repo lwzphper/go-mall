@@ -36,9 +36,14 @@ func TimeToDate(time time.Time) string {
 	return time.Format(DateLayout)
 }
 
-// PbTimeToDate 将 protobuf 时间转换成 yyyy-mm-dd HH:ii:ss 格式
+// PbTimeToDate 将 protobuf 时间转换成 yyyy-mm-dd 格式
 func PbTimeToDate(ts *timestamppb.Timestamp) string {
 	return time.Unix(ts.GetSeconds(), 0).Format(DateLayout)
+}
+
+// TimeToPb 将时间转换成 PbTime
+func TimeToPb(time time.Time) *timestamppb.Timestamp {
+	return timestamppb.New(time)
 }
 
 // RFC3339ToCSTLayout convert rfc3339 value to china standard time layout

@@ -17,6 +17,7 @@ func InitMember(r *gin.RouterGroup) {
 	// 会员信息
 	memberGroup := r.Group("member").Use(middleware.JwtAuth())
 	{
-		memberGroup.GET("", member.GetMemberDetail)
+		memberGroup.GET("", member.Detail)
+		memberGroup.PUT("", member.Update)
 	}
 }
