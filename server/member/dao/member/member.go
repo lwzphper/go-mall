@@ -1,9 +1,8 @@
-package dao
+package member
 
 import (
 	"context"
 	"github.com/lwzphper/go-mall/pkg/common/id"
-	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
 	"github.com/lwzphper/go-mall/server/member/entity"
 	"github.com/lwzphper/go-mall/server/member/global"
 	"gorm.io/gorm"
@@ -17,11 +16,6 @@ func NewMember() *Member {
 	return &Member{
 		db: global.DB,
 	}
-}
-
-// MemberRecord 定义 member 记录
-type MemberRecord struct {
-	memberpb.BasicInfo
 }
 
 // CreateMember 创建会员

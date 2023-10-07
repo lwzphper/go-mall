@@ -1,4 +1,4 @@
-package service
+package member
 
 import (
 	"context"
@@ -6,8 +6,8 @@ import (
 	"github.com/lwzphper/go-mall/pkg/common/id"
 	"github.com/lwzphper/go-mall/pkg/logger"
 	"github.com/lwzphper/go-mall/pkg/until"
-	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
-	"github.com/lwzphper/go-mall/server/member/dao"
+	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
+	"github.com/lwzphper/go-mall/server/member/dao/member"
 	"github.com/lwzphper/go-mall/server/member/entity"
 	"github.com/lwzphper/go-mall/server/member/global"
 	"github.com/lwzphper/go-mall/server/member/until/hash"
@@ -27,7 +27,7 @@ var (
 
 type MemberService struct {
 	memberpb.UnimplementedMemberServiceServer
-	MemberDao *dao.Member
+	MemberDao *member.Member
 	Logger    *logger.Logger
 }
 

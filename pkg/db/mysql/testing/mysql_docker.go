@@ -7,6 +7,7 @@ import (
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"log"
 	"os"
 	"testing"
@@ -107,6 +108,7 @@ func RunMysqlInDocker(m *testing.M) {
 func initMysql() {
 	mysqlCfg := db.NewDefaultMysql()
 	mysqlCfg.Port = dockerPort
+	mysqlCfg.LogLevel = logger.Error // 防止 debug 模式下，终端输出sql执行语句，导致单元测试执行失败
 	mysqlCfg.Database = dbSetting.Database
 	mysqlCfg.Password = password
 

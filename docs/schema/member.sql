@@ -48,7 +48,7 @@ CREATE TABLE `member`
   COLLATE = utf8mb4_0900_ai_ci COMMENT ='会员表';
 
 -- 收货地址
-CREATE TABLE `member_receive_address`
+CREATE TABLE `address`
 (
     `id`         bigint unsigned  NOT NULL AUTO_INCREMENT,
     `name`       varchar(100)     NOT NULL COMMENT '收货人名称',
@@ -63,10 +63,11 @@ CREATE TABLE `member_receive_address`
     `created_at` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
     `is_delete`  tinyint unsigned NOT NULL DEFAULT 0 COMMENT '删除时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    INDEX `idx_member_id` (member_id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci COMMENT ='会员收货地址表';
+  COLLATE = utf8mb4_0900_ai_ci COMMENT ='收货地址表';
 
 -- ========================================= 扩展 =================================================================
 CREATE TABLE `member_login_log`

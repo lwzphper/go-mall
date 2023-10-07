@@ -1,14 +1,13 @@
 syntax = "proto3";
 package address.v1;
-option go_package = "go-mall/server/member/api/gen/v1;addresspb";
+option go_package = "go-mall/server/member/api/gen/v1/address;addresspb";
 import "google/protobuf/empty.proto";
-import "github.com/mwitkow/go-proto-validators/validator.proto";
 
 service AddressService {
-  rpc GetAddressList(ListRequest) returns(ListResponse); //查看地址
-  rpc CreateAddress(CreateRequest) returns(AddressEntity); //新增地址
-  rpc DeleteAddress(DeleteRequest) returns(google.protobuf.Empty); //删除地址
-  rpc UpdateAddress(AddressEntity) returns(google.protobuf.Empty); //修改地址
+  rpc Create(CreateRequest) returns(CreateResponse); //新增地址
+  rpc Delete(DeleteRequest) returns(google.protobuf.Empty); //删除地址
+  rpc Update(Entity) returns(google.protobuf.Empty); //修改地址
+  rpc GetList(ListRequest) returns(ListResponse); //查看地址
 }
 
 message ListRequest {
@@ -16,34 +15,41 @@ message ListRequest {
 }
 
 message DeleteRequest {
-  int64 id = 1 [(validator.field) = {msg_exists : true}];
+  int64 id = 1;
+  int64 memberId = 2;
 }
 
 message CreateRequest{
-  int32 memberId = 2;
-  string name = 3 [(validator.field) = {msg_exists : true}];
+  uint64 memberId = 1;
+  string name = 2;
+  string phone = 3;
   uint32 isDefault = 4;
   string postCode = 5;
-  string province = 6 [(validator.field) = {msg_exists : true}];
-  string city = 7 [(validator.field) = {msg_exists : true}];
-  string region = 8 [(validator.field) = {msg_exists : true}];
-  string address = 9 [(validator.field) = {msg_exists : true}];
+  string province = 6;
+  string city = 7;
+  string region = 8;
+  string address = 9;
 }
 
-message  AddressEntity{
-  int32 id = 1;
-  int32 memberId = 2;
-  string name = 3 [(validator.field) = {msg_exists : true}];
-  uint32 isDefault = 4;
-  string postCode = 5;
-  string province = 6 [(validator.field) = {msg_exists : true}];
-  string city = 7 [(validator.field) = {msg_exists : true}];
-  string region = 8 [(validator.field) = {msg_exists : true}];
-  string address = 9 [(validator.field) = {msg_exists : true}];
+message CreateResponse {
+  uint64 id = 1;
+}
+
+message Entity{
+  uint64 id = 1;
+  uint64 memberId = 2;
+  string name = 3;
+  string phone = 4;
+  uint32 isDefault = 5;
+  string postCode = 6;
+  string province = 7;
+  string city = 8;
+  string region = 9;
+  string address = 10;
 }
 
 
 message ListResponse {
   int32 total = 1;
-  repeated AddressEntity list = 2;
+  repeated Entity list = 2;
 }

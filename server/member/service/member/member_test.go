@@ -1,25 +1,27 @@
-package service
+package member
 
 import (
 	"context"
-	"fmt"
 	"github.com/lwzphper/go-mall/pkg/common/id"
 	mysqltesting "github.com/lwzphper/go-mall/pkg/db/mysql/testing"
 	"github.com/lwzphper/go-mall/pkg/db/mysql/testing/init_table"
 	"github.com/lwzphper/go-mall/pkg/logger"
 	"github.com/lwzphper/go-mall/pkg/until"
-	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
-	"github.com/lwzphper/go-mall/server/member/dao"
+	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
+	"github.com/lwzphper/go-mall/server/member/dao/member"
 	"github.com/lwzphper/go-mall/server/member/global"
 	"github.com/lwzphper/go-mall/server/member/until/hash"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
+	"sync"
 	"testing"
 	"time"
 )
 
 var srv *MemberService
+var mutex sync.Mutex
+var hasCreateDB = false
 
 // 创建会员测试
 func TestMemberService_CreateMember(t *testing.T) {
@@ -56,7 +58,7 @@ func TestMemberService_GetMemberById(t *testing.T) {
 	ctx := context.Background()
 	cReq := &memberpb.CreateRequest{
 		Username: "张三",
-		Phone:    "15800000001",
+		Phone:    "15800000002",
 		Password: "123456",
 	}
 	member, err := srv.CreateMember(ctx, cReq)
@@ -77,7 +79,7 @@ func TestMemberService_GetMemberByPhone(t *testing.T) {
 	initDB()
 
 	ctx := context.Background()
-	phone := "15800000001"
+	phone := "15800000003"
 	cReq := &memberpb.CreateRequest{
 		Username: "张三",
 		Phone:    phone,
@@ -103,7 +105,7 @@ func TestMemberService_UpdateMember(t *testing.T) {
 	ctx := context.Background()
 	cReq := &memberpb.CreateRequest{
 		Username: "张三",
-		Phone:    "15800000001",
+		Phone:    "15800000004",
 		Password: "123456",
 	}
 	member, err := srv.CreateMember(ctx, cReq)
@@ -124,7 +126,7 @@ func TestMemberService_UpdateMember(t *testing.T) {
 		{
 			name:     "零值时间格式更新",
 			birthday: timestamppb.New(time.Time{}),
-			want:     "1970-01-02",
+			want:     "1970-01-01",
 		},
 	}
 
@@ -173,8 +175,6 @@ func TestMemberService_CheckPassWord(t *testing.T) {
 		t.Errorf("password hash error:%v", err)
 	}
 
-	fmt.Printf(encryptPwd)
-
 	cases := []struct {
 		name       string
 		oriPwd     string
@@ -207,15 +207,20 @@ func TestMemberService_CheckPassWord(t *testing.T) {
 
 // 数据库初始化
 func initDB() {
-	// 创建数据表
-	if err := init_table.Member(); err != nil {
-		log.Panicf("create table error: %v", err)
+	mutex.Lock()
+	if hasCreateDB == false {
+		// 创建数据表
+		if err := init_table.Member(); err != nil {
+			log.Panicf("create table error: %v", err)
+		}
+		hasCreateDB = true
 	}
+	mutex.Unlock()
 
 	global.DB = mysqltesting.GormDB
 
 	srv = &MemberService{
-		MemberDao: dao.NewMember(),
+		MemberDao: member.NewMember(),
 		Logger:    logger.NewDefaultLogger(),
 	}
 }

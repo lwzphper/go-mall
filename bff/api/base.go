@@ -45,6 +45,7 @@ func HandleGrpcErrorToHttp(c *gin.Context, err error) {
 	//将grpc的code转换成http的状态码
 	if err != nil {
 		if e, ok := status.FromError(err); ok {
+			errMsg := "[g]" + e.Message()
 			switch e.Code() {
 			case codes.Unavailable:
 				response.InternalError(c.Writer, response.WithMsg("[g] 服务不可用"))
@@ -52,12 +53,12 @@ func HandleGrpcErrorToHttp(c *gin.Context, err error) {
 			//	response.NotFoundError(c.Writer, e.Message())
 			//case codes.Internal:
 			//	response.InternalError(c.Writer)
-			//case codes.InvalidArgument:
-			//	response.FormValidError(c.Writer, e.Message())
+			//case codes.InvalidArgument: // bff 层对数据校验了，grpc层就不校验
+			//	response.FormValidError(c.Writer, errMsg)
 			//case codes.AlreadyExists:
 			//	response.InternalError(c.Writer, response.WithMsg("数据已存在"))
 			default:
-				response.InternalError(c.Writer, response.WithMsg("[g]"+e.Message()))
+				response.InternalError(c.Writer, response.WithMsg(errMsg))
 			}
 			return
 		}

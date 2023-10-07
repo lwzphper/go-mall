@@ -10,7 +10,6 @@ function genCommonProto {
 
 genCommonProto page
 
-
 function genProto {
     DOMAIN=$1
     SKIP_GATEWAY=$2
@@ -22,8 +21,10 @@ function genProto {
     if [ $DOMAIN = "member" ]; then
       for srv in member address;
       do
+        OUT_PATH=${GO_OUT_PATH}/${srv}
+        mkdir -p $OUT_PATH
         # 这里配置 go 依赖包 路径
-        protoc -I=$PROTO_PATH --proto_path=./pkg/common/proto --proto_path=${GOPATH}/src --go_out=paths=source_relative:$GO_OUT_PATH --go-grpc_out=paths=source_relative:$GO_OUT_PATH --govalidators_out=$GO_OUT_PATH ${srv}.proto
+        protoc -I=$PROTO_PATH --proto_path=./pkg/common/proto --go_out=paths=source_relative:$OUT_PATH --go-grpc_out=paths=source_relative:$OUT_PATH ${srv}.proto
       done
     else
       protoc -I=$PROTO_PATH --proto_path=./pkg/common/proto --go_out=paths=source_relative:$GO_OUT_PATH --go-grpc_out=paths=source_relative:$GO_OUT_PATH ${DOMAIN}.proto
@@ -38,5 +39,4 @@ function genProto {
 #    protoc -I=$PROTO_PATH --grpc-gateway_out=paths=source_relative,grpc_api_configuration=$PROTO_PATH/${DOMAIN}.yaml:$GO_OUT_PATH ${DOMAIN}.proto
 }
 
-genProto auth
 genProto member
