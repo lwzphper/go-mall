@@ -11,12 +11,12 @@ service AddressService {
 }
 
 message ListRequest {
-  int64 memberId = 1;
+  uint64 memberId = 1;
 }
 
 message DeleteRequest {
-  int64 id = 1;
-  int64 memberId = 2;
+  uint64 id = 1;
+  uint64 memberId = 2;
 }
 
 message CreateRequest{

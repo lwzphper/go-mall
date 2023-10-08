@@ -10,9 +10,16 @@ import (
 	"github.com/lwzphper/go-mall/server/member/entity"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"gorm.io/gorm"
 )
 
 var _ addresspb.AddressServiceServer = (*Service)(nil)
+
+var (
+	internalError      = status.Errorf(codes.Internal, "收货地址服务内部错误")
+	notFoundError      = status.Errorf(codes.NotFound, "数据不存在")
+	notPermissionError = status.Error(codes.Unauthenticated, "无权操作")
+)
 
 type Service struct {
 	addresspb.UnimplementedAddressServiceServer
@@ -21,18 +28,19 @@ type Service struct {
 	Logger     *logger.Logger
 }
 
-func modelToResponse(addr entity.Address) *addresspb.Entity {
-	var pb *addresspb.Entity
-	pb.Id = addr.Id
-	pb.MemberId = addr.MemberId
-	pb.Name = addr.Name
-	pb.IsDefault = addr.IsDefault
-	pb.PostCode = addr.PostCode
-	pb.Province = addr.Province
-	pb.City = addr.City
-	pb.Region = addr.Region
-	pb.Address = addr.Address
-	return pb
+func modelToResponse(addr entity.Address) addresspb.Entity {
+	return addresspb.Entity{
+		Id:        addr.Id,
+		MemberId:  addr.MemberId,
+		Name:      addr.Name,
+		Phone:     addr.Phone,
+		IsDefault: addr.IsDefault,
+		PostCode:  addr.PostCode,
+		Province:  addr.Province,
+		City:      addr.City,
+		Region:    addr.Region,
+		Address:   addr.Address,
+	}
 }
 
 // Create 创建
@@ -50,7 +58,8 @@ func (s *Service) Create(ctx context.Context, req *addresspb.CreateRequest) (*ad
 	}
 	err := s.AddressDao.Create(ctx, addr)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		s.Logger.Errorf("address create error：%s", err)
+		return nil, internalError
 	}
 	return &addresspb.CreateResponse{
 		Id: addr.Id,
@@ -59,26 +68,73 @@ func (s *Service) Create(ctx context.Context, req *addresspb.CreateRequest) (*ad
 
 // Update 更新
 func (s *Service) Update(ctx context.Context, req *addresspb.Entity) (*empty.Empty, error) {
-	// todo 更新
-	return &empty.Empty{}, nil
+	uData := entity.Address{
+		Name:      req.Name,
+		Phone:     req.Phone,
+		IsDefault: req.IsDefault,
+		PostCode:  req.PostCode,
+		Province:  req.Province,
+		City:      req.City,
+		Region:    req.Region,
+		Address:   req.Address,
+		MemberId:  req.MemberId,
+	}
+	err := s.AddressDao.UpdateUserItem(ctx, id.MemberID(req.MemberId), id.AddressID(req.Id), uData)
+	if err != nil {
+		s.Logger.Errorf("address update error：%s", err)
+	}
+	return &empty.Empty{}, err
 }
 
 // Delete 删除
 func (s *Service) Delete(ctx context.Context, req *addresspb.DeleteRequest) (*empty.Empty, error) {
-	// todo 删除
-	return &empty.Empty{}, nil
+	pbEmpty := &empty.Empty{}
+	// 权限校验
+	data, err := s.checkCanEdit(ctx, id.AddressID(req.GetId()), id.MemberID(req.GetMemberId()))
+	if err != nil {
+		return pbEmpty, err
+	}
+
+	// 删除
+	err = s.AddressDao.DeleteById(ctx, id.AddressID(data.Id))
+	if err != nil {
+		s.Logger.Errorf("delete address error：%s", err)
+		return pbEmpty, internalError
+	}
+	return pbEmpty, nil
 }
 
 // GetList 获取列表
 func (s *Service) GetList(ctx context.Context, req *addresspb.ListRequest) (*addresspb.ListResponse, error) {
 	list, err := s.AddressDao.GetList(ctx, id.MemberID(req.MemberId))
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		s.Logger.Errorf("address getList error：%s", err)
+		return nil, internalError
 	}
 
-	var result *addresspb.ListResponse
+	result := &addresspb.ListResponse{}
 	for _, addr := range list {
-		result.List = append(result.List, modelToResponse(addr))
+		respItem := modelToResponse(addr)
+		result.List = append(result.List, &respItem)
 	}
 	return result, nil
+}
+
+// 检查是否可以编辑数据
+func (s *Service) checkCanEdit(ctx context.Context, aid id.AddressID, mId id.MemberID) (*entity.Address, error) {
+	// 数据不存在或异常
+	data, err := s.AddressDao.GetItemById(ctx, aid)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, notFoundError
+		}
+		s.Logger.Errorf("address get item by id error：%s", err)
+		return nil, internalError
+	}
+
+	// 数据不属于当前用户
+	if data.MemberId != mId.Uint64() {
+		return nil, notPermissionError
+	}
+	return data, nil
 }

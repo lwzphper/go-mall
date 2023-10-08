@@ -60,7 +60,7 @@ func (s *MemberService) CreateMember(ctx context.Context, req *memberpb.CreateRe
 	// 校验用户是否存在
 	member, err := s.MemberDao.GetItemByWhere(ctx, &entity.Member{Phone: req.Phone})
 	if err != nil && err != gorm.ErrRecordNotFound {
-		global.Logger.Errorf("create member error:%v", err)
+		global.Logger.Errorf("get member error:%v", err)
 		return nil, InternalError
 	}
 
@@ -82,7 +82,8 @@ func (s *MemberService) CreateMember(ctx context.Context, req *memberpb.CreateRe
 	}
 	err = s.MemberDao.CreateMember(ctx, m)
 	if err != nil {
-		return nil, err
+		global.Logger.Errorf("create member error:%v", err)
+		return nil, InternalError
 	}
 
 	return &memberpb.CreateResponse{
@@ -97,7 +98,8 @@ func (s *MemberService) GetMemberById(ctx context.Context, req *memberpb.IdReque
 		if err == gorm.ErrRecordNotFound {
 			return nil, memberNotFoundError
 		}
-		return nil, status.Errorf(codes.Internal, err.Error())
+		global.Logger.Errorf("get member by id error:%v", err)
+		return nil, InternalError
 	}
 
 	return modelToResponse(memberRecord), nil
@@ -110,7 +112,8 @@ func (s *MemberService) GetMemberByPhone(ctx context.Context, req *memberpb.Phon
 		if err == gorm.ErrRecordNotFound {
 			return nil, memberNotFoundError
 		}
-		return nil, status.Errorf(codes.Internal, err.Error())
+		global.Logger.Errorf("get member by phone error:%v", err)
+		return nil, InternalError
 	}
 	return modelToResponse(item), nil
 }
@@ -118,31 +121,33 @@ func (s *MemberService) GetMemberByPhone(ctx context.Context, req *memberpb.Phon
 // UpdateMember 更新会员
 func (s *MemberService) UpdateMember(ctx context.Context, req *memberpb.MemberEntity) (*empty.Empty, error) {
 	// 获取需要更新的数据
-	member, err := s.MemberDao.GetItemById(ctx, id.MemberID(req.Id))
+	detail, err := s.MemberDao.GetItemById(ctx, id.MemberID(req.Id))
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, memberNotFoundError
 		}
-		return nil, status.Errorf(codes.Internal, err.Error())
+		global.Logger.Errorf("get member by id error:%v", err)
+		return nil, InternalError
 	}
 
 	if until.TimeToDate(req.Birthday.AsTime()) == "0001-01-01" {
-		member.Birthday = nil
+		detail.Birthday = nil
 	} else {
 		birthday := req.Birthday.AsTime()
-		member.Birthday = &birthday
+		detail.Birthday = &birthday
 	}
-	member.Username = req.Username
-	member.MemberLevelId = req.MemberLevelId
-	member.Icon = req.Icon
-	member.Status = entity.MemberStatus(req.Status)
-	member.Gender = entity.Gender(req.Gender)
-	member.City = req.City
-	member.Job = req.Job
-	member.Growth = req.Growth
-	err = s.MemberDao.UpdateByEntity(ctx, member)
+	detail.Username = req.Username
+	detail.MemberLevelId = req.MemberLevelId
+	detail.Icon = req.Icon
+	detail.Status = entity.MemberStatus(req.Status)
+	detail.Gender = entity.Gender(req.Gender)
+	detail.City = req.City
+	detail.Job = req.Job
+	detail.Growth = req.Growth
+	err = s.MemberDao.UpdateByEntity(ctx, detail)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, err.Error())
+		global.Logger.Errorf("update member error:%v", err)
+		return nil, InternalError
 	}
 	return &empty.Empty{}, nil
 }
