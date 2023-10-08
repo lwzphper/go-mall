@@ -2,7 +2,7 @@ package reponse
 
 import (
 	"github.com/lwzphper/go-mall/pkg/until"
-	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
+	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
 )
 
 type MemberResponse struct {
