@@ -29,7 +29,7 @@ func memberSrv() {
 func addressSrv() {
 	//fmt.Sprintf("consul://%s:%d/%s?wait=14s", consulInfo.Host, consulInfo.Port, global.ServerConfig.UserSrvInfo.Name),
 	conn, err := grpc.Dial(
-		"127.0.0.1:8082",
+		"127.0.0.1:8081",
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 	)

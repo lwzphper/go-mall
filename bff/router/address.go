@@ -10,6 +10,7 @@ func InitAddress(r *gin.RouterGroup) {
 	addressGroup := r.Group("address").Use(middleware.JwtAuth())
 	{
 		addressGroup.GET("", address.List)
+		addressGroup.POST("", address.Create)
 		addressGroup.PUT("", address.Update)
 		addressGroup.DELETE("", address.Delete)
 	}

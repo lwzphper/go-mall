@@ -57,7 +57,20 @@ func (s *Service) Create(ctx context.Context, req *addresspb.CreateRequest) (*ad
 		Detail:    req.Detail,
 		MemberId:  req.MemberId,
 	}
-	err := s.AddressDao.Create(ctx, addr)
+
+	err := dao.Transaction(ctx, func(tx context.Context) error {
+		// 重置默认地址
+		if req.IsDefault == 1 {
+			err := address.NewAddress(tx).UpdateByMemberId(ctx, id.MemberID(req.MemberId), map[string]interface{}{
+				"is_default": 0,
+			})
+			if err != nil {
+				return err
+			}
+		}
+		return address.NewAddress(tx).Create(ctx, addr)
+	})
+
 	if err != nil {
 		s.Logger.Errorf("address create error：%s", err)
 		return nil, internalError

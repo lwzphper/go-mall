@@ -21,12 +21,12 @@ func NewAddressList() *AddressList {
 }
 
 type AddressList struct {
-	list []AddressEntity
+	List []AddressEntity `json:"list"`
 }
 
 func (r *AddressList) Marshal(p *addresspb.ListResponse) {
 	for _, item := range p.GetList() {
-		r.list = append(r.list, AddressEntity{
+		r.List = append(r.List, AddressEntity{
 			Id:        item.Id,
 			Name:      item.Name,
 			Phone:     item.Phone,

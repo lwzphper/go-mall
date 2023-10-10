@@ -30,6 +30,7 @@ func (m *Address) GetList(ctx context.Context, mId id.MemberID) ([]entity.Addres
 	var address []entity.Address
 	result := m.db.Select([]string{"id", "name", "phone", "is_default", "post_code", "province", "city", "region", "detail"}).
 		Where(&entity.Address{MemberId: mId.Uint64()}).
+		Order("is_default desc,id desc").
 		Find(&address)
 	return address, result.Error
 }
