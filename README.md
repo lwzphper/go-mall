@@ -11,6 +11,14 @@ go商城系统（开发中...）
 ## 项目启动
 #### 1. 初始化数据库、数据表
 
+#### 2. 构架
+```shell
+# window 环境
+make build
+# linux 环境
+make linux
+```
+
 ## 依赖
 protoc
 grpc-go：https://github.com/grpc/grpc-go
