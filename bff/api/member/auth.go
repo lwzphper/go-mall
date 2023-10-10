@@ -5,6 +5,7 @@ import (
 	"github.com/lwzphper/go-mall/bff/api"
 	"github.com/lwzphper/go-mall/bff/global"
 	"github.com/lwzphper/go-mall/bff/request/auth"
+	response2 "github.com/lwzphper/go-mall/bff/response"
 	jwt2 "github.com/lwzphper/go-mall/pkg/jwt"
 	"github.com/lwzphper/go-mall/pkg/response"
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
@@ -44,7 +45,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	result := new(member.LoginResponse)
+	result := new(response2.LoginResponse)
 	result.Marshal(member)
 	response.Success(c.Writer, result, response.WithAuthHeader(token))
 }
