@@ -20,4 +20,5 @@ func InitMember(r *gin.RouterGroup) {
 		memberGroup.GET("", member.Detail)
 		memberGroup.PUT("", member.Update)
 	}
+
 }

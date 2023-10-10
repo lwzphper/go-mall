@@ -5,8 +5,8 @@ import (
 	"github.com/lwzphper/go-mall/bff/api"
 	"github.com/lwzphper/go-mall/bff/common"
 	"github.com/lwzphper/go-mall/bff/global"
-	"github.com/lwzphper/go-mall/bff/reponse"
 	"github.com/lwzphper/go-mall/bff/request/member"
+	member2 "github.com/lwzphper/go-mall/bff/response"
 	"github.com/lwzphper/go-mall/pkg/response"
 	"github.com/lwzphper/go-mall/pkg/until"
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
@@ -27,7 +27,7 @@ func Detail(c *gin.Context) {
 	}
 
 	// 这里空值会将字段过滤掉
-	result := new(reponse.MemberResponse)
+	result := member2.NewMemberResponse()
 	result.Marshal(detail)
 	response.Success(c.Writer, result)
 }

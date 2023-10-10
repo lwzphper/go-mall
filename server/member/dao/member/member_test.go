@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	dao          *Member
+	memberDao    *Member
 	ctx          context.Context
 	hasInitTable bool // 是否初始化 table
 	initLock     sync.Mutex
@@ -56,12 +56,12 @@ func TestCreateAndQueryMember(t *testing.T) {
 				Phone:    c.phone,
 				Password: until.RandomString(32),
 			}
-			err := dao.CreateMember(ctx, &member)
+			err := memberDao.CreateMember(ctx, &member)
 			if err != nil {
 				t.Errorf("[%s]:create member error:%v", c.caseName, err)
 			}
 
-			memberRecord, err := dao.GetItemByWhere(ctx, &entity.Member{Username: c.username})
+			memberRecord, err := memberDao.GetItemByWhere(ctx, &entity.Member{Username: c.username})
 			if err != nil {
 				t.Errorf("[%s]:get member info error: %v", c.caseName, err)
 			}
@@ -85,12 +85,12 @@ func TestGetItemById(t *testing.T) {
 		Phone:    until.RandomString(11),
 		Password: "123456",
 	}
-	err := dao.CreateMember(ctx, save)
+	err := memberDao.CreateMember(ctx, save)
 	if err != nil {
 		t.Errorf("create member error:%v", err)
 	}
 
-	member, err := dao.GetItemById(ctx, id.MemberID(save.Id))
+	member, err := memberDao.GetItemById(ctx, id.MemberID(save.Id))
 	if err != nil {
 		t.Errorf("get member by id error:%v", err)
 	}
@@ -105,7 +105,7 @@ func TestUpdate(t *testing.T) {
 		Phone:    until.RandomString(11),
 		Password: "123456",
 	}
-	err := dao.CreateMember(ctx, save)
+	err := memberDao.CreateMember(ctx, save)
 	if err != nil {
 		t.Errorf("create member error:%v", err)
 	}
@@ -121,12 +121,12 @@ func TestUpdate(t *testing.T) {
 		"job":             "go开发工程师",
 		"growth":          int32(100),
 	}
-	err = dao.UpdateById(ctx, id.MemberID(save.Id), uData)
+	err = memberDao.UpdateById(ctx, id.MemberID(save.Id), uData)
 	if err != nil {
 		t.Errorf("update member error:%v", err)
 	}
 
-	member, err := dao.GetItemById(ctx, id.MemberID(save.Id))
+	member, err := memberDao.GetItemById(ctx, id.MemberID(save.Id))
 	if err != nil {
 		t.Errorf("get member by id error:%v", err)
 	}
@@ -149,18 +149,18 @@ func TestMember_UpdateByEntity(t *testing.T) {
 		Phone:    until.RandomString(11),
 		Password: "123456",
 	}
-	err := dao.CreateMember(ctx, save)
+	err := memberDao.CreateMember(ctx, save)
 	if err != nil {
 		t.Errorf("create member error:%v", err)
 	}
 
 	save.Username = "王五"
-	err = dao.UpdateByEntity(ctx, save)
+	err = memberDao.UpdateByEntity(ctx, save)
 	if err != nil {
 		t.Errorf("update member error:%v", err)
 	}
 
-	member, err := dao.GetItemById(ctx, id.MemberID(save.Id))
+	member, err := memberDao.GetItemById(ctx, id.MemberID(save.Id))
 	if err != nil {
 		t.Errorf("get member by id error:%v", err)
 	}
@@ -180,7 +180,7 @@ func initTable() {
 	}
 
 	global.DB = mysqltesting.GormDB
-	dao = NewMember()
+	memberDao = NewMember(context.Background())
 	ctx = context.Background()
 	hasInitTable = true
 }

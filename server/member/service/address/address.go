@@ -6,6 +6,7 @@ import (
 	"github.com/lwzphper/go-mall/pkg/common/id"
 	"github.com/lwzphper/go-mall/pkg/logger"
 	addresspb "github.com/lwzphper/go-mall/server/member/api/gen/v1/address"
+	"github.com/lwzphper/go-mall/server/member/dao"
 	"github.com/lwzphper/go-mall/server/member/dao/address"
 	"github.com/lwzphper/go-mall/server/member/entity"
 	"google.golang.org/grpc/codes"
@@ -68,21 +69,47 @@ func (s *Service) Create(ctx context.Context, req *addresspb.CreateRequest) (*ad
 
 // Update 更新
 func (s *Service) Update(ctx context.Context, req *addresspb.Entity) (*empty.Empty, error) {
-	uData := entity.Address{
-		Name:      req.Name,
-		Phone:     req.Phone,
-		IsDefault: req.IsDefault,
-		PostCode:  req.PostCode,
-		Province:  req.Province,
-		City:      req.City,
-		Region:    req.Region,
-		Detail:    req.Detail,
-		MemberId:  req.MemberId,
+	addrId := id.AddressID(req.Id)
+	item, err := s.AddressDao.GetItemById(ctx, addrId)
+	if err != nil {
+		s.Logger.Errorf("get address by id error：%s", err)
+		return &empty.Empty{}, internalError
 	}
-	err := s.AddressDao.UpdateUserItem(ctx, id.MemberID(req.MemberId), id.AddressID(req.Id), uData)
+	if item.MemberId != req.MemberId {
+		return &empty.Empty{}, notPermissionError
+	}
+
+	err = dao.Transaction(ctx, func(tx context.Context) error {
+		// 如果设置了默认值，需要将其他设置为 0
+		if req.IsDefault == 1 && item.IsDefault == 0 {
+			err = address.NewAddress(tx).UpdateByMemberId(ctx, id.MemberID(req.MemberId), map[string]interface{}{
+				"is_default": 0,
+			})
+			if err != nil {
+				return err
+			}
+		}
+
+		// 更新基本数据
+		uData := entity.Address{
+			Name:      req.Name,
+			Phone:     req.Phone,
+			IsDefault: req.IsDefault,
+			PostCode:  req.PostCode,
+			Province:  req.Province,
+			City:      req.City,
+			Region:    req.Region,
+			Detail:    req.Detail,
+			MemberId:  req.MemberId,
+		}
+		uData.Id = item.Id
+		return address.NewAddress(tx).UpdateUserItem(ctx, uData)
+	})
+
 	if err != nil {
 		s.Logger.Errorf("address update error：%s", err)
 	}
+
 	return &empty.Empty{}, err
 }
 

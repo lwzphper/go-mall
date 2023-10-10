@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	dao          *Address
+	addressDao   *Address
 	ctx          context.Context
 	hasInitTable bool // 是否初始化 table
 	initLock     sync.Mutex
@@ -78,12 +78,12 @@ func TestCreateAndQuery(t *testing.T) {
 				Detail:    c.address,
 				MemberId:  c.memberId,
 			}
-			err := dao.Create(ctx, &item)
+			err := addressDao.Create(ctx, &item)
 			if err != nil {
 				t.Errorf("[%s]:create member error:%v", c.caseName, err)
 			}
 
-			record, err := dao.GetList(ctx, id.MemberID(memberId))
+			record, err := addressDao.GetList(ctx, id.MemberID(memberId))
 			if err != nil {
 				t.Errorf("[%s]:get list error: %v", c.caseName, err)
 			}
@@ -111,7 +111,7 @@ func TestUpdate(t *testing.T) {
 		Detail:    "xxx小区3单元1号",
 		MemberId:  memberId,
 	}
-	err := dao.Create(ctx, save)
+	err := addressDao.Create(ctx, save)
 	if err != nil {
 		t.Errorf("create member error:%v", err)
 	}
@@ -126,12 +126,12 @@ func TestUpdate(t *testing.T) {
 		"region":     "芦淞区",
 		"address":    "xxx小区8单元3号",
 	}
-	err = dao.UpdateById(ctx, id.AddressID(save.Id), uData)
+	err = addressDao.UpdateById(ctx, id.AddressID(save.Id), uData)
 	if err != nil {
 		t.Errorf("update member error:%v", err)
 	}
 
-	member, err := dao.GetList(ctx, id.MemberID(memberId))
+	member, err := addressDao.GetList(ctx, id.MemberID(memberId))
 	if err != nil {
 		t.Errorf("get list error:%v", err)
 	}
@@ -161,7 +161,7 @@ func initTable() {
 	}
 
 	global.DB = mysqltesting.GormDB
-	dao = NewAddress()
+	addressDao = NewAddress(context.Background())
 	ctx = context.Background()
 	hasInitTable = true
 }

@@ -220,7 +220,7 @@ func initDB() {
 	global.DB = mysqltesting.GormDB
 
 	srv = &MemberService{
-		MemberDao: member.NewMember(),
+		MemberDao: member.NewMember(context.Background()),
 		Logger:    logger.NewDefaultLogger(),
 	}
 }

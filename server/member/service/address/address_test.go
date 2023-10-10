@@ -5,8 +5,10 @@ import (
 	"github.com/lwzphper/go-mall/pkg/common/id"
 	mysqltesting "github.com/lwzphper/go-mall/pkg/db/mysql/testing"
 	"github.com/lwzphper/go-mall/pkg/db/mysql/testing/init_table"
+	"github.com/lwzphper/go-mall/pkg/logger"
 	"github.com/lwzphper/go-mall/pkg/until"
 	addresspb "github.com/lwzphper/go-mall/server/member/api/gen/v1/address"
+	"github.com/lwzphper/go-mall/server/member/dao/address"
 	"github.com/lwzphper/go-mall/server/member/global"
 	"github.com/stretchr/testify/assert"
 	"log"
@@ -64,6 +66,21 @@ func TestService_Update(t *testing.T) {
 	if err != nil {
 		t.Errorf("create error:%s", err)
 	}
+	req = addresspb.CreateRequest{
+		Name:      "王五",
+		Phone:     until.RandomString(11),
+		IsDefault: uint32(0),
+		PostCode:  "511450",
+		Province:  "广东省",
+		City:      "广州市",
+		Region:    "天河区",
+		Detail:    "xxx小区3单元1号",
+		MemberId:  memberId,
+	}
+	resp, err = srv.Create(ctx, &req)
+	if err != nil {
+		t.Errorf("create error:%s", err)
+	}
 
 	// 更新
 	entity := addresspb.Entity{
@@ -92,7 +109,11 @@ func TestService_Update(t *testing.T) {
 		t.Errorf("get list data empty")
 	}
 
-	item := list.GetList()[0]
+	// 校验是否将数据默认地址重置为0
+	first := list.GetList()[0]
+	assert.Equal(t, uint32(0), first.IsDefault)
+
+	item := list.GetList()[1]
 	assert.Equal(t, entity.Id, item.Id)
 	assert.Equal(t, entity.Phone, item.Phone)
 	assert.Equal(t, entity.Name, item.Name)
@@ -124,12 +145,12 @@ func initDB() {
 	cfg.Host = "127.0.0.1"
 	cfg.Password = "123456"
 	_ = cfg.InitDB()
-	global.DB = cfg.GetDB()
+	global.DB = cfg.GetDB()*/
 
 	srv = &Service{
-		AddressDao: address.NewAddress(),
+		AddressDao: address.NewAddress(context.Background()),
 		Logger:     logger.NewDefaultLogger(),
-	}*/
+	}
 }
 
 func TestMain(m *testing.M) {

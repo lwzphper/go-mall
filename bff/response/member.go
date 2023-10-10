@@ -1,9 +1,13 @@
-package reponse
+package response
 
 import (
 	"github.com/lwzphper/go-mall/pkg/until"
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
 )
+
+func NewMemberResponse() *MemberResponse {
+	return &MemberResponse{}
+}
 
 type MemberResponse struct {
 	Id            uint64 `json:"id"`

@@ -28,5 +28,6 @@ func Routers() *gin.Engine {
 
 	v1Group := r.Group("/v1")
 	router.InitMember(v1Group)
+	router.InitAddress(v1Group)
 	return r
 }

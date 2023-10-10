@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/lwzphper/go-mall/pkg/server"
 	addresspb "github.com/lwzphper/go-mall/server/member/api/gen/v1/address"
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
@@ -30,12 +31,12 @@ func main() {
 			// 会员服务
 			memberpb.RegisterMemberServiceServer(s, &member2.MemberService{
 				Logger:    global.Logger,
-				MemberDao: member.NewMember(),
+				MemberDao: member.NewMember(context.Background()),
 			})
 			// 地址服务
 			addresspb.RegisterAddressServiceServer(s, &address.Service{
 				Logger:     global.Logger,
-				AddressDao: address2.NewAddress(),
+				AddressDao: address2.NewAddress(context.Background()),
 			})
 		},
 	}))

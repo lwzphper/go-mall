@@ -3,8 +3,8 @@ package address
 import (
 	"context"
 	"github.com/lwzphper/go-mall/pkg/common/id"
+	"github.com/lwzphper/go-mall/server/member/dao"
 	"github.com/lwzphper/go-mall/server/member/entity"
-	"github.com/lwzphper/go-mall/server/member/global"
 	"gorm.io/gorm"
 )
 
@@ -12,11 +12,13 @@ type Address struct {
 	db *gorm.DB
 }
 
-func NewAddress() *Address {
+func NewAddress(ctx context.Context) *Address {
 	return &Address{
-		db: global.DB,
+		db: dao.GetDB(ctx),
 	}
 }
+
+var allowUpdateColumn = []string{"name", "phone", "is_default", "post_code", "province", "city", "region", "detail"}
 
 // Create 创建
 func (m *Address) Create(ctx context.Context, address *entity.Address) error {
@@ -43,12 +45,19 @@ func (m *Address) UpdateById(ctx context.Context, id id.AddressID, data map[stri
 	return m.db.Model(&entity.Address{}).Where("id", id).Save(data).Error
 }
 
-// UpdateUserItem 更新用户数据
-func (m *Address) UpdateUserItem(ctx context.Context, mId id.MemberID, aId id.AddressID, data entity.Address) error {
-	return m.db.Model(&entity.Address{}).
-		Select("name", "phone", "is_default", "post_code", "province", "city", "region", "detail").
+// UpdateByMemberId 通过会员id更新数据
+func (m *Address) UpdateByMemberId(ctx context.Context, mId id.MemberID, data map[string]interface{}) error {
+	return m.db.Model(&entity.Address{}).Select(allowUpdateColumn).
 		Where("member_id", mId).
-		Where("id", aId).
+		Updates(data).Error
+}
+
+// UpdateUserItem 更新用户数据
+func (m *Address) UpdateUserItem(ctx context.Context, data entity.Address) error {
+	return m.db.Model(&entity.Address{}).
+		Select(allowUpdateColumn).
+		Where("member_id", data.MemberId).
+		Where("id", data.Id).
 		Updates(data).
 		Error
 }

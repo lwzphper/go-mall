@@ -9,7 +9,7 @@ import (
 	en_translations "github.com/go-playground/validator/v10/translations/en"
 	zh_translations "github.com/go-playground/validator/v10/translations/zh"
 	"github.com/lwzphper/go-mall/bff/global"
-	"github.com/lwzphper/go-mall/bff/rule"
+	"github.com/lwzphper/go-mall/pkg/request/rule"
 	"reflect"
 )
 
@@ -40,6 +40,7 @@ func InitValidator(locale string) {
 
 	// 注册自定义验证类
 	rule.RegisterGender(v)
+	rule.RegisterOnOff(v)
 }
 
 // 设置语言

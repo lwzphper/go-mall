@@ -50,6 +50,5 @@ message Entity{
 
 
 message ListResponse {
-  int32 total = 1;
-  repeated Entity list = 2;
+  repeated Entity list = 1;
 }

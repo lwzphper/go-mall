@@ -1,4 +1,4 @@
-package reponse
+package response
 
 import memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
 
