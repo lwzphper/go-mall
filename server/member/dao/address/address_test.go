@@ -75,7 +75,7 @@ func TestCreateAndQuery(t *testing.T) {
 				Province:  c.province,
 				City:      c.city,
 				Region:    c.region,
-				Address:   c.address,
+				Detail:    c.address,
 				MemberId:  c.memberId,
 			}
 			err := dao.Create(ctx, &item)
@@ -108,7 +108,7 @@ func TestUpdate(t *testing.T) {
 		Province:  "广东省",
 		City:      "广州市",
 		Region:    "天河区",
-		Address:   "xxx小区3单元1号",
+		Detail:    "xxx小区3单元1号",
 		MemberId:  memberId,
 	}
 	err := dao.Create(ctx, save)
@@ -145,7 +145,7 @@ func TestUpdate(t *testing.T) {
 	assert.Equal(t, uData["province"], member[0].Province)
 	assert.Equal(t, uData["city"], member[0].City)
 	assert.Equal(t, uData["region"], member[0].Region)
-	assert.Equal(t, uData["address"], member[0].Address)
+	assert.Equal(t, uData["address"], member[0].Detail)
 }
 
 func initTable() {

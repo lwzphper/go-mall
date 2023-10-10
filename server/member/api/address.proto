@@ -28,7 +28,7 @@ message CreateRequest{
   string province = 6;
   string city = 7;
   string region = 8;
-  string address = 9;
+  string detail = 9;
 }
 
 message CreateResponse {
@@ -45,7 +45,7 @@ message Entity{
   string province = 7;
   string city = 8;
   string region = 9;
-  string address = 10;
+  string detail = 10;
 }
 
 

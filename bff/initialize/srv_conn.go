@@ -2,7 +2,7 @@ package initialize
 
 import (
 	"github.com/lwzphper/go-mall/bff/global"
-	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
+	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

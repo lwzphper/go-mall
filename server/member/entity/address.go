@@ -11,7 +11,7 @@ type Address struct {
 	Province  string `json:"province" gorm:"column:province"`
 	City      string `json:"city" gorm:"column:city"`
 	Region    string `json:"region" gorm:"column:region"`
-	Address   string `json:"address" gorm:"column:address"`
+	Detail    string `json:"detail" gorm:"column:detail"`
 	MemberId  uint64 `json:"member_id" gorm:"column:member_id"`
 	gorm.CreatedAtField
 	gorm.UpdatedAtFiled

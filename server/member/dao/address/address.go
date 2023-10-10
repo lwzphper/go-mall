@@ -26,7 +26,7 @@ func (m *Address) Create(ctx context.Context, address *entity.Address) error {
 // GetList 获取列表
 func (m *Address) GetList(ctx context.Context, mId id.MemberID) ([]entity.Address, error) {
 	var address []entity.Address
-	result := m.db.Select([]string{"id", "name", "phone", "is_default", "post_code", "province", "city", "region", "address"}).
+	result := m.db.Select([]string{"id", "name", "phone", "is_default", "post_code", "province", "city", "region", "detail"}).
 		Where(&entity.Address{MemberId: mId.Uint64()}).
 		Find(&address)
 	return address, result.Error
@@ -46,7 +46,7 @@ func (m *Address) UpdateById(ctx context.Context, id id.AddressID, data map[stri
 // UpdateUserItem 更新用户数据
 func (m *Address) UpdateUserItem(ctx context.Context, mId id.MemberID, aId id.AddressID, data entity.Address) error {
 	return m.db.Model(&entity.Address{}).
-		Select("name", "phone", "is_default", "post_code", "province", "city", "region", "address").
+		Select("name", "phone", "is_default", "post_code", "province", "city", "region", "detail").
 		Where("member_id", mId).
 		Where("id", aId).
 		Updates(data).

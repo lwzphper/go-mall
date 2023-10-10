@@ -4,7 +4,7 @@ import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/lwzphper/go-mall/bff/config"
 	"github.com/lwzphper/go-mall/pkg/logger"
-	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
+	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
 )
 
 var (

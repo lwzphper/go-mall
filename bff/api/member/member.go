@@ -9,7 +9,7 @@ import (
 	"github.com/lwzphper/go-mall/bff/request/member"
 	"github.com/lwzphper/go-mall/pkg/response"
 	"github.com/lwzphper/go-mall/pkg/until"
-	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
+	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
 )
 
 // Detail 获取会员详情

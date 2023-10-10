@@ -1,6 +1,6 @@
 package reponse
 
-import memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1"
+import memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
 
 type LoginResponse struct {
 	Id       uint64 `json:"id"`

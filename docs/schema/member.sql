@@ -58,7 +58,7 @@ CREATE TABLE `address`
     `province`   varchar(100)     NOT NULL COMMENT '省份/直辖市',
     `city`       varchar(100)     NOT NULL COMMENT '城市',
     `region`     varchar(100)     NOT NULL COMMENT '区',
-    `address`    varchar(128)     NOT NULL COMMENT '详细地址(街道)',
+    `detail`     varchar(128)     NOT NULL COMMENT '详细地址(街道)',
     `member_id`  bigint unsigned  NOT NULL COMMENT '会员id',
     `created_at` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',

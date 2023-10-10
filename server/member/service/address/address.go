@@ -39,7 +39,7 @@ func modelToResponse(addr entity.Address) addresspb.Entity {
 		Province:  addr.Province,
 		City:      addr.City,
 		Region:    addr.Region,
-		Address:   addr.Address,
+		Detail:    addr.Detail,
 	}
 }
 
@@ -53,7 +53,7 @@ func (s *Service) Create(ctx context.Context, req *addresspb.CreateRequest) (*ad
 		Province:  req.Province,
 		City:      req.City,
 		Region:    req.Region,
-		Address:   req.Address,
+		Detail:    req.Detail,
 		MemberId:  req.MemberId,
 	}
 	err := s.AddressDao.Create(ctx, addr)
@@ -76,7 +76,7 @@ func (s *Service) Update(ctx context.Context, req *addresspb.Entity) (*empty.Emp
 		Province:  req.Province,
 		City:      req.City,
 		Region:    req.Region,
-		Address:   req.Address,
+		Detail:    req.Detail,
 		MemberId:  req.MemberId,
 	}
 	err := s.AddressDao.UpdateUserItem(ctx, id.MemberID(req.MemberId), id.AddressID(req.Id), uData)

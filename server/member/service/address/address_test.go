@@ -30,7 +30,7 @@ func TestService_Create(t *testing.T) {
 		Province:  "广东省",
 		City:      "广州市",
 		Region:    "天河区",
-		Address:   "xxx小区3单元1号",
+		Detail:    "xxx小区3单元1号",
 		MemberId:  37,
 	}
 	resp, err := srv.Create(context.Background(), &req)
@@ -57,7 +57,7 @@ func TestService_Update(t *testing.T) {
 		Province:  "广东省",
 		City:      "广州市",
 		Region:    "天河区",
-		Address:   "xxx小区3单元1号",
+		Detail:    "xxx小区3单元1号",
 		MemberId:  memberId,
 	}
 	resp, err := srv.Create(ctx, &req)
@@ -76,7 +76,7 @@ func TestService_Update(t *testing.T) {
 		Province:  "长沙市",
 		City:      "株洲市",
 		Region:    "芦淞区",
-		Address:   "xxx小区8单元3号",
+		Detail:    "xxx小区8单元3号",
 	}
 	_, err = srv.Update(ctx, &entity)
 	if err != nil {
@@ -101,7 +101,7 @@ func TestService_Update(t *testing.T) {
 	assert.Equal(t, entity.Province, item.Province)
 	assert.Equal(t, entity.City, item.City)
 	assert.Equal(t, entity.Region, item.Region)
-	assert.Equal(t, entity.Address, item.Address)
+	assert.Equal(t, entity.Detail, item.Detail)
 }
 
 // 数据库初始化
