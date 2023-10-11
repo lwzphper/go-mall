@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.9.2
-// source: member.proto
+// source: user.proto
 
 package memberpb
 
@@ -20,11 +20,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MemberService_GetMemberById_FullMethodName    = "/member.v1.MemberService/GetMemberById"
-	MemberService_GetMemberByPhone_FullMethodName = "/member.v1.MemberService/GetMemberByPhone"
-	MemberService_CreateMember_FullMethodName     = "/member.v1.MemberService/CreateMember"
-	MemberService_UpdateMember_FullMethodName     = "/member.v1.MemberService/UpdateMember"
-	MemberService_CheckPassWord_FullMethodName    = "/member.v1.MemberService/CheckPassWord"
+	MemberService_GetMemberById_FullMethodName    = "/user.v1.MemberService/GetMemberById"
+	MemberService_GetMemberByPhone_FullMethodName = "/user.v1.MemberService/GetMemberByPhone"
+	MemberService_CreateMember_FullMethodName     = "/user.v1.MemberService/CreateMember"
+	MemberService_UpdateMember_FullMethodName     = "/user.v1.MemberService/UpdateMember"
+	MemberService_CheckPassWord_FullMethodName    = "/user.v1.MemberService/CheckPassWord"
 )
 
 // MemberServiceClient is the client API for MemberService service.
@@ -229,7 +229,7 @@ func _MemberService_CheckPassWord_Handler(srv interface{}, ctx context.Context, 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var MemberService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "member.v1.MemberService",
+	ServiceName: "user.v1.MemberService",
 	HandlerType: (*MemberServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -254,5 +254,5 @@ var MemberService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "member.proto",
+	Metadata: "user.proto",
 }

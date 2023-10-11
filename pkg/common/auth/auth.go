@@ -112,8 +112,8 @@ func ContextWithMemberID(c context.Context, aid id.MemberID) context.Context {
 	return context.WithValue(c, memberIDKey{}, aid)
 }
 
-// MemberIDFromContext gets member id from context.
-// Returns unauthenticated error if no member id is available.
+// MemberIDFromContext gets user id from context.
+// Returns unauthenticated error if no user id is available.
 func MemberIDFromContext(c context.Context) (id.MemberID, error) {
 	v := c.Value(memberIDKey{})
 	aid, ok := v.(id.MemberID)

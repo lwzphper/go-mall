@@ -80,7 +80,7 @@ func TestCreateAndQuery(t *testing.T) {
 			}
 			err := addressDao.Create(ctx, &item)
 			if err != nil {
-				t.Errorf("[%s]:create member error:%v", c.caseName, err)
+				t.Errorf("[%s]:create user error:%v", c.caseName, err)
 			}
 
 			record, err := addressDao.GetList(ctx, id.MemberID(memberId))
@@ -113,7 +113,7 @@ func TestUpdate(t *testing.T) {
 	}
 	err := addressDao.Create(ctx, save)
 	if err != nil {
-		t.Errorf("create member error:%v", err)
+		t.Errorf("create user error:%v", err)
 	}
 
 	uData := map[string]interface{}{
@@ -128,7 +128,7 @@ func TestUpdate(t *testing.T) {
 	}
 	err = addressDao.UpdateById(ctx, id.AddressID(save.Id), uData)
 	if err != nil {
-		t.Errorf("update member error:%v", err)
+		t.Errorf("update user error:%v", err)
 	}
 
 	member, err := addressDao.GetList(ctx, id.MemberID(memberId))
@@ -136,7 +136,7 @@ func TestUpdate(t *testing.T) {
 		t.Errorf("get list error:%v", err)
 	}
 	if len(member) == 0 {
-		t.Errorf("cannot get list by member id：%d", memberId)
+		t.Errorf("cannot get list by user id：%d", memberId)
 	}
 	assert.Equal(t, uData["name"], member[0].Name)
 	assert.Equal(t, uData["phone"], member[0].Phone)

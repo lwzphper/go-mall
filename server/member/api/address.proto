@@ -1,6 +1,6 @@
 syntax = "proto3";
 package address.v1;
-option go_package = "go-mall/server/member/api/gen/v1/address;addresspb";
+option go_package = "go-mall/server/user/api/gen/v1/address;addresspb";
 import "google/protobuf/empty.proto";
 
 service AddressService {

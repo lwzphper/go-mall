@@ -1,6 +1,6 @@
 app:
   env: development
-  name: go-mall-member
+  name: go-mall-user
   address: :8081
 
 mysql:
@@ -13,14 +13,14 @@ mysql:
   max_idle_conn: 100
   max_life_second: 30
   max_life_time: 1800
-  log_file_name: ./log/member/sql.log
+  log_file_name: ./log/user/sql.log
   table_prefix:
 
 logging:
-  name: member
+  name: user
   driver: rotate
   level: debug
-  file_name: ./log/member/rotate.log
+  file_name: ./log/user/rotate.log
   file_size_mb:
   max_age:
   max_backups:

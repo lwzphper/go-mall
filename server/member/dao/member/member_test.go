@@ -58,12 +58,12 @@ func TestCreateAndQueryMember(t *testing.T) {
 			}
 			err := memberDao.CreateMember(ctx, &member)
 			if err != nil {
-				t.Errorf("[%s]:create member error:%v", c.caseName, err)
+				t.Errorf("[%s]:create user error:%v", c.caseName, err)
 			}
 
 			memberRecord, err := memberDao.GetItemByWhere(ctx, &entity.Member{Username: c.username})
 			if err != nil {
-				t.Errorf("[%s]:get member info error: %v", c.caseName, err)
+				t.Errorf("[%s]:get user info error: %v", c.caseName, err)
 			}
 
 			if c.wantEqual && c.wantName != memberRecord.Username {
@@ -87,12 +87,12 @@ func TestGetItemById(t *testing.T) {
 	}
 	err := memberDao.CreateMember(ctx, save)
 	if err != nil {
-		t.Errorf("create member error:%v", err)
+		t.Errorf("create user error:%v", err)
 	}
 
 	member, err := memberDao.GetItemById(ctx, id.MemberID(save.Id))
 	if err != nil {
-		t.Errorf("get member by id error:%v", err)
+		t.Errorf("get user by id error:%v", err)
 	}
 	assert.Equal(t, save.Username, member.Username)
 }
@@ -107,7 +107,7 @@ func TestUpdate(t *testing.T) {
 	}
 	err := memberDao.CreateMember(ctx, save)
 	if err != nil {
-		t.Errorf("create member error:%v", err)
+		t.Errorf("create user error:%v", err)
 	}
 
 	uData := map[string]interface{}{
@@ -123,12 +123,12 @@ func TestUpdate(t *testing.T) {
 	}
 	err = memberDao.UpdateById(ctx, id.MemberID(save.Id), uData)
 	if err != nil {
-		t.Errorf("update member error:%v", err)
+		t.Errorf("update user error:%v", err)
 	}
 
 	member, err := memberDao.GetItemById(ctx, id.MemberID(save.Id))
 	if err != nil {
-		t.Errorf("get member by id error:%v", err)
+		t.Errorf("get user by id error:%v", err)
 	}
 	assert.Equal(t, uData["username"], member.Username)
 	assert.Equal(t, uData["birthday"], until.TimeToDate(*member.Birthday))
@@ -151,18 +151,18 @@ func TestMember_UpdateByEntity(t *testing.T) {
 	}
 	err := memberDao.CreateMember(ctx, save)
 	if err != nil {
-		t.Errorf("create member error:%v", err)
+		t.Errorf("create user error:%v", err)
 	}
 
 	save.Username = "王五"
 	err = memberDao.UpdateByEntity(ctx, save)
 	if err != nil {
-		t.Errorf("update member error:%v", err)
+		t.Errorf("update user error:%v", err)
 	}
 
 	member, err := memberDao.GetItemById(ctx, id.MemberID(save.Id))
 	if err != nil {
-		t.Errorf("get member by id error:%v", err)
+		t.Errorf("get user by id error:%v", err)
 	}
 	assert.Equal(t, save.Username, member.Username)
 }

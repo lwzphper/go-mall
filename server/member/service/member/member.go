@@ -60,7 +60,7 @@ func (s *MemberService) CreateMember(ctx context.Context, req *memberpb.CreateRe
 	// 校验用户是否存在
 	member, err := s.MemberDao.GetItemByWhere(ctx, &entity.Member{Phone: req.Phone})
 	if err != nil && err != gorm.ErrRecordNotFound {
-		global.Logger.Errorf("get member error:%v", err)
+		global.Logger.Errorf("get user error:%v", err)
 		return nil, InternalError
 	}
 
@@ -82,7 +82,7 @@ func (s *MemberService) CreateMember(ctx context.Context, req *memberpb.CreateRe
 	}
 	err = s.MemberDao.CreateMember(ctx, m)
 	if err != nil {
-		global.Logger.Errorf("create member error:%v", err)
+		global.Logger.Errorf("create user error:%v", err)
 		return nil, InternalError
 	}
 
@@ -98,7 +98,7 @@ func (s *MemberService) GetMemberById(ctx context.Context, req *memberpb.IdReque
 		if err == gorm.ErrRecordNotFound {
 			return nil, memberNotFoundError
 		}
-		global.Logger.Errorf("get member by id error:%v", err)
+		global.Logger.Errorf("get user by id error:%v", err)
 		return nil, InternalError
 	}
 
@@ -112,7 +112,7 @@ func (s *MemberService) GetMemberByPhone(ctx context.Context, req *memberpb.Phon
 		if err == gorm.ErrRecordNotFound {
 			return nil, memberNotFoundError
 		}
-		global.Logger.Errorf("get member by phone error:%v", err)
+		global.Logger.Errorf("get user by phone error:%v", err)
 		return nil, InternalError
 	}
 	return modelToResponse(item), nil
@@ -126,7 +126,7 @@ func (s *MemberService) UpdateMember(ctx context.Context, req *memberpb.MemberEn
 		if err == gorm.ErrRecordNotFound {
 			return nil, memberNotFoundError
 		}
-		global.Logger.Errorf("get member by id error:%v", err)
+		global.Logger.Errorf("get user by id error:%v", err)
 		return nil, InternalError
 	}
 
@@ -146,7 +146,7 @@ func (s *MemberService) UpdateMember(ctx context.Context, req *memberpb.MemberEn
 	detail.Growth = req.Growth
 	err = s.MemberDao.UpdateByEntity(ctx, detail)
 	if err != nil {
-		global.Logger.Errorf("update member error:%v", err)
+		global.Logger.Errorf("update user error:%v", err)
 		return nil, InternalError
 	}
 	return &empty.Empty{}, nil

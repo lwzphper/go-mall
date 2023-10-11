@@ -33,7 +33,7 @@ type Member struct {
 }
 
 func (m Member) TableName() string {
-	return "member"
+	return "user"
 }
 
 const (

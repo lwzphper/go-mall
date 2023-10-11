@@ -1,0 +1,22 @@
+app:
+  env: development
+  name: buff
+  address: :8018
+
+logging:
+  name: admin
+  driver: rotate
+  level: debug
+  file_name: ./log/auth/admin_rotate.log
+  file_size_mb:
+  max_age:
+  max_backups:
+
+jaeger:
+  host: 127.0.0.1
+  port: 6831
+  name: mail-jaeger
+
+jwt:
+  secret: xAiNXbZxVdDLerE27Gx3bcjEQNIWvPgrYm0fb3fyKlEsCAuiFvzzBckUbyDzPl21
+  ttl: 864000

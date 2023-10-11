@@ -69,7 +69,7 @@ func TestMemberService_GetMemberById(t *testing.T) {
 	req := &memberpb.IdRequest{Id: member.Id}
 	getVal, err := srv.GetMemberById(ctx, req)
 	if err != nil {
-		t.Errorf("get member error:%s", err)
+		t.Errorf("get user error:%s", err)
 	}
 	assert.Equal(t, cReq.Phone, getVal.Phone)
 }
@@ -93,7 +93,7 @@ func TestMemberService_GetMemberByPhone(t *testing.T) {
 	req := &memberpb.PhoneRequest{Phone: phone}
 	getVal, err := srv.GetMemberByPhone(ctx, req)
 	if err != nil {
-		t.Errorf("get member error:%s", err)
+		t.Errorf("get user error:%s", err)
 	}
 	assert.Equal(t, cReq.Phone, getVal.Phone)
 }
@@ -150,12 +150,12 @@ func TestMemberService_UpdateMember(t *testing.T) {
 				Icon:     icon,
 			})
 			if err != nil {
-				t.Errorf("update member error:%v", err)
+				t.Errorf("update user error:%v", err)
 			}
 
 			newMember, err := srv.GetMemberById(ctx, &memberpb.IdRequest{Id: member.Id})
 			if err != nil {
-				t.Errorf("get member error:%v", err)
+				t.Errorf("get user error:%v", err)
 			}
 			assert.Equal(t, username, newMember.Username)
 			assert.Equal(t, job, newMember.Job)

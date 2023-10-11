@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.31.0
 // 	protoc        v3.9.2
-// source: member.proto
+// source: user.proto
 
 package memberpb
 
@@ -368,8 +368,8 @@ type MemberEntity struct {
 	Password      string               `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"`
 	Phone         string               `protobuf:"bytes,5,opt,name=phone,proto3" json:"phone,omitempty"`
 	Icon          string               `protobuf:"bytes,6,opt,name=icon,proto3" json:"icon,omitempty"`
-	Status        MemberStatus         `protobuf:"varint,7,opt,name=status,proto3,enum=member.v1.MemberStatus" json:"status,omitempty"`
-	Gender        MemberGender         `protobuf:"varint,8,opt,name=gender,proto3,enum=member.v1.MemberGender" json:"gender,omitempty"`
+	Status        MemberStatus         `protobuf:"varint,7,opt,name=status,proto3,enum=user.v1.MemberStatus" json:"status,omitempty"`
+	Gender        MemberGender         `protobuf:"varint,8,opt,name=gender,proto3,enum=user.v1.MemberGender" json:"gender,omitempty"`
 	Birthday      *timestamp.Timestamp `protobuf:"bytes,9,opt,name=birthday,proto3" json:"birthday,omitempty"`
 	City          string               `protobuf:"bytes,10,opt,name=city,proto3" json:"city,omitempty"`
 	Job           string               `protobuf:"bytes,11,opt,name=job,proto3" json:"job,omitempty"`
@@ -726,33 +726,33 @@ func file_member_proto_rawDescGZIP() []byte {
 var file_member_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_member_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_member_proto_goTypes = []interface{}{
-	(MemberStatus)(0),           // 0: member.v1.MemberStatus
-	(MemberGender)(0),           // 1: member.v1.MemberGender
-	(*PhoneRequest)(nil),        // 2: member.v1.PhoneRequest
-	(*PasswordCheckInfo)(nil),   // 3: member.v1.PasswordCheckInfo
-	(*CreateResponse)(nil),      // 4: member.v1.CreateResponse
-	(*CheckResponse)(nil),       // 5: member.v1.CheckResponse
-	(*IdRequest)(nil),           // 6: member.v1.IdRequest
-	(*MemberEntity)(nil),        // 7: member.v1.MemberEntity
-	(*BasicInfo)(nil),           // 8: member.v1.BasicInfo
-	(*CreateRequest)(nil),       // 9: member.v1.CreateRequest
+	(MemberStatus)(0),           // 0: user.v1.MemberStatus
+	(MemberGender)(0),           // 1: user.v1.MemberGender
+	(*PhoneRequest)(nil),        // 2: user.v1.PhoneRequest
+	(*PasswordCheckInfo)(nil),   // 3: user.v1.PasswordCheckInfo
+	(*CreateResponse)(nil),      // 4: user.v1.CreateResponse
+	(*CheckResponse)(nil),       // 5: user.v1.CheckResponse
+	(*IdRequest)(nil),           // 6: user.v1.IdRequest
+	(*MemberEntity)(nil),        // 7: user.v1.MemberEntity
+	(*BasicInfo)(nil),           // 8: user.v1.BasicInfo
+	(*CreateRequest)(nil),       // 9: user.v1.CreateRequest
 	(*timestamp.Timestamp)(nil), // 10: google.protobuf.Timestamp
 	(*empty.Empty)(nil),         // 11: google.protobuf.Empty
 }
 var file_member_proto_depIdxs = []int32{
-	0,  // 0: member.v1.MemberEntity.status:type_name -> member.v1.MemberStatus
-	1,  // 1: member.v1.MemberEntity.gender:type_name -> member.v1.MemberGender
-	10, // 2: member.v1.MemberEntity.birthday:type_name -> google.protobuf.Timestamp
-	6,  // 3: member.v1.MemberService.GetMemberById:input_type -> member.v1.IdRequest
-	2,  // 4: member.v1.MemberService.GetMemberByPhone:input_type -> member.v1.PhoneRequest
-	9,  // 5: member.v1.MemberService.CreateMember:input_type -> member.v1.CreateRequest
-	7,  // 6: member.v1.MemberService.UpdateMember:input_type -> member.v1.MemberEntity
-	3,  // 7: member.v1.MemberService.CheckPassWord:input_type -> member.v1.PasswordCheckInfo
-	7,  // 8: member.v1.MemberService.GetMemberById:output_type -> member.v1.MemberEntity
-	7,  // 9: member.v1.MemberService.GetMemberByPhone:output_type -> member.v1.MemberEntity
-	4,  // 10: member.v1.MemberService.CreateMember:output_type -> member.v1.CreateResponse
-	11, // 11: member.v1.MemberService.UpdateMember:output_type -> google.protobuf.Empty
-	5,  // 12: member.v1.MemberService.CheckPassWord:output_type -> member.v1.CheckResponse
+	0,  // 0: user.v1.MemberEntity.status:type_name -> user.v1.MemberStatus
+	1,  // 1: user.v1.MemberEntity.gender:type_name -> user.v1.MemberGender
+	10, // 2: user.v1.MemberEntity.birthday:type_name -> google.protobuf.Timestamp
+	6,  // 3: user.v1.MemberService.GetMemberById:input_type -> user.v1.IdRequest
+	2,  // 4: user.v1.MemberService.GetMemberByPhone:input_type -> user.v1.PhoneRequest
+	9,  // 5: user.v1.MemberService.CreateMember:input_type -> user.v1.CreateRequest
+	7,  // 6: user.v1.MemberService.UpdateMember:input_type -> user.v1.MemberEntity
+	3,  // 7: user.v1.MemberService.CheckPassWord:input_type -> user.v1.PasswordCheckInfo
+	7,  // 8: user.v1.MemberService.GetMemberById:output_type -> user.v1.MemberEntity
+	7,  // 9: user.v1.MemberService.GetMemberByPhone:output_type -> user.v1.MemberEntity
+	4,  // 10: user.v1.MemberService.CreateMember:output_type -> user.v1.CreateResponse
+	11, // 11: user.v1.MemberService.UpdateMember:output_type -> google.protobuf.Empty
+	5,  // 12: user.v1.MemberService.CheckPassWord:output_type -> user.v1.CheckResponse
 	8,  // [8:13] is the sub-list for method output_type
 	3,  // [3:8] is the sub-list for method input_type
 	3,  // [3:3] is the sub-list for extension type_name

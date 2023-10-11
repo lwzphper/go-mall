@@ -1,0 +1,13 @@
+[app]
+env = "development"
+name = "buff"
+address = ":8018"
+
+[logging]
+name = "buff"
+driver = "rotate"
+level = "debug"
+file_name = "./log/buff/admin_rotate.log"
+file_size_mb = ""
+max_age = ""
+max_backups = ""

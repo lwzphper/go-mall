@@ -19,7 +19,7 @@ function genProto {
 
     #protoc -I=$PROTO_PATH --go_out=plugins=grpc,paths=source_relative:$GO_OUT_PATH ${DOMAIN}.proto
     if [ $DOMAIN = "member" ]; then
-      for srv in member address;
+      for srv in user address;
       do
         OUT_PATH=${GO_OUT_PATH}/${srv}
         mkdir -p $OUT_PATH
@@ -39,4 +39,4 @@ function genProto {
 #    protoc -I=$PROTO_PATH --grpc-gateway_out=paths=source_relative,grpc_api_configuration=$PROTO_PATH/${DOMAIN}.yaml:$GO_OUT_PATH ${DOMAIN}.proto
 }
 
-genProto member
+genProto user

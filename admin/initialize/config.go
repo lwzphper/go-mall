@@ -2,17 +2,17 @@ package initialize
 
 import (
 	"fmt"
+	"github.com/lwzphper/go-mall/admin/config"
+	"github.com/lwzphper/go-mall/admin/global"
 	cfgHelper "github.com/lwzphper/go-mall/pkg/config"
-	"github.com/lwzphper/go-mall/server/member/config"
-	"github.com/lwzphper/go-mall/server/member/global"
 )
 
 // InitConfig 初始化配置文件
 func InitConfig() {
 	cfg := config.NewDefaultConfig()
-	err := cfgHelper.LoadConfigFromYml("server/user/etc/config.yaml", cfg)
+	err := cfgHelper.LoadConfigFromYml("admin/etc/config.yaml", cfg)
 	if err != nil {
 		panic(fmt.Sprintf("load config from env error:%v", err))
 	}
-	global.Config = cfg
+	global.C = cfg
 }
