@@ -2,16 +2,14 @@ package address
 
 import (
 	"context"
+	"github.com/lwzphper/go-mall/pkg/common/config/db"
 	"github.com/lwzphper/go-mall/pkg/common/id"
-	mysqltesting "github.com/lwzphper/go-mall/pkg/db/mysql/testing"
-	"github.com/lwzphper/go-mall/pkg/db/mysql/testing/init_table"
 	"github.com/lwzphper/go-mall/pkg/logger"
 	"github.com/lwzphper/go-mall/pkg/until"
 	addresspb "github.com/lwzphper/go-mall/server/member/api/gen/v1/address"
 	"github.com/lwzphper/go-mall/server/member/dao/address"
 	"github.com/lwzphper/go-mall/server/member/global"
 	"github.com/stretchr/testify/assert"
-	"log"
 	"sync"
 	"testing"
 )
@@ -54,7 +52,7 @@ func TestService_Update(t *testing.T) {
 	req := addresspb.CreateRequest{
 		Name:      "王五",
 		Phone:     until.RandomString(11),
-		IsDefault: uint32(1),
+		IsDefault: uint32(0),
 		PostCode:  "511450",
 		Province:  "广东省",
 		City:      "广州市",
@@ -127,7 +125,7 @@ func TestService_Update(t *testing.T) {
 
 // 数据库初始化
 func initDB() {
-	mutex.Lock()
+	/*mutex.Lock()
 	if hasCreateDB == false {
 		// 创建数据表
 		if err := init_table.Address(); err != nil {
@@ -137,15 +135,15 @@ func initDB() {
 	}
 	mutex.Unlock()
 
-	global.DB = mysqltesting.GormDB
+	global.DB = mysqltesting.GormDB*/
 
 	// 本地调试
-	/*cfg := db.NewDefaultMysql()
+	cfg := db.NewDefaultMysql()
 	cfg.Database = "go_mall"
 	cfg.Host = "127.0.0.1"
 	cfg.Password = "123456"
 	_ = cfg.InitDB()
-	global.DB = cfg.GetDB()*/
+	global.DB = cfg.GetDB()
 
 	srv = &Service{
 		AddressDao: address.NewAddress(context.Background()),
@@ -153,6 +151,7 @@ func initDB() {
 	}
 }
 
-func TestMain(m *testing.M) {
+/*func TestMain(m *testing.M) {
 	mysqltesting.RunMysqlInDocker(m)
 }
+*/
