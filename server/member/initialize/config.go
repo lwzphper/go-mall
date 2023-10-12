@@ -10,7 +10,7 @@ import (
 // InitConfig 初始化配置文件
 func InitConfig() {
 	cfg := config.NewDefaultConfig()
-	err := cfgHelper.LoadConfigFromYml("server/user/etc/config.yaml", cfg)
+	err := cfgHelper.LoadConfigFromYml("server/member/etc/config.yaml", cfg)
 	if err != nil {
 		panic(fmt.Sprintf("load config from env error:%v", err))
 	}
