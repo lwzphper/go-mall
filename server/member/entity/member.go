@@ -21,7 +21,7 @@ type Member struct {
 	Birthday              *time.Time   `json:"birthday" gorm:"column:birthday;default:null"`
 	City                  string       `json:"city" gorm:"column:city"`
 	Job                   string       `json:"job" gorm:"column:job"`
-	PersonalizedSignature string       `json:"personalized_signature" gorm:"column:personalized_signature"`
+	PersonalizedSignature string       `json:"signature" gorm:"column:signature"`
 	SourceType            SourceType   `json:"source_type" gorm:"column:source_type"`
 	Integration           int          `json:"integration" gorm:"column:integration"`
 	Growth                int32        `json:"growth" gorm:"column:growth"`
