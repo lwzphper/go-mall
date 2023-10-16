@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/lwzphper/go-mall/pkg/common/config"
 	"github.com/lwzphper/go-mall/pkg/common/config/app"
+	configDB "github.com/lwzphper/go-mall/pkg/common/config/db"
 )
 
 type Config struct {
@@ -10,6 +11,7 @@ type Config struct {
 	Logging *config.Logging `toml:"logging" yaml:"logging" mapstructure:"logging"`
 	Jaeger  *config.Jaeger  `toml:"jaeger" yaml:"jaeger" mapstructure:"jaeger"`
 	Jwt     *config.Jwt     `toml:"jwt" yaml:"jwt" mapstructure:"jwt"`
+	Mysql   *configDB.Mysql `toml:"mysql" yaml:"mysql" mapstructure:"mysql"`
 }
 
 func NewDefaultConfig() *Config {
@@ -18,5 +20,6 @@ func NewDefaultConfig() *Config {
 		Logging: config.NewDefaultLogging(),
 		Jaeger:  config.NewJaeger(),
 		Jwt:     config.NewJwt(),
+		Mysql:   configDB.NewDefaultMysql(),
 	}
 }

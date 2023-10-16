@@ -6,6 +6,7 @@ import (
 	"github.com/lwzphper/go-mall/bff/global"
 	"github.com/lwzphper/go-mall/bff/request/auth"
 	response2 "github.com/lwzphper/go-mall/bff/response"
+	ginhelper "github.com/lwzphper/go-mall/pkg/gin"
 	jwt2 "github.com/lwzphper/go-mall/pkg/jwt"
 	"github.com/lwzphper/go-mall/pkg/response"
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
@@ -22,7 +23,7 @@ func Login(c *gin.Context) {
 	// 获取用户信息
 	member, err := global.MemberSrvClient.GetMemberByPhone(c, &memberpb.PhoneRequest{Phone: req.Phone})
 	if err != nil {
-		api.HandleGrpcErrorToHttp(c, err)
+		ginhelper.HandleGrpcErrorToHttp(c, err)
 		return
 	}
 
@@ -70,7 +71,7 @@ func Register(c *gin.Context) {
 	}
 	member, err := global.MemberSrvClient.CreateMember(c, createReq)
 	if err != nil {
-		api.HandleGrpcErrorToHttp(c, err)
+		ginhelper.HandleGrpcErrorToHttp(c, err)
 		return
 	}
 
