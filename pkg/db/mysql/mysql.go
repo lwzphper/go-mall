@@ -165,7 +165,7 @@ func InitMysqlClient(clientName, username, password, host, port, dbName string, 
 
 	db, err := dbConnect(username, password, host, port, dbName, opt)
 	if err != nil {
-		return errors.Wrapf(err, "host : "+host)
+		return errors.Wrapf(err, fmt.Sprintf("host: %s:%s", host, port))
 	}
 	mysqlClients[clientName] = &DB{
 		DB:         db,
