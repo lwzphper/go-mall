@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"flag"
 	"fmt"
 	cfgHelper "github.com/lwzphper/go-mall/pkg/config"
 	"github.com/lwzphper/go-mall/server/member/config"
@@ -9,8 +10,11 @@ import (
 
 // InitConfig 初始化配置文件
 func InitConfig() {
+	conf := flag.String("c", "admin/etc/config.yaml", "配置文件")
+	flag.Parse()
+
 	cfg := config.NewDefaultConfig()
-	err := cfgHelper.LoadConfigFromYml("server/member/etc/config.yaml", cfg)
+	err := cfgHelper.LoadConfigFromYml(*conf, cfg)
 	if err != nil {
 		panic(fmt.Sprintf("load config from env error:%v", err))
 	}
