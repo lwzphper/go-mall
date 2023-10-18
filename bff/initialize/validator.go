@@ -18,6 +18,12 @@ const (
 	ZhLocale = "zh"
 )
 
+var translator ut.Translator
+
+func GetTranslator() ut.Translator {
+	return translator
+}
+
 // InitValidator 初始验证器
 func InitValidator(locale string) {
 	// 修改gin框架中的validator引擎属性, 实现定制
@@ -39,8 +45,8 @@ func InitValidator(locale string) {
 	setLocale(v, locale)
 
 	// 注册自定义验证类
-	rule.RegisterGender(v)
-	rule.RegisterOnOff(v)
+	rule.RegisterGender(v, translator)
+	rule.RegisterOnOff(v, translator)
 }
 
 // 设置语言
@@ -50,7 +56,7 @@ func setLocale(v *validator.Validate, locale string) {
 	// 第一个参数是备用的语言环境，后面的参数是应该支持的语言环境
 	uni := ut.New(enT, zhT, enT)
 	var ok bool
-	global.T, ok = uni.GetTranslator(locale)
+	translator, ok = uni.GetTranslator(locale)
 	if !ok {
 		global.L.Errorf("uni.GetTranslator error:%s", locale)
 		return
@@ -59,9 +65,9 @@ func setLocale(v *validator.Validate, locale string) {
 	var err error
 	switch locale {
 	case ZhLocale:
-		err = zh_translations.RegisterDefaultTranslations(v, global.T)
+		err = zh_translations.RegisterDefaultTranslations(v, translator)
 	default:
-		err = en_translations.RegisterDefaultTranslations(v, global.T)
+		err = en_translations.RegisterDefaultTranslations(v, translator)
 	}
 	if err != nil {
 		global.L.Errorf("Register Default transition error:%v", err)

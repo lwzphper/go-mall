@@ -13,3 +13,7 @@ func NewJwt() *Jwt {
 		TTL:    24 * time.Hour,
 	}
 }
+
+func (j *Jwt) GetSecret() []byte {
+	return []byte(j.Secret)
+}

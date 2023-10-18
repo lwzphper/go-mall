@@ -38,7 +38,7 @@ func Login(c *gin.Context) {
 	}
 
 	// 生成 token
-	tokenGen := jwt2.NewJwtTokenGen(global.C.App.Name, global.JwtSecret)
+	tokenGen := jwt2.NewJwtTokenGen(global.C.App.Name, global.C.Jwt.GetSecret())
 	token, err := tokenGen.GenerateToken(member.Id, global.C.Jwt.TTL)
 	if err != nil {
 		global.L.Errorf("create token error:%v", err)

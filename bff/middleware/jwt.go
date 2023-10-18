@@ -17,7 +17,7 @@ func JwtAuth() gin.HandlerFunc {
 			return
 		}
 
-		validator := jwt.NewTokenValidator(global.JwtSecret)
+		validator := jwt.NewTokenValidator(global.C.Jwt.GetSecret())
 		memberId, err := validator.Validator(token)
 		if err != nil {
 			if err == jwt.ErrExpiredOrNotValid {

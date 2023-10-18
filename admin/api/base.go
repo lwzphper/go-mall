@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/lwzphper/go-mall/admin/global"
+	"github.com/lwzphper/go-mall/admin/initialize"
 	"github.com/lwzphper/go-mall/pkg/response"
 )
 
@@ -22,7 +23,7 @@ func HandleValidatorError(c *gin.Context, err error) {
 	}
 
 	// 多条错误信息，只显示第一条
-	for _, val := range errs.Translate(global.T) {
+	for _, val := range errs.Translate(initialize.GetTranslator()) {
 		response.FormValidError(c.Writer, val)
 		return
 	}
