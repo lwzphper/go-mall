@@ -22,6 +22,7 @@ var (
 )
 
 type Mysql struct {
+	ClientName  string `toml:"client_name" yaml:"client_name" mapstructure:"client_name" env:"MYSQL_NAME"`
 	Host        string `toml:"host" yaml:"host" mapstructure:"host" env:"MYSQL_HOST"`
 	Port        string `toml:"port" yaml:"port" mapstructure:"port" env:"MYSQL_PORT"`
 	UserName    string `toml:"username" yaml:"username" mapstructure:"username" env:"MYSQL_USERNAME"`
@@ -39,6 +40,7 @@ type Mysql struct {
 
 func NewDefaultMysql() *Mysql {
 	return &Mysql{
+		ClientName:  mysqlDB.DefaultClient,
 		Host:        "127.0.0.1",
 		Port:        "3306",
 		UserName:    "root",
@@ -87,10 +89,10 @@ func (m *Mysql) InitDB() error {
 	options = append(options, mysqlDB.WithLogger(logWriter, logConf))
 
 	// 初始化客户端
-	if err := mysqlDB.InitMysqlClient(mysqlDB.DefaultClient, m.UserName, m.Password, m.Host, m.Port, m.Database, options...); err != nil {
+	if err := mysqlDB.InitMysqlClient(m.ClientName, m.UserName, m.Password, m.Host, m.Port, m.Database, options...); err != nil {
 		return err
 	}
-	db = mysqlDB.GetMysqlClient(mysqlDB.DefaultClient).DB
+	db = mysqlDB.GetMysqlClient(m.ClientName).DB
 	return nil
 }
 
