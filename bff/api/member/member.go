@@ -7,6 +7,7 @@ import (
 	"github.com/lwzphper/go-mall/bff/global"
 	"github.com/lwzphper/go-mall/bff/request/member"
 	member2 "github.com/lwzphper/go-mall/bff/response"
+	ginhelper "github.com/lwzphper/go-mall/pkg/gin"
 	"github.com/lwzphper/go-mall/pkg/response"
 	"github.com/lwzphper/go-mall/pkg/until"
 	memberpb "github.com/lwzphper/go-mall/server/member/api/gen/v1/member"
@@ -22,7 +23,7 @@ func Detail(c *gin.Context) {
 
 	detail, err := global.MemberSrvClient.GetMemberById(c, &memberpb.IdRequest{Id: memberId})
 	if err != nil {
-		api.HandleGrpcErrorToHttp(c, err)
+		ginhelper.HandleGrpcErrorToHttp(c, err)
 		return
 	}
 
@@ -54,7 +55,7 @@ func Update(c *gin.Context) {
 		Gender:   memberpb.MemberGender(req.Gender),
 	})
 	if err != nil {
-		api.HandleGrpcErrorToHttp(c, err)
+		ginhelper.HandleGrpcErrorToHttp(c, err)
 		return
 	}
 	response.Success(c.Writer, nil)

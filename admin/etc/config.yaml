@@ -20,3 +20,16 @@ jaeger:
 jwt:
   secret: xAiNXbZxVdDLerE27Gx3bcjEQNIWvPgrYm0fb3fyKlEsCAuiFvzzBckUbyDzPl21
   ttl: 864000
+
+mysql:
+  database: go_mall
+  username: root
+  password: 123456
+  host: 127.0.0.1
+  port: 3306
+  max_open_conn: 1000
+  max_idle_conn: 100
+  max_life_second: 30
+  max_life_time: 1800
+  log_file_name: ./log/admin/sql.log
+  table_prefix:

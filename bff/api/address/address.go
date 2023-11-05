@@ -8,6 +8,7 @@ import (
 	"github.com/lwzphper/go-mall/bff/request/address"
 	"github.com/lwzphper/go-mall/bff/response"
 	"github.com/lwzphper/go-mall/pkg/common/id"
+	ginhelper "github.com/lwzphper/go-mall/pkg/gin"
 	untilResponse "github.com/lwzphper/go-mall/pkg/response"
 	addresspb "github.com/lwzphper/go-mall/server/member/api/gen/v1/address"
 )
@@ -22,7 +23,7 @@ func List(c *gin.Context) {
 
 	list, err := global.AddressSrvClient.GetList(c, &addresspb.ListRequest{MemberId: memberId})
 	if err != nil {
-		api.HandleGrpcErrorToHttp(c, err)
+		ginhelper.HandleGrpcErrorToHttp(c, err)
 	}
 
 	result := response.NewAddressList()
@@ -46,7 +47,7 @@ func Create(c *gin.Context) {
 
 	_, err := global.AddressSrvClient.Create(c, req.Marshal(id.MemberID(memberId)))
 	if err != nil {
-		api.HandleGrpcErrorToHttp(c, err)
+		ginhelper.HandleGrpcErrorToHttp(c, err)
 		return
 	}
 	untilResponse.Success(c.Writer, nil)
@@ -68,7 +69,7 @@ func Update(c *gin.Context) {
 
 	_, err := global.AddressSrvClient.Update(c, req.Marshal(id.MemberID(memberId)))
 	if err != nil {
-		api.HandleGrpcErrorToHttp(c, err)
+		ginhelper.HandleGrpcErrorToHttp(c, err)
 		return
 	}
 	untilResponse.Success(c.Writer, nil)
@@ -90,7 +91,7 @@ func Delete(c *gin.Context) {
 
 	_, err := global.AddressSrvClient.Delete(c, req.Marshal(id.MemberID(memberId)))
 	if err != nil {
-		api.HandleGrpcErrorToHttp(c, err)
+		ginhelper.HandleGrpcErrorToHttp(c, err)
 		return
 	}
 	untilResponse.Success(c.Writer, nil)

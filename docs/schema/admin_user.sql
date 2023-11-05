@@ -1,4 +1,4 @@
-CREATE TABLE `admin`
+CREATE TABLE `admin_user`
 (
     `id`         bigint unsigned NOT NULL AUTO_INCREMENT,
     `username`   varchar(64)  NOT NULL COMMENT '用户名称',

@@ -4,6 +4,7 @@ app:
   address: :8081
 
 mysql:
+  client_name: go_mall # 用于区分不同步实例（需要唯一）
   database: go_mall
   username: root
   password: 123456

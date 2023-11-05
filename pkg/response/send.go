@@ -122,6 +122,10 @@ func SendResponse(w http.ResponseWriter, data interface{}, code int, options ...
 		resp.Msg = GetMsg(resp.Code)
 	}
 
+	if resp.Data == nil {
+		resp.Data = make([]struct{}, 0)
+	}
+
 	respByt, err := json.Marshal(resp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
