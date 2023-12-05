@@ -21,7 +21,7 @@ func Trace() gin.HandlerFunc {
 			},
 			Reporter: &jaegercfg.ReporterConfig{
 				LogSpans:           true,
-				LocalAgentHostPort: fmt.Sprintf("%s:%d", global.C.Jaeger.Host, global.C.Jaeger.Port),
+				LocalAgentHostPort: fmt.Sprintf("%s:%s", global.C.Jaeger.Host, global.C.Jaeger.Port),
 			},
 			ServiceName: global.C.Jaeger.Name,
 		}
